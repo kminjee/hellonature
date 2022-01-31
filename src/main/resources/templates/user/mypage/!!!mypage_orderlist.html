@@ -1,0 +1,768 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(1) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(1) > a {
+            color: #5dab99;
+        }
+    </style>
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(function () {
+            $(".contents_category_list").click(function (e) {
+                $(".category_name1 > h2").text($(this).children("span").text());
+
+                if ($(".category_name1 > h2").text() === '좋아요') {
+                    document.getElementById("filter_period_box").style.display = 'none';
+                    document.getElementById("mg_period").style.display = 'none';
+                    document.getElementById("filter_like_box").style.display = 'block';
+                    document.getElementById("filter_like_box").style.display = 'flex';
+                } else {
+                    document.getElementById("filter_period_box").style.display = 'block';
+                    document.getElementById("filter_period_box").style.display = 'flex';
+                    document.getElementById("filter_like_box").style.display = 'none';
+                }
+            })
+        })
+
+        $(function () {
+
+            const offset = new Date().getTimezoneOffset() * 60000;
+            const now = new Date(Date.now() - offset);
+            console.log(now)
+            const now_result = now.toISOString().substring(0, 10);
+            console.log(now_result)
+
+            let date_start = '';
+            let date_end = '';
+            let urlidx = $("#section_hidden").val()
+
+            $(".filter_outline > div").click(function (e) {
+                $("#main_contents").empty();
+                if ($(this).children("a").text() === "최근 1개월") {
+                    $("#main_contents").empty();
+                    let month = new Date();
+                    month.setMonth(month.getMonth() - 1);
+                    let month_result = month.toISOString().substring(0, 10);
+                    date_end = now_result;
+                    date_start = month_result;
+                } else if ($(this).children("a").text() === "3개월") {
+                    $("#main_contents").empty();
+                    let three_month = new Date();
+                    three_month.setMonth(three_month.getMonth() - 3);
+                    let three_month_result = three_month.toISOString().substring(0, 10);
+                    date_end = now_result;
+                    date_start = three_month_result;
+                } else if ($(this).children("a").text() === "6개월") {
+                    $("#main_contents").empty();
+                    let six_month = new Date();
+                    six_month.setMonth(six_month.getMonth() - 6);
+                    let sis_month_result = six_month.toISOString().substring(0, 10);
+                    date_end = now_result;
+                    date_start = sis_month_result;
+                } else if ($(this).children("a").text() === "기간 조회") {
+                    if (document.getElementById("mg_period").style.display === 'block') {
+                        document.getElementById("mg_period").style.display = 'none';
+                    } else document.getElementById("mg_period").style.display = 'block';
+                    return false;
+                }
+
+                if ($(".category_name1 > h2").text() === "주문배송") {
+                    let url = "/api/orderList/myPage?dateStart=" + date_start + "&dateEnd=" + date_end + "&type=1&memIdx=" + urlidx;
+                    console.log(url)
+                    $("#main_contents").empty();
+                    axios.get(url, {}).then(function (response) {
+
+                        for (let i in response.data.data) {
+                            let proIdx = response.data.data[i].proIdx;
+                            let proName = response.data.data[i].proName;
+                            let proImg = response.data.data[i].proImg;
+                            let proWeightSize = response.data.data[i].proWeightSize;
+                            let proCount = response.data.data[i].proCount;
+                            let state = response.data.data[i].state;
+                            let regdate = response.data.data[i].regdate;
+                            let greenFlag = response.data.data[i].greenFlag;
+                            let dawnFlag = response.data.data[i].dawnFlag;
+                            let address1 = response.data.data[i].address1;
+                            let address2 = response.data.data[i].address2;
+                            let recName = response.data.data[i].recName;
+                            let recHp = response.data.data[i].recHp;
+
+
+                            regdate = regdate.toString().substring(0, 10);
+
+                            if (greenFlag === "TRUE") {
+                                greenFlag = "더 그린 배송지"
+                            } else {
+                                greenFlag = ''
+                            }
+
+                            if (dawnFlag === "TRUE") {
+                                dawnFlag = "새벽 배송"
+                            } else {
+                                dawnFlag = ''
+                            }
+
+                            switch (state) {
+                                case 1:
+                                    state = "입금완료";
+                                    break;
+                                case 2:
+                                    state = "상품준비중";
+                                    break;
+                                case 3:
+                                    state = "배송준비중";
+                                    break;
+                                case 4:
+                                    state = "배송중";
+                                    break;
+                                case 5:
+                                    state = "배송완료";
+                                    break;
+                                case 6:
+                                    state = "취소";
+                                    break;
+                                case 7:
+                                    state = "반품요청";
+                                    break;
+                                case 8:
+                                    state = "반품";
+                                    break;
+                                case 9:
+                                    state = "환불요청 ";
+                                    break;
+                                case 0:
+                                    state = "환불";
+                                    break;
+                            }
+
+
+                            let tb = $('<div>')
+                            let row = $('<div class="contents_box4">').append(
+                                '<div class="contents_box4_inner1"><div class="order_date"><p>'+ '구매일 ' + regdate + '</p></div>' +
+                                '<div class="default_ship"><p>'+ address1 + address2 + '<span>' + greenFlag + '</span><span>' + dawnFlag + '</span></p></div></div>' +
+                                '<div class="order_detail_button" style="cursor:pointer"><a href="#" alt="주문상세페이지 이동"></a></div>')
+                            row.append('</div>')
+
+                            let row2 = $('<div class="orderlist_contain" style="display: none">')
+                            // for(let i=0; i<proIdx.length; i++){a
+                            row2.append(
+                                '<div class="contents_box5"><div class="order_info"><p>받는 분'+ recName + '/'  + recHp +'</p>' +
+                                '<div class="order_info_right">' +
+                                '<p><a href="#" class="order_info_font3">' + state + '</a></p></div></div></div>' +
+                                `<div class="contents_box6"><div class="product_image" style="background: url('${proImg}') no-repeat; background-size: cover"></div><div class="product_info">` +
+                                '<p>' + proName + '</p><div class="contents_box6_inner"><p>' + proWeightSize + '</p><div class="product_info_line"></div><p>' + proCount + '개' + '</p></div>' +
+                                '</div><div class="mantoman_button_box"><input type="button" value="1:1문의" class="mantoman_button"></div></div>'
+                            )
+                            // }
+                            row2.append('</div>')
+
+                            tb.append(row)
+                            tb.append(row2)
+                            tb.append('</div>')
+                            $("#main_contents").append(tb)
+                        }
+
+                        $(".mantoman_button").click(function (){
+                            location.href = '/user/mypage_enrollMantoman';
+                        })
+
+
+                        $(".order_detail_button").click(function (e) {
+                            if ($(this).parents().parents().children(".orderlist_contain").css("display") === "block") {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "none");
+                            } else {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "block");
+                            }
+                        })
+
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+
+                } else if ($(".category_name1 > h2").text() === "취소ㆍ교환ㆍ반품") {
+                    let url = "/api/orderList/myPage?dateStart=" + date_start + "&dateEnd=" + date_end + "&type=2&memIdx=" + urlidx;
+                    $("#main_contents").empty();
+                    axios.get(url, {}).then(function (response) {
+
+                        for (let i in response.data.data) {
+                            let proIdx = response.data.data[i].proIdx;
+                            let proName = response.data.data[i].proName;
+                            let proImg = response.data.data[i].proImg;
+                            let proWeightSize = response.data.data[i].proWeightSize;
+                            let proCount = response.data.data[i].proCount;
+                            let state = response.data.data[i].state;
+                            let regdate = response.data.data[i].regdate;
+                            let greenFlag = response.data.data[i].greenFlag;
+                            let dawnFlag = response.data.data[i].dawnFlag;
+                            let address1 = response.data.data[i].address1;
+                            let address2 = response.data.data[i].address2;
+                            let recName = response.data.data[i].recName;
+                            let recHp = response.data.data[i].recHp;
+
+
+                            regdate = regdate.toString().substring(0, 10);
+
+
+                            if (greenFlag === "TRUE") {
+                                greenFlag = "더 그린 배송지"
+                            } else {
+                                greenFlag = ''
+                            }
+
+                            if (dawnFlag === "TRUE") {
+                                dawnFlag = "새벽 배송"
+                            } else {
+                                dawnFlag = ''
+                            }
+
+                            switch (state) {
+                                case 1:
+                                    state = "입금완료";
+                                    break;
+                                case 2:
+                                    state = "상품준비중";
+                                    break;
+                                case 3:
+                                    state = "배송준비중";
+                                    break;
+                                case 4:
+                                    state = "배송중";
+                                    break;
+                                case 5:
+                                    state = "배송완료";
+                                    break;
+                                case 6:
+                                    state = "취소";
+                                    break;
+                                case 7:
+                                    state = "반품요청";
+                                    break;
+                                case 8:
+                                    state = "반품";
+                                    break;
+                                case 9:
+                                    state = "환불요청 ";
+                                    break;
+                                case 0:
+                                    state = "환불";
+                                    break;
+                            }
+
+
+                            let tb = $('<div>')
+                            let row = $('<div class="contents_box4">').append(
+                                '<div class="contents_box4_inner1"><div class="order_date"><p>'+ '구매일 ' + regdate + '</p></div>' +
+                                '<div class="default_ship"><p>'+ address1 + address2 + '<span>' + greenFlag + '</span><span>' + dawnFlag + '</span></p></div></div>' +
+                                '<div class="order_detail_button" style="cursor:pointer"><a href="#" alt="주문상세페이지 이동"></a></div>')
+                            row.append('</div>')
+
+                            let row2 = $('<div class="orderlist_contain" style="display: none">')
+                            // for(let i=0; i<proIdx.length; i++){a
+                            row2.append(
+                                '<div class="contents_box5"><div class="order_info"><p>받는 분 '+  recName+  '/'  + recHp +'</p>' +
+                                '<div class="order_info_right">' +
+                                '<p><a href="#" class="order_info_font3">' + state + '</a></p></div></div></div>' +
+                                `<div class="contents_box6"><div class="product_image" style="background: url('${proImg}') no-repeat; background-size: cover""></div><div class="product_info">` +
+                                '<p>' + proName + '</p><div class="contents_box6_inner"><p>' + proWeightSize + '</p><div class="product_info_line"></div><p>' + proCount + '개' + '</p></div>' +
+                                '</div><div class="mantoman_button_box"><input type="button" value="1:1문의" class="mantoman_button"></div></div>'
+                            )
+                            // }
+                            row2.append('</div>')
+
+                            tb.append(row)
+                            tb.append(row2)
+                            tb.append('</div>')
+                            $("#main_contents").append(tb)
+                        }
+
+                        $(".mantoman_button").click(function (){
+                            location.href = '/user/mypage_enrollMantoman';
+                        })
+
+                        $(".order_detail_button").click(function (e) {
+                            if ($(this).parents().parents().children(".orderlist_contain").css("display") === "block") {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "none");
+                            } else {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "block");
+                            }
+                        })
+
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+
+                } else if ($(".category_name1 > h2").text() === "자주 구매") {
+                    let url = "/api/frequentlyOrder/list?memIdx=" + urlidx + "&dateStart=" + date_start + "&dateEnd=" + date_end;
+                    console.log(url)
+
+                    $("#main_contents").empty();
+                    axios.get(url, {}).then(function (response) {
+                        for (let i in response.data.data) {
+                            let proName = response.data.data[i].proName;
+                            let count = response.data.data[i].count;
+                            let proImg = response.data.data[i].proImg;
+                            let proWeightSize = response.data.data[i].proWeightSize;
+
+                            let row = $('<div class="contents_box6">').append(
+                                `<div class="product_image" style="background: url('${proImg}') no-repeat; background-size: cover"></div>` +
+                                '<div class="product_info"><p>' + proName +  '</p></div>' +
+                                '<div class="favorite_box"><p class="favorite_count">구매횟수 ' + count + '</p></div></div>'
+                            )
+                            $("#main_contents").append(row)
+                        }
+                    })
+                }
+            })
+
+
+            $("#mg_ol_sc").click(function () {
+                $("#main_contents").empty();
+                date_start = $("#date_start").val();
+                date_end = $("#date_end").val();
+
+                if ($(".category_name1 > h2").text() === "주문배송") {
+                    let url = "/api/orderList/myPage?dateStart=" + date_start + "&dateEnd=" + date_end + "&type=1&memIdx=" + urlidx;
+                    console.log(url)
+                    axios.get(url, {}).then(function (response) {
+
+                        for (let i in response.data.data) {
+                            let proIdx = response.data.data[i].proIdx;
+                            let proName = response.data.data[i].proName;
+                            let proImg = response.data.data[i].proImg;
+                            let proWeightSize = response.data.data[i].proWeightSize;
+                            let proCount = response.data.data[i].proCount;
+                            let state = response.data.data[i].state;
+                            let regdate = response.data.data[i].regdate;
+                            let greenFlag = response.data.data[i].greenFlag;
+                            let dawnFlag = response.data.data[i].dawnFlag;
+                            let address1 = response.data.data[i].address1;
+                            let address2 = response.data.data[i].address2;
+                            let recName = response.data.data[i].recName;
+                            let recHp = response.data.data[i].recHp;
+
+
+                            regdate = regdate.toString().substring(0, 10);
+
+
+                            if (greenFlag === "TRUE") {
+                                greenFlag = "더 그린 배송지"
+                            } else {
+                                greenFlag = ''
+                            }
+
+                            if (dawnFlag === "TRUE") {
+                                dawnFlag = "새벽 배송"
+                            } else {
+                                dawnFlag = ''
+                            }
+
+                            switch (state) {
+                                case 1:
+                                    state = "입금완료";
+                                    break;
+                                case 2:
+                                    state = "상품준비중";
+                                    break;
+                                case 3:
+                                    state = "배송준비중";
+                                    break;
+                                case 4:
+                                    state = "배송중";
+                                    break;
+                                case 5:
+                                    state = "배송완료";
+                                    break;
+                                case 6:
+                                    state = "취소";
+                                    break;
+                                case 7:
+                                    state = "반품요청";
+                                    break;
+                                case 8:
+                                    state = "반품";
+                                    break;
+                                case 9:
+                                    state = "환불요청 ";
+                                    break;
+                                case 0:
+                                    state = "환불";
+                                    break;
+                            }
+
+
+                            let tb = $('<div>')
+                            let row = $('<div class="contents_box4">').append(
+                                '<div class="contents_box4_inner1"><div class="order_date"><p>'+ '구매일 ' + regdate + '</p></div>' +
+                                '<div class="default_ship"><p>'+ address1 + address2 + '<span>' + greenFlag + '</span><span>' + dawnFlag + '</span></p></div></div>' +
+                                '<div class="order_detail_button" style="cursor:pointer"><a href="#" alt="주문상세페이지 이동"></a></div>')
+                            row.append('</div>')
+
+                            let row2 = $('<div class="orderlist_contain" style="display: none">')
+                            // for(let i=0; i<proIdx.length; i++){a
+                            row2.append(
+                                '<div class="contents_box5"><div class="order_info"><p>'+ ' ' + recName+ + ' ' + '/' +  ' ' + recHp +'</p>' +
+                                '<div class="order_info_right">' +
+                                '<p><a href="#" class="order_info_font3">' + state + '</a></p></div></div></div>' +
+                                `<div class="contents_box6"><div class="product_image" style="background: url('${proImg}') no-repeat; background-size: cover""></div><div class="product_info">` +
+                                '<p>' + proName + '</p><div class="contents_box6_inner"><p>' + proWeightSize + '</p><div class="product_info_line"></div><p>' + proCount + '개' + '</p></div>' +
+                                '</div><div class="mantoman_button_box"><input type="button" value="1:1문의" class="mantoman_button"></div></div>'
+                            )
+
+                            row2.append('</div>')
+
+                            tb.append(row)
+                            tb.append(row2)
+                            tb.append('</div>')
+                            $("#main_contents").append(tb)
+                        }
+
+                        $(".mantoman_button").click(function (){
+                            location.href = '/user/mypage_enrollMantoman';
+                        })
+
+
+                        $(".order_detail_button").click(function (e) {
+                            if ($(this).parents().parents().children(".orderlist_contain").css("display") === "block") {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "none");
+                            } else {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "block");
+                            }
+                        })
+
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+
+                } else if ($(".category_name1 > h2").text() === "취소ㆍ교환ㆍ반품") {
+                    let url = "/api/orderList/myPage?dateStart=" + date_start + "&dateEnd=" + date_end + "&type=2&memIdx=" + urlidx;
+                    console.log(url)
+                    axios.get(url, {}).then(function (response) {
+
+                        for (let i in response.data.data) {
+                            let proIdx = response.data.data[i].proIdx;
+                            let proName = response.data.data[i].proName;
+                            let proImg = response.data.data[i].proImg;
+                            let proWeightSize = response.data.data[i].proWeightSize;
+                            let proCount = response.data.data[i].proCount;
+                            let state = response.data.data[i].state;
+                            let regdate = response.data.data[i].regdate;
+                            let greenFlag = response.data.data[i].greenFlag;
+                            let dawnFlag = response.data.data[i].dawnFlag;
+                            let address1 = response.data.data[i].address1;
+                            let address2 = response.data.data[i].address2;
+                            let recName = response.data.data[i].recName;
+                            let recHp = response.data.data[i].recHp;
+
+
+                            regdate = regdate.toString().substring(0, 10);
+
+                            // proIdx = proIdx.split(",")
+                            // proName = proName.split(",")
+                            // proImg = proImg.split(",")
+                            // proWeightSize = proWeightSize.split(",")
+                            // proCount = proCount.split(",")
+
+                            // console.log(proIdx)
+                            // console.log(proName)
+                            // console.log(proImg)
+                            // console.log(proWeightSize)
+                            // console.log(proCount)
+
+                            if (greenFlag === "TRUE") {
+                                greenFlag = "더 그린 배송지"
+                            } else {
+                                greenFlag = ''
+                            }
+
+                            if (dawnFlag === "TRUE") {
+                                dawnFlag = "새벽 배송"
+                            } else {
+                                dawnFlag = ''
+                            }
+
+                            switch (state) {
+                                case 1:
+                                    state = "입금완료";
+                                    break;
+                                case 2:
+                                    state = "상품준비중";
+                                    break;
+                                case 3:
+                                    state = "배송준비중";
+                                    break;
+                                case 4:
+                                    state = "배송중";
+                                    break;
+                                case 5:
+                                    state = "배송완료";
+                                    break;
+                                case 6:
+                                    state = "취소";
+                                    break;
+                                case 7:
+                                    state = "반품요청";
+                                    break;
+                                case 8:
+                                    state = "반품";
+                                    break;
+                                case 9:
+                                    state = "환불요청 ";
+                                    break;
+                                case 0:
+                                    state = "환불";
+                                    break;
+                            }
+
+
+                            let tb = $('<div>')
+                            let row = $('<div class="contents_box4">').append(
+                                '<div class="contents_box4_inner1"><div class="order_date"><p>'+ '구매일 ' + regdate + '</p></div>' +
+                                '<div class="default_ship"><p>'+ address1 + address2 + '<span>' + greenFlag + '</span><span>' + dawnFlag + '</span></p></div></div>' +
+                                '<div class="order_detail_button" style="cursor:pointer"><a href="#" alt="주문상세페이지 이동"></a></div>')
+                            row.append('</div>')
+
+                            let row2 = $('<div class="orderlist_contain" style="display: none">')
+                            // for(let i=0; i<proIdx.length; i++){a
+                            row2.append(
+                                '<div class="contents_box5"><div class="order_info"><p>'+ ' ' + recName+ + ' ' + '/' +  ' ' + recHp +'</p>' +
+                                '<div class="order_info_right">' +
+                                '<p><a href="#" class="order_info_font3">' + state + '</a></p></div></div></div>' +
+                                `<div class="contents_box6"><div class="product_image" style="background: url('${proImg}')" no-repeat; background-size: cover"></div><div class="product_info">` +
+                                '<p>' + proName + '</p><div class="contents_box6_inner"><p>' + proWeightSize + '</p><div class="product_info_line"></div><p>' + proCount + '개' + '</p></div>' +
+                                '</div><div class="mantoman_button_box"><input type="button" value="1:1문의" class="mantoman_button"></div></div>'
+                            )
+                            // }
+                            row2.append('</div>')
+
+                            tb.append(row)
+                            tb.append(row2)
+                            tb.append('</div>')
+                            $("#main_contents").append(tb)
+                        }
+
+                        $(".order_detail_button").click(function (e) {
+                            if ($(this).parents().parents().children(".orderlist_contain").css("display") === "block") {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "none");
+                            } else {
+                                $(this).parents().parents().children(".orderlist_contain").css("display", "block");
+                            }
+                        })
+
+                        $(".mantoman_button").click(function (){
+                            location.href = '/user/mypage_enrollMantoman';
+                        })
+
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+
+                } else if ($(".category_name1 > h2").text() === "자주 구매") {
+                    let url = "/api/frequentlyOrder/list?memIdx=" + urlidx + "&dateStart=" + date_start + "&dateEnd=" + date_end;
+                    console.log(url)
+                    axios.get(url, {}).then(function (response) {
+                        for (let i in response.data.data) {
+                            let proName = response.data.data[i].proName;
+                            let count = response.data.data[i].count;
+                            let proImg = response.data.data[i].proImg;
+                            let proWeightSize = response.data.data[i].proWeightSize;
+
+                            let row = $('<div class="contents_box6">').append(
+                                `<div class="product_image" style="background: url('${proImg}') no-repeat; background-size: cover""></div>` +
+                                '<div class="product_info"><p>' + proName + '개' + '</p></div>' +
+                                '<div class="favorite_box"><p class="favorite_count">구매횟수 ' + count + '</p></div></div>'
+                            )
+                            $("#main_contents").append(row)
+                        }
+                    })
+                }
+            })
+        })
+
+
+        $(function () {
+            let type;
+            let urlidx = $("#section_hidden").val()
+
+            $(".filter_outline3 > div").click(function (e) {
+                $("#main_contents").empty();
+                if ($(this).children("a").text() === "상품") {
+                    type = 1;
+                    let url = "/api/memberslikes/list?type=" + type + "&memIdx=" + urlidx;
+                    console.log(url)
+                    axios.get(url, {}).then(function (response) {
+                        for (let i in response.data.data) {
+                            let $proName = response.data.data[i].proName;
+                            let $proImg = response.data.data[i].proImg;
+                            let $proWeightSize = response.data.data[i].proWeightSize;
+                            let $proLikeCount = response.data.data[i].proLikeCount;
+                            let $proIdx = response.data.data[i].proIdx
+
+                            let row = $('<div class="contents_box6">').append(
+                                `<div class="product_image" style="background: url('${$proImg}') no-repeat; background-size: cover"></div>` +
+                                '<div class="product_info"><p>' + $proName + " " + '</p>' +
+                                '</div><div class="like_box"><div class="like_image" style="cursor: pointer" onclick="likedel()">' +
+                                '<input type="hidden" value="' + $proIdx + '"></div><p class="like_count">' + $proLikeCount + '</p>' +
+                                '</div></div></div>'
+                            )
+                            $("#main_contents").append(row);
+                        }
+
+                        $(".like_image").click(function (e) {
+                            let idx = $(this).children("input").val()
+                            let urlidx = $("#section_hidden").val()
+
+                            axios.delete("/api/memberslikes/delete?memIdx=" + urlidx + "&proIdx=" + idx, {}).then(function () {
+                                alert("좋아요를 취소합니다")
+                                location.reload()
+                            }).catch(function (err) {
+                                console.log(err)
+                            })
+
+                        })
+
+
+
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                } else {
+                    type = 2;
+                    let url = "/api/memberslikes/list?type=" + type + "&memIdx=" + urlidx;
+                    console.log(url)
+                    axios.get(url, {}).then(function (response) {
+                        for (let i in response.data.data) {
+                            let $mgTitle = response.data.data[i].mgTitle;
+                            let $mgImg = response.data.data[i].mgImg;
+                            let $mgLikeCount = response.data.data[i].mgLikeCount;
+                            let $mgIdx = response.data.data[i].mgIdx
+
+
+                            let row = $('<div class="contents_box6">').append(
+                                `<div class="product_image" style="background: url('${$mgImg}')  no-repeat; background-size: cover"></div>` +
+                                '<div class="product_info"><p>' + $mgTitle + '</p>' +
+                                '</div><div class="like_box"><div class="like_image" style="cursor: pointer" onclick="likedel()">' +
+                                '<input type="hidden" value="' + $mgIdx + '"></div><p class="like_count">' + $mgLikeCount + '</p>' +
+                                '</div></div></div>'
+                            )
+                            $("#main_contents").append(row);
+                        }
+
+                        $(".like_image").click(function (e) {
+                            let idx = $(this).children("input").val()
+                            let urlidx = $("#section_hidden").val()
+
+                            axios.delete("/api/memberslikes/delete?memIdx=" + urlidx + "&proIdx=" + idx, {}).then(function () {
+                                alert("좋아요를 취소합니다")
+                                location.reload()
+                            }).catch(function (err) {
+                                console.log(err)
+                            })
+
+                        })
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">주문 내역</h2>
+                </div>
+                <div class="contents_box2">
+                    <ul class="contents_category">
+                        <li class="contents_category_list"><span>주문배송</span></li>
+                        <li class="contents_category_list"><span>취소ㆍ교환ㆍ반품</span></li>
+                        <li class="contents_category_list"><span>자주 구매</span></li>
+                        <li class="contents_category_list"><span>좋아요</span></li>
+                    </ul>
+                </div>
+                <div class="orderlist_box">
+                    <div class="contents_box3">
+                        <div class="category_name1">
+                            <h2>주문배송</h2>
+                        </div>
+                        <div class="filter_outline" id="filter_period_box">
+                            <div id="month_btn"><a href="#">최근 1개월</a></div>
+                            <div id="threemonth_btn"><a href="#">3개월</a></div>
+                            <div id="sixmonth_btn"><a href="#">6개월</a></div>
+                            <div id="period_select"><a href="#">기간 조회</a></div>
+                        </div>
+                        <div class="filter_outline3" style="display: none;" id="filter_like_box">
+                            <div><a href="#">상품</a><span></span></div>
+                            <div><a href="#">매거진</a><span></span></div>
+                        </div>
+                        <div id="mg_period" style="float:right; display: none;">
+                            <input type="date" id="date_start"> - <input type="date" id="date_end"><input type="button"
+                                                                                                          value="조회하기"
+                                                                                                          id="mg_ol_sc">
+                        </div>
+                    </div>
+                </div>
+                <div id="main_contents">
+
+                </div>
+            </div>
+            <!— main 끝 —>
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

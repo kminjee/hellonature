@@ -1,0 +1,788 @@
+/*넷마블체*/
+@font-face {
+    font-family: 'netmarbleM';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleM.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+.notosanskr * { font-family: 'Noto Sans KR', sans-serif; }
+
+#PS_c1_img {width: 400px; height: 200px; border: 1px solid #266266; margiwn-left: -30px}
+.file_input_div_p
+{position: relative; width: 120px; height: 40px; overflow: hidden; margin-top: -40px; margin-left: 430px}
+
+.file_input_button_p
+{position: absolute; top: 0px;color: #9b9b9b;border-style: solid;background-color: #266266;
+    color: white; text-align: center; border-radius: 5px; width: 120px;height: 40px;}
+
+.file_input_hidden_p
+{font-size: 45px; position: absolute; right: 0px; top: 0px; opacity: 0;
+    filter: alpha(opacity=0); -ms-filter: "alpha(opacity=0)"; -khtml-opacity: 0; -moz-opacity: 0;}
+
+/* 공통 부분 */
+* { margin: 0; padding: 0; font-family: 'Noto Sans KR'; box-sizing: border-box; }
+body {  overflow-x: hidden; background-color: #ebebeb; width: 100%; }
+.content_title {  margin: 11px; background-color: white; padding: 15px 30px; box-shadow: 5px 5px 5px rgb(180, 180, 180);}
+.content_title p {  font-size: 21px; }
+.content_title span { font-size: 16px; margin-left: 10px; }
+
+input[type=checkbox]{overflow: hidden; position: absolute; left:-1000px; width: 1px; height: 1px;}
+input[type=checkbox] + label{
+    display: inline-block; height: 20px; padding-left: 25px !important; line-height: 13px !important;
+    background: url(../img/checkbox.png) no-repeat 0 0; background-size: 15px;
+    cursor: pointer; vertical-align: middle; font-size: 15px;}
+input[type=checkbox]:checked + label{background: url(../img/checked.png) no-repeat 0 0; background-size: 15px;}
+
+.file_input_textbox{float: left}
+.file_input_div{position: relative; width: 250px; height: 40px; overflow: hidden;}
+.file_input_hidden
+{font-size: 23px; position: absolute; right: 0px; top: 0px; opacity: 0;}
+.file_input_button
+{position: absolute; top: 0px;color: #FFFFFF;border-style: solid;background-color: #266266;
+color: white; text-align: center; border-radius: 5px; width: 250px;height: 40px;}
+.file_input_hidden
+{font-size: 45px; position: absolute; right: 0px; top: 0px; opacity: 0;
+filter: alpha(opacity=0); -ms-filter: "alpha(opacity=0)"; -khtml-opacity: 0;}
+
+.file_input_div_s{position: relative; width: 170px; height: 130px; overflow: hidden;
+background-color: #e7f1ee; }
+.file_input_hidden_s
+{font-size: 23px; position: absolute; right: 0px; top: 0px; opacity: 0;}
+.file_input_button_s
+{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+width: 240px; height: 200px; padding: 30px;}
+.file_input_hidden_s
+{font-size: 45px; position: absolute; right: 0px; top: 0px; opacity: 0;
+filter: alpha(opacity=0); -ms-filter: "alpha(opacity=0)"; -khtml-opacity: 0; -moz-opacity: 0;}
+
+.file_input_div_k
+{position: relative; width: 300px; height: 200px; overflow: hidden;}
+.file_input_button_k
+{position: absolute; top: 0px; background-color: #e9e7e7; border: 2px solid #266266; width: 300px; height: 200px;}
+.file_input_hidden_k
+{font-size: 45px; position: absolute; right: 0px; top: 0px; opacity: 0;
+filter: alpha(opacity=0); -ms-filter: "alpha(opacity=0)"; -khtml-opacity: 0; -moz-opacity: 0;
+width: 300px; height: 200px;}
+
+.file_input_div_b{position: relative; width: 250px; height: 27px; overflow: hidden;}
+.file_input_hidden_b
+{font-size: 23px; position: absolute; right: 0px; top: 0px; opacity: 0;}
+.file_input_button_b
+{position: absolute; top: 0px;color: #FFFFFF;border-style: solid;background-color: #266266;
+color: white; text-align: center; border-radius: 5px; width: 250px;height: 27px;}
+.file_input_hidden_b
+{font-size: 45px; position: absolute; right: 0px; top: 0px; opacity: 0;
+filter: alpha(opacity=0); -ms-filter: "alpha(opacity=0)"; -khtml-opacity: 0;}
+
+
+table tr td label{margin-left: 10px;}
+table tr th label{margin-left: 10px;}
+
+form table {  margin: 0 auto;}
+form table select { height: 34px;}
+form .list_table th { background-color: rgb(247, 247, 247); }
+table { border-collapse: collapse; }
+table tr td span { margin-right: 35px;}
+textarea { margin: 0 0 10px; width: 100%; }
+
+.green_title { padding: 14px 40px; font-size: 18px; background-color: #266266; color: white; }
+.product_title label { font-size: 18px; font-weight: bold; color: #333;  }
+.product_title { border-bottom: 2px solid #266266; padding-bottom: 7px;}
+
+.create_html { background-color: #266266; color: white;
+    height: 45px; padding: 10px 20px; font-size: 15px; border-radius: 5px;}
+.create_prod { background-color: #266266; color: white;
+    height: 45px; padding: 10px 20px; font-size: 18px; border-radius: 5px;
+    margin-top: 30px;}
+
+/* 페이지 선택 부분 */
+.content_title_click { background-color: white; margin: 11px; padding: 15px 0; font-size: 17px; text-align: center;box-shadow: 5px 5px 5px rgb(180, 180, 180); }
+.content_title_click a {  color: rgb(77, 75, 75);  margin: 0 90px 0 70px;  text-decoration: none; }
+.content_title_click a:hover { color: rgb(151, 148, 148); }
+
+/* 페이지 박스 */
+.pageBox ul { display: flex; justify-content: center;}
+.pageBox ul li
+{ border: 1px solid #ebebeb; width:30px; text-align: center; margin-top: 20px;
+border-top: 1px solid #555252bd; border-bottom: 1px solid #555252bd; list-style: none; }
+.pageBox > ul li a { text-decoration: none; color:#555252bd; }
+.pageBox > ul li a:visited { color:#555252bd; }
+#Maxprev {border-left: 1px solid #555252bd; }
+#Maxnext {border-right: 1px solid #555252bd; }
+
+
+/* 버튼, lnput 부분 */
+.bottom_btn { text-align: center; margin: 10px 0; }
+ /*.bottom_btn input[type="button"]*/ { padding: 6px 22px;}
+input[type="text"], input[type="date"], input[type="email"], input[type="password"], input[type="tel"] { height: 38px; padding-left: 10px; caret-color: #2d858b; border-radius: 5px; border: 1px solid #266266; box-shadow: 2px 2px 2px #9B9B9B;}
+input[name="file"] { padding: 60px 34px; border: 1px solid #266266; color: #3c8b91;}
+input[name="target"]
+{ height: 55px; width: 100px; margin-right: 10px; background-color: rgb(245, 244, 244); border: 1px solid #999;
+cursor: pointer; }
+input[name="target"]:hover
+{ background-color: #266266; color: white; }
+input[type="radio"] { margin-right: 8px; }
+input[type="button"], input[type="submit"], input[type="reset"],button[type="submit"],button[type="reset"] { padding: 4px 16px; background-color: white; color: #266266; border: 1px solid #266266; border-radius: 5px; font-size: 13px; box-shadow: 3px 3px 3px #9B9B9B;}
+input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover, button[type="submit"]:hover, button[type="reset"]:hover { background-color: #266266; color: white ;}
+.file_button { background-color:#e7f1ee; text-align: center; padding: 40px 0; width: 300px;}
+.banner_button {display: flex;}
+select { box-shadow: 2px 2px 2px #9B9B9B;}
+#zip_btn { height: 37px; border: 2px solid #266266; }
+
+/* Admin_Login.html */
+.login {    position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.login_main {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    width: 600px;
+    height: 520px;
+    border: 4px solid #266266;
+    background-color: white;
+    margin: 0 auto;
+    box-shadow: 5px 5px 5px gray;
+}
+.login-form {
+    border: none;
+    width: 550px;
+    height: 470px;
+    background-color: white;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+.login-form h2 { padding: 68px 0; font-size: 35px; color: #04363a;}
+.login form input[type="text"], .login form input[type="password"] {
+    border: 1px solid #266266;
+    background-color: white;
+    margin: 0 20px 10px;
+    width: 370px;
+    border-radius: 5px;
+    font-size: 17px;
+    display: inline-block;
+    padding: 25px 15px;
+}
+.login form input[type="submit"] {
+    margin: 0 20px 30px;
+    width: 370px;
+    border-radius: 5px;
+    font-size: 17px;
+    background-color: #266266;
+    color: white;
+    padding: 15px 0;
+}
+.login form input[type="submit"]:hover { background-color: white; color: #266266; border: 1px solid #266266;}
+.links { text-align: center; }
+.links a { font-size: 15px; color: #9B9B9B; }
+.links a:hover { color: #3d9b7c;}
+
+/* 1-2 Admin_ProductCreate.html */
+.Pcreate {  margin: 11px; background-color: white; padding: 30px 50px; }
+.Pcreate form { margin-bottom: 11px; padding: 25px 80px 0; }
+
+form[name="product_create"] table { margin: 25px 0 0 80px;}
+form[name="product_create"] table tr th { padding-right: 60px; text-align: left; font-size: 14px;}
+form[name="product_create"] table tr td { padding: 20px 50px 20px 50px; font-size: 14px; }
+form[name="product_create"] table tr td label {  margin-left: 70px; padding-left: 30px;}
+form[name="product_create"] table input[type="text"] { width: 420px;  }
+form[name="product_create"] table span { }
+form[name="product_create"] table input[type="text"]:nth-child(1) { margin-right: 0;}
+form[name="product_create"] table select { width: 208px; height: 38px; padding-left: 8px;}
+form[name="product_create"] table input[type="file"] { padding: 60px 0 60px 5px;}
+form[name="product_create"] table tr th:nth-child(3) { padding-right: 0px;}
+form[name="product_create"] table tr:nth-child(14) { border-top: 0.5px dotted rgb(189, 187, 187);}
+form[name="product_create"] table tr:nth-child(15) { border-bottom: 0.5px dotted rgb(189, 187, 187);}
+form[name="product_create"] table a img { width: 32px; }
+form[name="product_create"] table input[name="brand"] { width: 390px; }
+form[name="product_create"] table input[type="date"] { width: 205px; }
+form[name="product_create"] .modal_search input[type="text"] { width: 300px; }
+
+
+/* 1-2 Admin_ProductText.html */
+#PT_title { margin-bottom: 20px; }
+
+/* 1-3 Admin_OrderList.html */
+.Order_list { margin: 11px; }
+.OL_c1, .OL_c2 { background-color: white; box-sizing: border-box; }
+.OL_c1 form { margin-bottom: 11px; padding: 25px 80px 15px; }
+
+form[name="order_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="order_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="order_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="order_list"] { width: 90%; margin: 50px auto; padding-bottom: 30px; }
+form[name="order_list"] input[type="button"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="order_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="order_search"] table tr td { padding: 15px 0;}
+form[name="order_search"] table input[type="text"] { width: 445px; }
+form[name="order_search"] table input[type="date"] { width: 155px; }
+form[name="order_search"] table span  { font-size: 14px;}
+form[name="order_search"] table { margin-top: 15px;}
+form[name="order_search"] table span input[type="checkbox"] { margin-right: 7px; }
+form[name="order_search"] select  { height: 38px; margin-right: 8px;}
+
+
+/* 1-4 Admin_ProductQuestion.html */
+.Pro_question { margin: 11px; }
+.PQ_c1 { margin-bottom: 11px; padding: 25px 80px; background-color: white; box-sizing: border-box; }
+form[name="pro_question"] { margin-top: 25px;}
+form #pro_question tr th { font-size: 14px; text-align: center; border: 1px solid #999; width: 140px; }
+form #pro_question tr td { padding: 14px 10px; border: 1px solid #999; font-size: 14px; background-color: rgb(240, 240, 240); width: 300px;}
+form #pro_question input[type="text"] { width: 322px;}
+form #pro_question input[type="date"] { width: 155px;}
+form #pro_question span  { font-size: 13px;}
+form #pro_question span input[type="checkbox"] { margin-right: 7px; }
+form[name="pro_question"] p:nth-child(3) { margin-top: 50px; }
+#product_answer { margin: 30px 60px; text-align: left; font-size: 15px;}
+#product_answer tr th { padding: 10px 0;}
+
+/* 1-4 Admin_ProductQuestionList.html*/
+.PQL_list { margin: 11px; }
+.PQL_c1, .PQL_c2 { background-color: white; box-sizing: border-box; }
+.PQL_c1 form { margin-bottom: 11px; padding: 25px 80px 15px; }
+
+form[name="PQL_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="PQL_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="PQL_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="PQL_list"] { width: 90%; margin: 50px auto; padding-bottom: 30px; }
+form[name="PQL_list"] input[type="button"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="Pql_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="Pql_search"] table tr td { padding: 15px 0;}
+form[name="Pql_search"] table input[type="date"] { width: 200px; }
+form[name="Pql_search"] table span  { font-size: 14px;}
+form[name="Pql_search"] table { margin-top: 15px;}
+form[name="Pql_search"] table span input[type="checkbox"] { margin-right: 7px; }
+form[name="Pql_search"] select  { height: 38px; margin-right: 8px; }
+
+/* 1-5 Admin_ProductReview.html */
+.Review_list { margin: 11px; }
+.PR_c1 { margin-bottom: 11px; padding: 25px 80px 20px;}
+.PR_c1, .PR_c2 { background-color: white; box-sizing: border-box; }
+.PR_c2 #PR_c2_title p span { font-size: 14px; margin-left: 10px;}
+
+form[name="review_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163); }
+form[name="review_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="review_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="review_list"] { width: 90%; margin: 50px auto; padding-bottom: 30px; }
+form[name="review_list"] input[type="button"],form[name="coupon_list"] input[type="submit"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="pro_review_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="pro_review_search"] table tr td { padding: 15px 0;}
+form[name="pro_review_search"] table input[type="text"] { width: 400px;}
+form[name="pro_review_search"] table span  { font-size: 13px;}
+form[name="pro_review_search"] table { margin-top: 15px;}
+form[name="pro_review_search"] select  { height: 38px;}
+
+/* 1-5 Admin_ProductAnswer.html */
+.Pro_review { margin: 11px; }
+.PA_c1 { margin-bottom: 11px; padding: 25px 80px; background-color: white; box-sizing: border-box; }
+
+form[name="pro_review"] table, form[name="pro_question"] table { margin-top: 40px; }
+form[name="pro_review"] { margin-top: 25px;}
+form #pro_review tr th { font-size: 14px; text-align: center; border: 1px solid #999; width: 140px; height: 55px;}
+form #pro_review tr td { padding: 14px 10px; border: 1px solid #999; font-size: 14px; background-color: rgb(240, 240, 240); width: 300px; }
+form #pro_review input[type="text"] { width: 322px;}
+form #pro_review input[type="date"] { width: 155px;}
+form #pro_review span  { font-size: 13px;}
+form #pro_review span input[type="checkbox"] { margin-right: 7px; }
+form[name="pro_review"] p:nth-child(3) { margin-top: 50px; }
+#review_answer { margin: 30px 60px; text-align: left; font-size: 15px;}
+#review_answer tr th { padding: 10px 0;}
+form #pro_review #files img{ width: 300px;}
+
+/* 4-1 Admin_Fresh.html */
+.Fresh { margin: 11px; background-color: white; padding-bottom: 20px;}
+.Fresh .green_title { margin-bottom: 0;}
+
+/* 4-2 Admin_PopupStore.html */
+.Pstore { margin: 11px;}
+.PS_c1 { background-color: white; margin-bottom: 11px;}
+.PS_c1 form { margin-bottom: 11px; padding: 25px 80px 20px; }
+
+form[name="pop_enter"] table tr th { font-size: 14px; text-align: left; width: 150px;}
+form[name="pop_enter"] table tr td { padding: 15px 20px; }
+form[name="pop_enter"] table input[type="text"] { width: 664px;}
+form[name="pop_enter"] table input[name="brand"] { width: 200px; }
+form[name="pop_enter"] table input[type="date"] { width: 155px;}
+form[name="pop_enter"] table span  { font-size: 13px;}
+form[name="pop_enter"] table select { width: 100px; padding-left: 8px; margin-right: 40px;}
+form[name="pop_enter"] table tr th:nth-child(3) { width: 100px; padding-left: 40px; }
+.pop_btn { position: absolute; border: none; background-color: white; cursor: pointer;}
+.pop_btn img { height: 38px; }
+form[name="pop_enter"] table .modal_search input[type="text"] { width: 310px; margin-right: 8px;}
+form[name="pop_enter"] table .modal_search span, form[name="pop_enter"] table .modal_list span { font-size: 16px;}
+.Pstore .green_title { margin-bottom: 0;}
+#PS_c1_btnBox span input { width: 150px; height: 42px; border: 2px solid #266266; font-size: 16px; background-color: white; color: #266266;  }
+#PS_c1_btnBox span input:hover {font-size: 15px; background-color: #266266; color: white; }
+#PS_c1_btnBox { margin-top: 30px;}
+
+/* 4-3 Admin_EventList.html */
+.Event_list{ margin: 11px; }
+.EL_c1 form { margin-bottom: 11px; padding: 25px 80px 20px; }
+.EL_c1, .EL_c2 { background-color: white; box-sizing: border-box; }
+.EL_c1 #EL_c1_title p span { font-size: 14px; }
+
+form[name="event_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163); }
+form[name="event_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="event_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="event_list"] { width: 90%; margin: 50px auto; padding-bottom: 30px; }
+form[name="event_list"] input[type="button"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="event_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="event_search"] table { margin-top: 15px; }
+form[name="event_search"] table tr td { padding: 15px 0;}
+form[name="event_search"] table span  { font-size: 13px;}
+form[name="event_search"] select  { height: 38px; width: 160px; padding-left: 8px;}
+form[name="event_search"] input[type="date"] { width: 230px;}
+form[name="event_search"] input[type="text"] { width: 310px;}
+
+/* 4-3 Admin_EventCreate.html */
+.Ecreate { margin: 11px; background-color: white; }
+.Ecreate form { margin-bottom: 11px; padding: 25px 80px 15px; }
+
+form[name="create_event"] .EC_table { margin: 20px auto; }
+form[name="create_event"] table { margin-top: 20px;}
+form[name="create_event"] table tr th { padding-right: 60px; text-align: left; font-size: 14px;}
+form[name="create_event"] table tr td { padding: 15px 50px 15px 50px; font-size: 14px; }
+form[name="create_event"] table tr td input[type="text"] { width: 700px; height: 42px;}
+form[name="create_event"] table tr td input[type="date"] { width: 210px; height: 42px;}
+form[name="create_event"] table tr td select { width: 210px; padding-left: 8px; height: 42px;}
+
+
+/* 4-4 Admin_BrandList.html */
+.Brand_list { margin: 11px; }
+.BL_c1, .BL_c2 { background-color: white; box-sizing: border-box; }
+.BL_c1 form { margin-bottom: 11px; padding: 25px 80px 20px; }
+.BL_c2 #BL_c2_title p span { font-size: 14px; }
+
+form .list_select { padding: 3px 7px; font-size: 13px; }
+form[name="brand_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="brand_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="brand_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="brand_list"] { width: 90%; margin: 50PX auto 22px; padding-bottom: 30px; }
+form[name="brand_list"] input[type="button"],form[name="coupon_list"] input[type="submit"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="brand_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="brand_search"] table tr td { padding: 15px 0;}
+form[name="brand_search"] table input[type="text"] { width: 322px;}
+form[name="brand_search"] table input[type="date"] { width: 155px;}
+form[name="brand_search"] table { margin-top: 15px; }
+form[name="brand_search"] table span  { font-size: 14px;}
+form[name="brand_search"] table span input[type="checkbox"] { margin-right: 7px; }
+
+.BL_c3 form { margin-bottom: 11px; padding: 25px 80px 20px; }
+.BL_c3, .BL_c4 { background-color: white; box-sizing: border-box; margin: 11px;}
+.BL_c4 #BL_c4_title p span { font-size: 14px; }
+
+form[name="product_list"] table { border: 1px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="product_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="product_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="product_list"] { width: 90%; margin: 50px auto; padding-bottom: 30px; }
+form[name="product_list"] input[type="button"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="product_search"] table tr th { font-size: 14px; text-align: left; }
+form[name="product_search"] table { margin-top: 15px; }
+form[name="product_search"] table tr td { padding: 15px 0; }
+form[name="product_search"] table input[type="text"] { width: 322px; }
+form[name="product_search"] table span  { font-size: 13px;}
+form[name="product_search"] select  { height: 38px;}
+form[name="product_search"] input[type="button"] { margin-left: 10px; height: 35px; width: 65px;}
+
+
+/* 4-4 Admin_BrandCreate.html */
+.Bcreate { margin: 11px; background-color: white;}
+.Bcreate form { margin-bottom: 11px; padding: 25px 80px; }
+
+form[name="brand_create"] table { margin:25px 0 0 80px;}
+form[name="brand_create"] table tr th { padding-right: 60px; text-align: left; font-size: 14px;}
+form[name="brand_create"] table tr td { padding: 15px 50px 15px 50px; font-size: 14px; }
+form[name="brand_create"] table tr td label {  margin-left: 70px;  padding-left: 30px; border-left: 1px solid #999; }
+form[name="brand_create"] table input[type="text"]  { width: 650px; margin-right: 10px; height: 40px;}
+form[name="brand_create"] table input[name="banner"] { padding: 0; width: 220px; border: 1px solid #266266; color: #3c8b91;}
+form[name="brand_create"] table input[type="submit"] { padding: 0; border-radius: 0; height: 27px; width: 450px;}
+form[name="brand_create"] table input[type="submit"]:hover { color: #266266; background-color: white; border: 2px solid #266266;}
+.banner_button { margin: 0;}
+.banner_content { height: 200px; border: 1px solid #999; box-shadow: 5px 5px 5px gray; position: relative;}
+.banner_notice { padding: 5px; font-size: 12px; color: rgb(236, 130, 8);}
+.banner_button input[type="submit"] { color: white; background-color: #266266;}
+#BCT_logo_img {width: 300px; height: 200px; border: 2px solid #262626;}
+
+/* 4-4 Admin_BrandEdit.html */
+.Bedit { margin: 11px; background-color: white;}
+.Bedit form { margin-bottom: 11px; padding: 25px 80px; }
+
+form[name="brand_edit"] table { margin:25px 0 0 80px; }
+form[name="brand_edit"] table tr th { padding-right: 60px; text-align: left; font-size: 14px;}
+form[name="brand_edit"] table tr td { padding: 15px 50px 15px 50px; font-size: 14px; }
+form[name="brand_edit"] table tr td label {  margin-left: 70px;  padding-left: 30px; border-left: 1px solid #999; }
+form[name="brand_edit"] table input[type="text"]  { width: 650px; margin-right: 10px; height: 40px;}
+form[name="brand_edit"] table input[name="banner"] { padding: 0; width: 220px; border: 1px solid #266266; color: #3c8b91; }
+form[name="brand_edit"] table input[type="submit"] { padding: 0; border-radius: 0; height: 27px; width: 450px;}
+form[name="brand_edit"] table input[type="submit"]:hover { color: #266266; background-color: white; border: 2px solid #266266;}
+#BE_c1_btnBox input { width: 450px; height: 46px; background-color: #266266; color: white; font-size: 15px; box-shadow: 6px 6px 6px rgb(168 168 168); border: 2px solid #98c0c2;}
+#BE_c1_btnBox { font-size: 15px; margin-top: 50px;}
+#BCE_banner{width:650px; height:160px; position: absolute; top:50%; left:50%; transform: translate(-50%, -50%);}
+#BCT_banner{width:650px; height:160px; position: absolute; top:50%; left:50%; transform: translate(-50%, -50%);}
+
+/* 5-1 Admin_Notice.html */
+.Notice { margin: 11px; }
+.No_c1, .No_c2 { background-color: white; box-sizing: border-box; }
+.No_c1 form { margin-bottom: 11px; padding: 25px 80px 20px; }
+.No_c2 #No_c2_title p span { font-size: 14px; }
+
+form .list_select { padding: 3px 7px; font-size: 13px; }
+form[name="notice_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="notice_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="notice_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="notice_list"] { width: 90%; margin: 50px auto 22px; padding-bottom: 30px; }
+form[name="notice_list"] input[type="button"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="notice_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="notice_search"] table tr td { padding: 10px 0;}
+form[name="notice_search"] table input[type="text"] { width: 322px;}
+form[name="notice_search"] table input[type="date"] { width: 155px;}
+form[name="notice_search"] table span  { font-size: 13px;}
+form[name="notice_search"] table { margin-top: 15px;}
+
+
+/* 5-1 Admin_NoticeCreate.html */
+.Ncreate { margin: 11px; background-color: white;}
+.Ncreate form { margin-bottom: 11px; padding: 25px 80px; }
+form[name="notice_create"] .green_title { margin-top: 40px;}
+form[name="notice_create"] select { width: 150px; padding-left: 8px; height: 39px;}
+form[name="notice_create"] table { margin:25px 0 0 80px;}
+form[name="notice_create"] table tr th { padding-right: 60px; text-align: left; font-size: 14px;}
+form[name="notice_create"] table tr td { padding: 20px 50px 5px 50px; font-size: 14px; }
+form[name="notice_create"] table tr td label {  margin-left: 70px;  padding-left: 30px; border-left: 1px solid #999; }
+form[name="notice_create"] table input[type="text"]  { width: 650px; margin-right: 10px; height: 39px; }
+
+
+/* 5-2 Admin_PaymentHistory.html */
+.Pay_list { margin: 11px; background-color: white; }
+.PH_c1 form { margin-bottom: 11px; padding: 25px 80px;}
+
+form[name="payment_search"] table { margin-top: 15px;}
+form[name="payment_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="payment_search"] table tr td { padding: 10px 0;}
+form[name="payment_search"] table input[type="text"] { width: 250px;}
+form[name="payment_search"] table input[type="date"] { width: 155px;}
+form[name="payment_search"] table span  { font-size: 14px;}
+form[name="payment_search"] table select { width: 155px; margin-right: 10px; height: 38px; padding-left: 8px;}
+
+
+/* 5-5 Admin_UserEdit.html */
+.Uedit {  margin: 11px; background-color: white; padding: 30px 50px; }
+.Uedit form { margin-bottom: 11px; padding: 25px 80px 0; }
+
+form[name="edit"] table { margin-top: 20px; }
+form[name="edit"] table tr th { padding-right: 60px; text-align: left; font-size: 14px;}
+form[name="edit"] table tr td { padding: 20px 50px 20px 50px; font-size: 14px; }
+form[name="edit"] table tr td label {  margin-left: 70px;  padding-left: 30px; border-left: 1px solid #999; }
+form[name="edit"] table input[type="text"], form[name="edit"] table input[type="email"],form[name="edit"] table input[type="password"],form[name="edit"] table input[type="tel"] { width: 400px;}
+form[name="edit"] table tr td label .mail { padding-right: 15px;}
+form[name="edit"] table .sel_date { width: 100px; padding-left: 8px; margin-right: 5px;}
+form[name="edit"] table .sel_date:nth-child(2), form[name="edit"] table .sel_date:nth-child(3) { margin-left: 15px;}
+form[name="edit"] table .sel_level { width: 180px; padding-left: 8px;}
+
+
+/* 5-6 Admin_CouponCreate.html */
+.Cou_create { margin: 11px; background-color: white; }
+.Cou_create form { margin-bottom: 11px; padding: 25px 80px 0; }
+
+form[name="coupon_create"] table { margin: 25px 0 0 80px;}
+form[name="coupon_create"] table tr th { padding-right: 60px; text-align: left; font-size: 15px;}
+form[name="coupon_create"] table tr td { padding: 25px 50px 25px 50px; font-size: 15px; }
+form[name="coupon_create"] table tr td input[name="create_text"] { width: 460px; }
+form[name="coupon_create"] table tr td input[name="price"] { width: 250px;}
+form[name="coupon_create"] table tr td input[name="date"] { width: 250px;}
+form[name="coupon_create"] #CC_c1_btnBox { padding: 20px 0 25px;}
+form[name="coupon_create"] table tr td input[type="text"] { height: 40px; }
+
+/* 5-6 Admin_CouponList.html */
+.Cou_list { margin: 11px; }
+.CL_c1, .CL_c2 { background-color: white; box-sizing: border-box; }
+.Cou_list form { margin-bottom: 11px; padding: 25px 80px 15px; }
+
+form[name="coupon_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="coupon_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="coupon_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="coupon_list"] { width: 100%; margin: 30px auto; padding-bottom: 30px; }
+form[name="coupon_list"] input[type="button"],form[name="coupon_list"] input[type="submit"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="coupon_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="coupon_search"] table tr td { padding: 5px 0;}
+form[name="coupon_search"] table { margin-top: 15px;}
+form[name="coupon_search"] table input[type="text"] { width: 453px;}
+form[name="coupon_search"] table input[type="date"] { width: 220px;}
+
+
+/* Admin_RecipeCreate.html */
+.RCreate {  margin: 11px;  }
+.RCreate .RC_form { margin-bottom: 11px; }
+.RC_c1 { background-color: white; padding: 30px 80px 0;}
+.RC_c2 { background-color: white; }
+.RC_table { margin:25px 0 0 80px;}
+.RC_table tr th {font-size: 15px; text-align: left; }
+.RC_table tr td { padding: 20px 0; font-size: 14px;}
+.RC_table tr td label {  margin-left: 70px;  padding-left: 30px; border-left: 1px solid #999; }
+.RC_table input[type="text"]  { width: 600px; margin-right: 10px; height: 38px;}
+.RC_table select { width: 200px; height: 38px; padding-left: 8px; margin-right: 5px;}
+.RC_table select:nth-child(2) { margin-left: 10px;}
+
+.RCreate #dynamicTable { border: 2px solid #266266; margin-left: 0;  }
+.RCreate #dynamicTable th { border: 1px solid #266266; width: 200px; text-align: center; height: 38px; background-color: white; color: #266266;}
+.RCreate #dynamicTable td { border: 1px solid #266266; width: 200px; text-align: center; height: 38px; }
+.RCreate .recipe_add input[type="text"] { margin-right: 0;  width: 200px;}
+.recipe_add button {  width: 100px; height: 38px; background-color: white; color: #266266; border: 1px solid #266266; border-radius: 5px; font-size: 14px;}
+.recipe_add button:hover { color: white; background-color: #266266;}
+.RC_form { margin: 0 auto; }
+.RC_image { margin-top: 10px; display: flex;}
+.txt_add { height: 38px; font-size: 15px; margin-bottom: 7px;}
+.RC_content { margin: 15px 20px; }
+.RC_content input { margin-left: 30px;}
+.RC_htmllist { border-bottom: 3px solid #266266; border-radius: 10px; margin-bottom: 15px; }
+.RCreate table tr .recipe_table { padding-bottom: 60px; padding-top: 0;}
+#RC_c1_btnBox input { width: 450px; height: 46px; background-color: #266266; color: white; font-size: 16px; box-shadow: 6px 6px 6px rgb(168 168 168); border: 2px solid #98c0c2;}
+#RC_c1_btnBox input:hover { color: #266266; background-color: white; border: 2px solid #266266; font-weight: bold;}
+#RC_c1_btnBox { margin: 40px 0 0; padding-bottom: 40px;}
+#RC_btnBox { text-align: right; }
+#RC_btnBox input { width: 130px; border: 1px solid #266266; font-size: 14px;}
+#RC_btnBox2 { text-align: right; }
+#RC_btnBox2 input { width: 130px; border: 1px solid #266266; font-size: 14px;}
+.RC_c3_editlist > p { font-size: 15px; font-weight: bold; padding: 20px 0;}
+.RC_c3_editlist { width:80%; margin: 0 auto; border-top: 2px dotted #266266;}
+
+.EC_prodTitle{width: 100%; font-size: 17px; font-weight: bold; padding: 20px 0; }
+.EC_proBox {width: 100%; height: 400px; border-top: 3px solid #ebebeb; border-bottom: 3px solid #ebebeb;
+    display: flex; align-items: center; font-size: 15px; color: #555252bd;}
+.EC_addTitle { font-size: 18px; font-weight: bold; margin-top: 30px;}
+.EC_scbox { width: 100%; margin-top: 20px; font-size: 15px; border: 2px solid rgb(192, 191, 191);}
+.EC_scbox tr td { padding-left: 20px; }
+.EC_scbox tr td label {padding-right: 50px;}
+.EC_list { width: 100%; border-top: none; text-align: center;}
+#EC_scName { width: 450px; height: 38px;}
+#EC_scbtn { margin-left: 5px; height: 38px; width: 70px;}
+.EC_scbox select { width: 200px; height: 38px; padding-left: 10px; }
+.EC_scbox input[type="checkbox"] { margin-right: 10px;}
+.EC_p_list { font-size: 15px; margin-top: 10px; border: 2px solid rgb(192, 191, 191); box-shadow: 8px 8px 8px rgb(163, 163, 163); }
+.EC_p_list th { background-color: rgb(247, 247, 247); text-align: center;}
+.EC_p_list th, .EC_p_list td { border: 1px solid rgb(192, 191, 191);}
+#EC_btnBox { text-align: right; }
+#EC_btnBox input { width: 130px; border: 1px solid #266266; font-size: 14px;}
+.EC_editlist > p { font-size: 15px; font-weight: bold; padding: 20px 0;}
+.EC_editlist { width:80%; margin: 0 auto; border-top: 2px dotted #266266;}
+
+/* Admin_MagazineList.html */
+.MList{ margin: 11px; }
+.ML_c1 form { margin-bottom: 11px; padding: 25px 80px 20px; }
+.ML_c1, .ML_c2 { background-color: white; box-sizing: border-box; }
+.ML_c1 #ML_c1_title p span { font-size: 14px;  }
+
+form[name="magazine_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="magazine_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="magazine_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="magazine_list"] { width: 90%; margin: 50px auto; padding-bottom: 30px; }
+form[name="magazine_list"] input[type="button"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="magazine_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="magazine_search"] table { margin-top: 15px; }
+form[name="magazine_search"] { width: 100%;}
+form[name="magazine_search"] table tr td { padding: 15px 0;}
+form[name="magazine_search"] table span  { font-size: 13px;}
+form[name="magazine_search"] select  { height: 38px; margin-right: 30px; width: 150px; padding-left: 8px;}
+form[name="magazine_search"] input[type="button"] { margin-left: 10px; height: 35px; width: 65px;}
+form[name="magazine_search"] input[type="text"] { width: 350px;}
+form[name="magazine_search"] input[type="date"] { width: 250px; padding: 0px 20px; }
+
+
+/* UserList.html*/
+.UList { margin: 11px; }
+.UL_c1 form { margin-bottom: 11px; padding: 25px 80px;}
+
+.UL_c1, .UL_c2 { background-color: white; box-sizing: border-box; }
+form[name="user_search"] table { margin-top: 15px;}
+form[name="user_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="user_search"] table tr td { padding: 10px 0;}
+form[name="user_search"] table input[type="text"] { width: 440px;}
+form[name="user_search"] table input[type="date"] { width: 155px;}
+form[name="user_search"] table select { width: 155px; margin-right: 10px; height: 38px; padding-left: 8px;}
+form[name="user_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="user_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="user_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="user_list"] { width: 90%; margin: 30px auto; padding-bottom: 30px; }
+#Ul_c2_top {  font-size: 17px; font-weight: bold; margin-bottom: 10px;}
+.Ul_c2_btnBox { margin-top: 10px;}
+
+/* Admin_AddressList.html */
+.Add_List { margin: 11px; background-color: white; }
+.AL_c1 form {  padding: 40px 100px 10px;}
+
+.AL_c1, .AL_c2 { box-sizing: border-box; }
+form[name="addr_search"] table { margin-top: 35px; }
+form[name="addr_search"] table tr th { font-size: 15px; text-align: left;}
+form[name="addr_search"] table tr td { padding: 10px 0;}
+form[name="addr_search"] table input[type="text"] { width: 500px; height: 40px;}
+form[name="addr_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163); }
+form[name="addr_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="addr_list"] table tr th { border: 1px solid #999; height: 50px; font-size: 13px; font-weight: bold; }
+form[name="addr_list"] { width: 80%; margin: 30px auto; padding-bottom: 30px; }
+#AL_c2_top {  font-size: 17px; font-weight: bold; margin-bottom: 10px;}
+.AL_c2_btnBox { margin-top: 20px; margin-bottom: 5px;}
+form[name="addr_search"] input[type="button"] { width: 300px; height: 40px; color: white; background-color: #266266; border: 2px solid #98c0c2; font-size: 14px;
+    box-shadow: 4px 4px 4px rgb(168, 168, 168); margin-top: 10px;}
+form[name="addr_search"] input[type="button"]:hover { color: #266266; background-color: white; border: 2px solid #266266; }
+#AL_c1_title { border-bottom: 3px solid #266266; text-align: center; padding-bottom: 30px;  }
+#AL_c1_title label { font-size: 20px; }
+#AL_c2_top { margin-bottom: 30px; border-top: 1px dotted #266266; padding-top: 25px;}
+#AL_c2_top span { color: #266266; padding-right: 5px; }
+form[name="addr_search"] p { margin-top: 15px; font-size: 12px; color: orange;}
+
+/* Admin_AddressEdit.html */
+.Add_edit { margin: 11px; background-color: white; }
+.AD_c1 form {  padding: 40px 100px 10px;}
+
+.AD_c1 { box-sizing: border-box; }
+form[name="addr_edit"] table { margin-top: 35px; margin-bottom: 50px; }
+form[name="addr_edit"] table tr th { font-size: 15px; text-align: left; height: 80px;}
+form[name="addr_edit"] table tr th span { color: #46ad8b; margin-left: 5px; font-size: 16px;}
+form[name="addr_edit"] table tr:nth-child(7) th span { font-size: 13px;}
+form[name="addr_edit"] table tr td { padding: 10px 0;}
+form[name="addr_edit"] table input[type="text"] { width: 500px; height: 42px;}
+form[name="addr_edit"] input[type="button"] { width: 550px; height: 48px; color: white; background-color: #266266; border: 2px solid #98c0c2; font-size: 15px;
+    box-shadow: 6px 6px 6px rgb(168, 168, 168); margin-top: 10px; font-weight: bold;}
+form[name="addr_edit"] input[type="button"]:hover { color: #266266; background-color: white; border: 2px solid #266266; }
+#AD_c1_title { border-bottom: 3px solid #266266; text-align: center; padding-bottom: 30px;  }
+#AD_c1_title label { font-size: 20px; }
+form[name="addr_edit"] p { margin-top: 15px; font-size: 13px; color: orange;}
+form[name="addr_edit"] table .zipcode input[type="button"] { width: 150px; height: 43px; font-size: 14px;}
+form[name="addr_edit"] table .zipcode input[type="text"] { width: 345px;}
+
+/* 팝업창 css */
+.mw { position:fixed; top:0; left:0; width:100%; height:100%; display:none;}
+.mw_s { position:fixed; top:0; left:0; width:100%; height:100%; display:none;}
+
+.mw .bg {position:fixed;top:0;left:0;width:100%;height:100%;background:#000;opacity:.5;filter:alpha(opacity=50)}
+.mw_s .bg_s {position:fixed;top:0;left:0;width:100%;height: 100%;background:#000;opacity:.5;filter:alpha(opacity=50)}
+
+.mw .fg {position:absolute; top:50%; left:50%; width:600px; height:500px;  transform: translate(-50%, -50%); border:3px solid #ccc;background:#fff;}
+.mw_s .fg_s {position:absolute; top:50%; left:50%; width:600px; height:260px;  transform: translate(-50%, -50%); border:3px solid #ccc;background:#fff;}
+ul li { list-style: none; }
+
+.Modal { margin: 30px auto; background-color: white; }
+.modal_list ul li:hover { background-color: #ebebeb;}
+.modal_list {  display: flex; margin-top: 30px; margin-left: 60px;}
+.modal_list span { font-size: 16px; font-weight: bold; }
+.modal_list ul { width: 383px; height: 250px; overflow-y: auto; border: 2px solid #ebebeb; margin-left: 27px;}
+.modal_list ul li { font-size: 15px; height: 50px; box-sizing: border-box; padding-top: 13px; padding-left: 10px; border: 0.5px solid #ebebeb;}
+.modal_search span { font-size: 16px; font-weight: bold; }
+.modal_search input[type="button"] { width: 70px; height: 38px; font-size: 15px;}
+.modal_search input[type="text"] { border: 1px solid #999; border-radius: 5px; }
+.modal_search { text-align: center; }
+button[type="submit"], button[type="reset"] { width: 70px; height: 38px; font-size: 15px; }
+.modal_btn { margin-top: 20px;  text-align: center; }
+.modal_btn input[type="reset"],.modal_btn input[type="button"] { box-shadow: 3px 3px 3px #999; height: 34px; width: 80px;}
+.modal_closeBtn{width: 30px; height:30px; float: right; cursor: pointer; margin-top: -1px;}
+.modal_greentitle { padding: 14px 10px 14px 20px; font-size: 18px; background-color: #266266; color: white; }
+
+.modal_search_s span { font-size: 15px; font-weight: bold; }
+.modal_search_s input[type="button"] { width: 70px; height: 38px; font-size: 15px;}
+.modal_search_s input[type="text"] { border-radius: 5px; width: 100px;}
+.modal_search_s {text-align: center;}
+
+/**/
+.PCcate_c1 {display: flex; flex-wrap: wrap; background-color: white; margin: 11px; padding: 30px;
+justify-content: center;}
+.PCcate_c1_cateBox_1 {margin-left: 10px;}
+.PCcate_c1_cateBox_1 ul {width: 500px; height: 300px; overflow-y: auto; border: 2px solid #ebebeb;}
+.PCcate_c1_cateBox_1 ul li {height: 50px; box-sizing: border-box; padding-top: 13px; padding-left: 10px;}
+.PCcate_c1_cateBox_1 ul li:hover {background-color: #ebebeb;}
+.PCcate_c1_cateBox_2 {width: 500px; height: 300px; border: 2px solid #ebebeb;}
+#PCT_c1_title{margin-bottom: 10px;}
+
+
+/* Admin_Question.html */
+.Question { margin: 11px; }
+.Qt_c1 { margin-bottom: 11px; padding: 25px 80px; background-color: white; box-sizing: border-box; }
+#Qt_title2 { margin-top: 60px;}
+form[name="Lquestion"] table { margin-top: 40px; }
+form[name="Lquestion"] { margin-top: 25px;}
+form #Lquestion tr th { font-size: 14px; text-align: center; border: 1px solid #999; width: 140px; height: 55px; }
+form #Lquestion tr td { padding: 14px 10px; border: 1px solid #999; font-size: 14px; background-color: rgb(240, 240, 240); width: 300px; }
+form #Lquestion input[type="text"] { width: 322px;}
+form #Lquestion input[type="date"] { width: 155px;}
+form #Lquestion span  { font-size: 13px;}
+form #Lquestion span input[type="checkbox"] { margin-right: 7px; }
+#Qanswer { margin: 30px 60px; text-align: left; font-size: 15px;}
+#Qanswer tr th { padding: 10px 0;}
+.Question textarea { height: 200px; width: 700px;}
+
+/* Admin_Question.html */
+.Order { margin: 11px; }
+.Order_c1 { margin-bottom: 11px; padding: 25px 80px; background-color: white; box-sizing: border-box; }
+#O_title2 { margin-top: 60px;}
+form[name="OrderForm"] table { margin-top: 40px; }
+form[name="OrderForm"] { margin-top: 25px;}
+form #orderDetail tr th { font-size: 14px; text-align: center; border: 1px solid #999; width: 200px; }
+form #orderDetail tr td { padding: 14px 10px; border: 1px solid #999; font-size: 14px; background-color: rgb(240, 240, 240); width: 680px; height: 55px;}
+form #orderDetail span  { font-size: 13px;}
+form #orderDetail span input[type="checkbox"] { margin-right: 7px; }
+#order_answer { margin: 30px 60px; text-align: left; font-size: 15px; margin-top: 50px; }
+#order_answer tr th { padding: 10px 0; width: 120px; height: 50px; }
+
+
+/* Admin_ProductList.html */
+.PL_c1, .PL_c2 { background-color: white; box-sizing: border-box; }
+.PL_c1 form { margin-bottom: 11px; padding: 25px 80px 15px; }
+
+form[name="prod_list"] table { border: 2px solid #999; box-shadow: 8px 8px 8px rgb(163, 163, 163);}
+form[name="prod_list"] table tr td { border: 1px solid #999; height: 80px; font-size: 13px; text-align: center;}
+form[name="prod_list"] table tr th { border: 1px solid #999; height: 40px; font-size: 13px; font-weight: bold; }
+form[name="prod_list"] { width: 90%; margin: 50px auto; padding-bottom: 30px; }
+form[name="prod_list"] input[type="button"],form[name="prod_list"] input[type="submit"] { margin-right: 5px; margin-bottom: 5px; }
+form[name="prod_search"] table tr th { font-size: 14px; text-align: left;}
+form[name="prod_search"] table tr td { padding: 15px 0;}
+form[name="prod_search"] table input[type="text"] { width: 462px; }
+form[name="prod_search"] table span  { font-size: 14px;}
+form[name="prod_search"] table { margin-top: 15px;}
+form[name="prod_search"] table span input[type="checkbox"] { margin-right: 7px; }
+form[name="prod_search"] select  { height: 38px; margin-right: 8px; width: 225px;}
+
+/* content_title_click btn*/
+#BL_click_1{padding-bottom: 10px;border-bottom: 5px solid #266266;}
+#BL_click_2{padding-bottom: 10px;border-bottom: 5px solid #266266;}
+#product_click_1{padding-bottom: 10px;border-bottom: 5px solid #266266;}
+#product_click_2{padding-bottom: 10px;border-bottom: 5px solid #266266;}
+#product_click_3{padding-bottom: 10px;border-bottom: 5px solid #266266;}
+#EL_click_1{padding-bottom: 10px;border-bottom: 5px solid #266266;}
+#EL_click_2{padding-bottom: 10px;border-bottom: 5px solid #266266;}
+
+#CP_click_1.strong{
+height: 55px; width: 100px; margin-right: 10px; background-color: #266266; border: 1px solid #999;
+cursor: pointer; color:white;
+}
+
+#CP_click_2.strong{
+height: 55px; width: 100px; margin-right: 10px; background-color: #266266; border: 1px solid #999;
+cursor: pointer; color:white;
+}
+
+#CP_click_3.strong{
+height: 55px; width: 100px; margin-right: 10px; background-color: #266266; border: 1px solid #999;
+cursor: pointer; color:white;
+}
+
+
+/* index.html */
+.preview_table { margin: 10px auto; font-size: 15px; color: #065157; text-align: center; border-radius: 15px;
+border-style: hidden; box-shadow: 0 0 0 3px #dfebec;}
+.preview_table tr td { height: 55px; width: 600px;}
+.preview_table tr th { height: 55px; width: 600px;}
+.preview_table tr:nth-child(even) { background-color: #eef7f8;  }
+.Am_preview_list p { font-weight: bold; font-size: 17px; padding-left: 10px; color: #065157; }
+.Am_preview_list th:hover, .Am_preview_list td:hover  { border-radius: 10px; background-color: #c8e4dc; }
+
+/* 기간버튼 css */
+.datebtn input { height: 37px; box-shadow: 3px 3px 3px #9B9B9B; border: 2px solid #266266;}
+
+
+#RC_img {width: 400px; height: 200px; border: 1px solid #266266; background-color: #ebebeb; }
+#RC_imgbox {display: flex; margin-bottom: 30px; position: relative; margin-top: 30px;}
+.RC_Btnbox {margin-top: 175px; margin-left: 10px; margin-left: 30px;}
+
+.pagination{cursor: pointer}
+
+.brlist.on{background-color: #ebebeb;}

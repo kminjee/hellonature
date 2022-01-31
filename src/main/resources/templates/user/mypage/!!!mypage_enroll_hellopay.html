@@ -1,0 +1,260 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카드등록</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(3) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(3) > a { color: #5dab99;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function sendit(){
+
+            let busiFlag;
+            // 법인카드 체크여부
+            if($('#check_business_credit_card').is(':checked')){
+                busiFlag = "TRUE"        // 법인카드 o
+                $(".form_title").text("사업자번호")
+                $(".form_title").attr("placeholder", "사업자 번호 10자리")
+            }else{
+                busiFlag = "FALSE"       // 법인카드 x
+            }
+            let memIdx = $("#hidden_user").val();
+            let name1 = $('#card_nickname').val();               // 카드별칭
+            let num1 = $("#card_num1").val();                   // 카드번호 4자리-1
+            let num2 = $("#card_num2").val();                   // 카드번호 4자리-2
+            let num3 = $("#card_num3").val();                   // 카드번호 4자리-3
+            let num4 = $("#card_num4").val();                   // 카드번호 4자리-4
+            const num = num1+"-"+num2+"-"+num3+"-"+num4         // 1234-1234-1234-1234
+            let date = $('#card_range').val();                  // 카드 유효기간 06/24
+            let cvc = $('#card_cvc').val();                     // 카드 cvc 3자리
+            let birth = $('#birth_sixnum').val();               // 생년월일
+            let password = $('#card_pw').val();                 // 카드 비밀번호 앞 2자리
+            let check;                                          // 개인정보 이용동의 체크 여부// 은행
+            // KB국민은행, 신한은행, 한국씨티은행, 신한은행, IBK기업은행, KEB하나은행, BNK부산은행, SC제일은행, 광주은행, 우리은행
+            let bankType = ["KB", "SINHAN", "CITY", "IBK", "KEB", "BNK", "SC", "GWANGJU", "WOORI"];
+
+
+            // 개인정보 이용동의 체크여부 확인
+            if($(".check_privacy").is(':checked')){
+                check = true;
+            }else{
+                check = false;
+                alert("개인정보 이용동의에 체크해주세요.");
+                location.href="/user/mypage_enrollHellopay";
+                return false;
+            }
+
+            // 은행
+            let distinctCvc = cvc.split("");
+            let bank;
+            let cvcFirst = distinctCvc[0]
+            // cvc 첫번째 숫자로 은행 분류
+            switch(cvcFirst){
+                case "1":
+                    bank = bankType[0];     // 국민은행
+                    break;
+                case "2":
+                    bank = bankType[1];     // 신한은행
+                    break;
+                case "3":
+                    bank = bankType[2];     // 한국씨티은행
+                    break;
+                case "4":
+                    bank = bankType[3];     // 기업은행
+                    break;
+                case "5":
+                    bank = bankType[4];     // 하나은행
+                    break;
+                case "6":
+                    bank = bankType[5];     // 부산은행
+                    break;
+                case "7":
+                    bank = bankType[6];     // 제일은행
+                    break;
+                case "8":
+                    bank = bankType[7];     // 광주은행
+                    break;
+                case "9":
+                    bank = bankType[8];     // 우리은행
+                    break;
+            }
+            console.log(memIdx)
+            console.log(busiFlag)
+            console.log(name1)
+            console.log(num)
+            console.log(memIdx)
+            console.log(date)
+            console.log(cvc)
+            console.log(birth)
+            console.log(password)
+            console.log(bank)
+
+            axios.post('/api/card/create', {
+                headers: {'Content-type': 'application/json'},
+                data: {
+                    memIdx: memIdx,
+                    busiFlag: "FALSE",
+                    name: name1,
+                    num: num,
+                    date: date,
+                    cvc: cvc,
+                    birth: birth,
+                    password: password,
+                    bank: bank
+                }
+            }).then(function (response){
+                alert("헬로페이가 정상적으로 등록되었습니다.");
+                location.href="/user/mypage_hellopay";
+            })
+        }
+    </script>
+    <!-- axios -->
+</head>
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="contents">
+                <div th:replace="/user/fragment/section::section"></div>
+            </div>
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <div class="main_leftaside3">
+                    <div th:replace="/user/fragment/sidebar3::sidebar3"></div>
+                <!-- main_leftaside 끝 -->
+                </div>
+               <!-- main_contents 시작 -->
+               <div class="main_contents">                                                
+                <div class="contents_box1">
+                    <div class="back_button">
+                        <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                    </div>
+                    <h2 class="contents_name">헬로페이 카드 등록</h2>                        
+                </div>
+                <!-- form 시작 -->
+                <div>
+                    <!-- 카드등록 기입 리스트 시작 -->
+                    <div class="enrollhellopay_box">                    
+                        <div class="enrollpay_box_inner2">
+                            <h5 class="form_title">카드별칭</h5>
+                            <input type="text" name="cardName" id="card_nickname" class="enrollpay_input" placeholder="카드별칭을 입력해주세요." maxlength="10" autocomplete="off">
+                            <div class="caution_not_input">
+                                카드별칭을 입력해 주세요.
+                            </div>
+                        </div>
+                        <div class="enrollpay_box_inner3">
+                            <h5 class="form_title">카드번호</h5>
+                            <ul class="form_area">
+                                <li><input type="password" id="card_num1" class="enrollpay_input" maxlength="4" autocomplete="off"></li>
+                                <li><input type="password" id="card_num2" class="enrollpay_input" maxlength="4" autocomplete="off"></li>                            
+                                <li><input type="password" id="card_num3" class="enrollpay_input" maxlength="4" autocomplete="off"></li>                               
+                                <li><input type="tel" id="card_num4" class="enrollpay_input" maxlength="4" autocomplete="off"></li>
+                            </ul>
+                            <div class="caution_not_input">
+                                카드번호를 입력해 주세요.
+                            </div>
+                        </div>
+                        <div class="enrollpay_box_inner4">
+                            <h5 class="form_title">유효기간 (월/년)</h5>
+                            <input type="tel" placeholder="월 /년도" class="enrollpay_input" id="card_range" maxlength="5" autocomplete="off">                           
+                            <div class="caution_not_input">
+                                유효기간을 입력해 주세요.
+                            </div>
+                        </div>
+                        <div class="enrollpay_box_inner7">
+                            <h5 class="form_title">CVC</h5>
+                            <input type="text" placeholder="cvc 3자리" class="enrollpay_input" id="card_cvc" maxlength="3" autocomplete="off">
+                            <div class="caution_not_input">
+                                카드 뒷편 cvc번호를 확인해주세요
+                            </div>
+                        </div>
+                        <div class="enrollpay_box_inner5">
+                            <h5 class="form_title">생년월일</h5>
+                            <input type="tel" placeholder="6자리" class="enrollpay_input" id="birth_sixnum" maxlength="6" autocomplete="off">                           
+                            <div class="caution_not_input">
+                                생년월일을 입력해 주세요.
+                            </div>
+                        </div>                    
+                        <div class="enrollpay_box_inner6">
+                            <h5 class="form_title">비밀번호</h5>
+                            <input type="password" placeholder="비밀번호 앞 2자리" class="enrollpay_input" id="card_pw" maxlength="2" autocomplete="off">                           
+                            <div class="caution_not_input">
+                                카드 비밀번호 앞 2자리를 입력해 주세요.
+                            </div>                       
+                        </div>
+                    </div>
+                     <!-- 카드등록 기입 리스트 끝 -->   
+                    <!-- 개인 정보 동의 체크박스 시작 -->
+                    <div class="enrollpay_allow">
+                        <div class="enrollhellopay_box_check_inner">
+                            <input type="checkbox" class="check_business_credit_card check_privacy">
+                        </div>
+                        <label for="check_business_credit_card">개인 정보 수집 및 이용 동의</label>                        
+                        <div class="allow_button">
+                            <a href="#" alt="개인 정보 수집 및 이용 동의 오버뷰"></a>
+                        </div>
+                    </div>
+                    <!-- 개인 정보 수집 체크박스 끝 -->
+                    <!-- 개인 정보 수집 및 이용 동의 시작 -->
+                    <div class="enrollpay_allow_list">
+                        <h5>개인 정보 수집 및 이용 동의</h5>
+                        <div class="allow_contents1">
+                            <p>헬로네이처는 고객님께서 구매하신 서비스 및 상품의 원활한 제공을 위해 최소한의 범위 내에서 아래와 같이 개인 정보를 수집 • 이용합니다. 고객님께서는 정보 제공에 동의하지 않으실 수 있으며 동의하지 않으실 경우, 일부 구매가 제한될 수 있습니다.</p>                            
+                        </div>
+                        <div class="allow_table">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>수집목적</th>
+                                        <td>상품 배송 및 서비스 제공을 위한 사용자 정보 확인</td>
+                                    </tr>
+                                    <tr>
+                                        <th>수집항목</th>
+                                        <td>주문자 정보(주문자명, 주문자 연락처 등) 배송정보(수취인명/수취인 주소, 수취인 연락처 등), 결제정보(현금영수증 발행여부 등)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>보유기간</th>
+                                        <td>5년 (계약 및 청약철회, 대금결제 및 재화 등의 공급) 또는 회원탈퇴 후 90일 까지</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 개인 정보 수집 및 이용 동의 끝 -->
+                    <!-- 카드 등록 버튼 시작 -->
+                    <div class="hellopay_button_area">
+                        <button type="submit" class="hellopay_inputcard_submit" id="regist_card" onclick="sendit()">카드 등록</button>
+                    </div>
+                    <!-- 카드 등록 버튼 끝 -->
+                </div>
+                <!-- form 끝 -->
+            <!-- main_contents 끝 -->        
+            </div>
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script2.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>
+

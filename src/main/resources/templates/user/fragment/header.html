@@ -1,0 +1,202 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div th:fragment="header">
+    <!-- header 시작 -->
+    <header>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+
+        <!-- axios -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            $(function () {
+                let memIdx = $("#hidden_user").val()
+
+                if (memIdx !== "") {
+                    $("#basket_list").css("display", 'inline-block')
+                    axios.get('/api/basket/member/list?memIdx=' + memIdx, {}).then(function (res) {
+                        let basket_list = res.data.data.product.length;
+                        console.log(basket_list)
+                        $("#basket_list").text(basket_list)
+                        if(basket_list === 0){
+                            $("#basket_list").css("display", 'none')
+                        }
+                    })
+                }
+
+                $("#categoryAll").on('click', function (e) {
+                    e.preventDefault();
+                    $(".cate_1dep").css("display", "block");
+                    $(".cate_1dep").empty();
+
+                    axios.get("/api/category/list/first?lifeFlag=FALSE", {}).then(function (res) {
+                        for (let i in res.data.data) {
+                            let rootIdx = res.data.data[i].idx;
+                            let name = res.data.data[i].name
+                            let num = parseInt(i) + 1;
+
+
+                            let li = $(`<li id="rootIdx" onclick="location.href='/user/goods_list?rootIdx=${rootIdx}&page=0'">`).append(
+                                '<input id="firstCate_value" type="hidden" value="' + rootIdx + '">' +
+                                '<a href="#" class="cate-parent fruit"><img src="/user/images/icon/icon_cate_' + num + '.png" alt="과일 아이콘"><div>' + name + '</div></a></li>'
+                            );
+                            $(".cate_1dep").append(li);
+                        }
+
+
+                        $(".cate_1dep > li").mouseover(function (e) {
+                            e.preventDefault();
+                            $(".cate_2dep").css("display", "block");
+
+                            $(".cate_2dep").empty();
+                            let rootIdxValue = $(this).children().val();
+                            axios.get("/api/category/list/second/?idx=" + rootIdxValue + "&lifeFlag=FALSE", {}).then(function (res) {
+
+                                for (let j in res.data.data) {
+                                    let cateIdx = res.data.data[j].idx;
+                                    let name = res.data.data[j].name;
+
+                                    let cateIdx_li = $(`<li id="cateIdx" onclick="location.href='/user/goods_list?rootIdx=${rootIdxValue}&cateIdx=${cateIdx}&page=0'">`).append(
+                                        '<input id="secondCate_value" type="hidden" value="' + cateIdx + '">' +
+                                        '<a href="#" class="menu"><span>' + name + '</span></a></li>'
+                                    );
+                                    $(".cate_2dep").append(cateIdx_li);
+                                }
+
+                            }).catch(function (err) {
+                                console.log(err);
+                            });
+
+                            $(".gnb_box").mouseleave(function () {
+                                $(".cate_1dep").css("display", "none");
+                                $(".cate_2dep").css("display", "none");
+                            });
+
+                        });
+                    }).catch(function (err) {
+                        console.log(err);
+                    });
+                });
+
+            });
+        </script>
+        <!-- axios -->
+
+        <!-- 상단 배너 시작 -->
+        <div class="top_bnr_bg">
+            <input type="hidden" th:value="${session['idx']}" id="hidden_user">
+            <div class="top_bnr_mold">
+                <div class="top_bnr_box">
+                    <div>
+                        <a href="#" target="" id="eventLanding">
+                            <span>일부지역 배송 지연 안내드립니다.</span>
+                            <img src="/user/images/icon/bnr_arr.png" alt="우측 화살표" class="bnr_arr">
+                        </a>
+                    </div>
+                    <div>
+                        <button class="top_brn_close">
+                            <img src="/user/images/icon/bnr_close.png" alt="접기">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단 배너 끝 -->
+        <!-- nav 시작 -->
+        <nav>
+            <div class="nav_bg">
+                <div class="nav_mold">
+                    <div class="nav_userMenu">
+                        <!-- 더그린배송 버튼 시작 -->
+                        <label  sec:authorize="isAuthenticated()">
+                            <a href="/mypage_thegreen" target="">
+                                <img src="/user/images/icon/nav_theGreenDeli.png" alt="더그린배송 아이콘"
+                                     class="nav_theGreenDeli"></a>
+                        </label>
+                        <!-- 더그린배송 버튼 끝 -->
+                        <!-- 회원가입, 로그인, 고객센터 시작 -->
+                        <div class="login_wrap">
+                            <a href="/user/mypage_userRegist" class="regist" sec:authorize="isAnonymous()"><span>회원가입</span></a>
+                            <a th:href="@{/user/mypage_orderlist}" class="regist"
+                               sec:authorize="isAuthenticated()"><span th:text="${session['name']} + '님'"></span></a>
+                            <a href="/user/logout" class="login" sec:authorize="isAuthenticated()"><span>로그아웃</span></a>
+                            <a href="/user/mypage_userLogin" class="login"
+                               sec:authorize="!isAuthenticated()"><span>로그인</span></a>
+
+                            <div class="header_callcenter dropdown">
+                                <button class="dropbtn"><span>고객센터</span>
+                                    <img src="/user/images/icon/callcenter_pointer.png" alt="고객센터 아래 화살표"></button>
+                                <div class="dropdown-content">
+                                    <a href="/user/mypage_news">공지사항</a>
+                                    <a href="/user/mypage_faq">자주하는 질문</a>
+                                    <a href="/user/mypage_mantoman">1:1 문의</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 회원가입, 로그인, 고객센터 끝 -->
+                        <!-- 헬로네이처 메인 로고 시작 -->
+                        <div class="logo_top_wrap">
+                            <div class="logo_top"><label><a href="/user/index" target=""><img
+                                    src="/user/images/icon/helloNature.png" alt="헬로네이처 메인 로고"></a></label></div>
+                        </div>
+                        <!-- 헬로네이처 메인 로고 끝 -->
+                    </div>
+                </div>
+            </div>
+            <div id="top_menu">
+                <div id="top_menu_slide" class="category_bg">
+                    <div class="category_mold">
+                        <!-- 전체상품 / 추천 / 신상품 / 할인 / 라이프존 / 매거진 카테고리 시작 -->
+                        <ul class="category">
+                            <li class="cate_menu1">
+                                <a href="#" id="categoryAll">
+                                    <span class="ico"></span><span class="txt">전체상품</span>
+                                </a>
+                            </li>
+                            <li class="cate_menu2"><a href="/user/recommend_goods"><span class="txt">추천</span></a></li>
+                            <li class="cate_menu3"><a href="/user/new_goods?page=0&order=1"><span class="txt">신상품</span></a></li>
+                            <li class="cate_menu4"><a href="/user/sale_goods?page=0&order=1"><span class="txt">할인</span></a></li>
+                            <!--<li class="cate_menu5"><a href="/user/life"><span class="txt">라이프존</span></a></li>-->
+                            <li class="cate_menu6"><a href="/user/magazine"><span class="txt">매거진</span></a></li>
+                        </ul>
+                        <!-- 전체상품 / 추천 / 신상품 / 할인 / 라이프존 / 매거진 카테고리 끝 -->
+
+                        <!-- 검색 / 마이페이지 / 장바구니 시작 -->
+                        <div class="search_my_cart_box">
+                            <div class="searchbar_wrap"><input type="text" maxlength="30" placeholder=""><img
+                                    src="/user/images/icon/search_icon.png" alt="돋보기">
+                            </div>
+                            <label><a href="/user/mypage_orderlist" target="" class="icon_mypage"><img
+                                    src="/user/images/icon/icon_my.png" alt="마이페이지 아이콘"></a></label>
+                            <label>
+                                <a href="/user/mypage_usercart" target="" class="icon_cart"><img
+                                        src="/user/images/icon/icon_cart.png" alt="장바구니 아이콘">
+                                    <span id="basket_list" style="display: none; border-radius: 100%; background-color: red; width: 25px; height: 15px; position: absolute; margin-top: -5px; margin-left: -10px; color: white; padding-bottom: 10px; text-align: center;">
+                                </span>
+                                </a>
+                            </label>
+                        </div>
+                        <!-- 검색 / 마이페이지 / 장바구니 끝 -->
+
+                        <!-- 카테고리 틀 -->
+                        <div id="gnb_nav" class="gnb_bg">
+                            <div class="gnb_box">
+                                <ul class="cate_1dep" style="display: none;">
+
+                                </ul>
+                                <ul class="cate_2dep" style="display: none;">
+
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- 카테고리 틀 끝 -->
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+        <!-- nav 끝 -->
+    </header>
+</div>
+</html>

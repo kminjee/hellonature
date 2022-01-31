@@ -1,0 +1,183 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>더그린배송</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(4) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(4) > a { color: #5dab99;}
+    </style>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+
+        $(function (){
+            let urlidx = $("#section_hidden").val()
+            axios.get('/api/membersAddresses/user/list/' + urlidx, {
+            }).then(function(response) {
+                for (let i in response.data.data) {
+                    let addrName = response.data.data[i].addrName;
+                    let id = response.data.data[i].idx;
+                    let name = response.data.data[i].name;                           // 받는 사람
+                    let hp = response.data.data[i].hp;                               // 전화번호
+                    let zipcode = response.data.data[i].zipcode;                     // 우편번호
+                    let addr1 = response.data.data[i].addr1;                         // 도로명주소 + 상세주소
+                    let addr2 = response.data.data[i].addr2;                         // 나머지주소
+                    let requestType = response.data.data[i].requestType;             // 배송타입
+                    let baseFlag = response.data.data[i].baseFlag;                // 기본배송지
+                    let greenFlag = response.data.data[i].greenFlag;
+                    let dawnFlag = response.data.data[i].dawnFlag;
+
+                    if (baseFlag === "TRUE") {
+                        baseFlag = "기본 배송지"
+                    } else {
+                        baseFlag = "그 외"
+                    }
+
+                    let show_greenFlag;
+                    if (greenFlag == "TRUE") {
+                        greenFlag = "더그린"
+                        show_greenFlag = 'block';
+                    } else {
+                        show_greenFlag = 'none';
+                    }
+
+                    let show_dawnFlag;
+                    if (dawnFlag == "TRUE") {
+                        dawnFlag = "새벽"
+                        show_dawnFlag = 'block';
+                    } else {
+                        show_dawnFlag = 'none';
+                    }
+
+                    let showCSS;
+                    if(greenFlag === "더그린" || dawnFlag === "새벽"){
+                        showCSS = 'white'
+                    }else{
+                        showCSS = '#ebebeb;'
+                    }
+
+                    switch (requestType) {
+                        case 1:
+                            requestType = "문앞 / 공동현관 비밀번호"
+                            break;
+                        case 2:
+                            requestType = "문앞 / 비밀번호 없이 출입 가능"
+                            break;
+                        case 3:
+                            requestType = "경비실"
+                            break;
+                        case 4:
+                            requestType = "택배함"
+                            break;
+                        case 5:
+                            requestType = "기타장소"
+                            break;
+                    }
+
+                    let disabled;
+                    if(greenFlag === "더그린" || dawnFlag === "새벽"){
+                        disabled = 'able';
+                    }else{
+                        disabled = 'disabled'
+                    }
+
+                    let row = $('<div class="shipping_box1" style="background-color:'+showCSS+'">').append(
+                        '<div class="shipping_box1_line1"><input type="checkbox" name="green_choose" value="'+id+'"'+disabled+'><div class="shipping_txt"><span>'+addrName+'</span><span style="display:'+show_greenFlag+'">'+greenFlag+'</span><span style="display:'+show_dawnFlag+'">'+dawnFlag+'</span></div>' +
+                        '<div class="shipping_box1_line2"><span>'+name+'</span><span>'+hp+'</span><br>' +
+                        ' <span>['+zipcode+']' + addr1 + addr2 + '</span></div><div class="shipping_delivery_detail"><span class="shipping_font">' +
+                        requestType+'</span></div></div>'
+                    )
+
+                    $("#shipping_list").append(row)
+                }
+
+
+                $("input[name='green_choose']").click(function (){
+                    let count = $("input[name='green_choose']:checked").length;
+
+                    if(count > 1){
+                        $(this).prop("checked", false);
+                        alert("하나의 배송지만 선택할 수 있습니다.")
+                    }
+
+                    if(count === 1){
+                        $("#pay_hellopass").removeAttr("disabled")
+                        $("#pay_hellopass").css("background", "#5dab99");
+                        $("#pay_hellopass").css("color", "white");
+                    }else{
+                        $("#pay_hellopass").css("color", "#ddd");
+                        $("#pay_hellopass").css("background", "#f6f6f6");
+                        $("#pay_hellopass").attr("disabled", true)
+                    }
+                })
+
+
+            }).then(function(err) {
+                console.log(err)
+            });
+
+            $("#pay_hellopass").click(function (){
+                let thegreen_idx = $("input[name='green_choose']:checked").val()
+                sessionStorage.setItem("the_green", thegreen_idx)
+                location.href='/user/mypage_paythegreen'
+            })
+        });
+    </script>
+    <!-- axios -->
+</head>
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="contents">
+                <div th:replace="/user/fragment/section::section"></div>
+            </div>
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <div class="main_leftaside1">
+                    <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+                </div>
+                <div class="main_contents">
+                    <div class="contents_box1">                                               
+                        <div class="back_button">
+                            <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                        </div>
+                        <h2 class="contents_name">더그린배송지 선택</h2>
+                    </div>
+                    <div class="thegreen_shipping_title">
+                        <p>
+                            더그린배송은 <em>새벽배송</em> 지역만 이용이 가능합니다.<span class="underline"></span><br>                        
+                            배송지 선택 시 보증금 결제화면으로 이동합니다.
+                        </p>
+                    </div>
+                    <div id="shipping_list">
+
+                    </div>
+
+                    <div class="enroll_hellopass_area2">
+                        <button type="submit" class="hellopass_button_reset" id="reset_hellopass" onClick="location.href='/user/mypage_addShipping'">배송지 추가</button>
+                        <button type="submit" class="hellopass_button_submit" id="pay_hellopass" disabled>더그린배송 결제</button>
+                    </div>
+                </div>             
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+</body>
+</html>
+

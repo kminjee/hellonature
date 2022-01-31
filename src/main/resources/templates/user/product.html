@@ -1,0 +1,1162 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로네이처 - 오늘이 맛있는 탐험</title>
+    <link rel="stylesheet" href="/resource/css/bootstrap.css">
+    <link rel="stylesheet" href="/user/css/index_style.css">
+    <link rel="stylesheet" th:href="@{/user/css/layout.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function shareTwitter() {
+            window.open("https://twitter.com/?lang=ko");
+        }
+    </script>
+    <!-- axios -->
+    <script>
+        $(function () {
+            const currentUrl = new URL(location.href);              // 현재 url
+            const currentUrlParam = currentUrl.searchParams;        // 물음표 뒤 값 잘라내기
+            let prodIdx = currentUrlParam.get("prodIdx");           // 상품 상세
+            let memIdx = $("#hidden_user").val();
+            console.log(memIdx);
+
+            let sizeWeight;
+
+            axios.get('/api/product/detail?proIdx=' + prodIdx + '&memIdx=' + memIdx, {}).then(function (res) {
+                console.log(res.data.data);
+                let name = res.data.data.name;
+                let brIdx = res.data.data.brIdx;
+                let brLogo = res.data.data.brLogo;
+                let brName = res.data.data.brName;
+                let count = res.data.data.count;
+                let dateBuilt = res.data.data.dateBuilt;
+                let dateValid = res.data.data.dateValid;
+                let delivery = res.data.data.delivery;
+                let deliveryText = "";
+                switch (delivery) {
+                    case 1:
+                        deliveryText = "새벽배송";
+                        break;
+                    case 2:
+                        deliveryText = "택배배송";
+                        break;
+                    case 3:
+                        deliveryText = "새벽/택배배송";
+                        break;
+                }
+                let foodType = res.data.data.foodType;
+                let img1 = res.data.data.img1;
+                let likeFlag = res.data.data.likeFlag;
+                let proDes = res.data.data.proDes;
+                let location = res.data.data.location;
+                let origin = res.data.data.origin;
+                let packing = res.data.data.packing;
+                let proType = res.data.data.proType;
+                let proName = res.data.data.proName;
+                let producer = res.data.data.producer;
+                sizeWeight = res.data.data.sizeWeight;
+                let temp = res.data.data.temp;
+                let tempText = "";
+                switch (temp) {
+                    case 1:
+                        tempText = "냉장";
+                        break;
+                    case 2:
+                        tempText = "냉동";
+                        break;
+                    case 3:
+                        tempText = "상온";
+                        break;
+                }
+                let netPrice = res.data.data.netPrice;
+                let discount = res.data.data.salePrice;
+                if (discount == null || discount == 0) {
+                    $("#discount_box").css("display", "none");
+                    $("#prod_netPrice").css("display", "none");
+                }
+                let salePrice = res.data.data.price;
+                let earnPoint = Math.floor(salePrice * 0.01);
+                let totalPrice = salePrice; // 수량에 따라 변동될 변수
+
+                if (likeFlag === "TRUE") {
+                    let likeBtn = document.getElementById('like_button');
+                    likeBtn.classList.add("likeClicked");
+                }
+
+                netPrice = netPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                salePrice = salePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                earnPoint = earnPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                let totalPrice_1 = totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                img1 = img1.replace("\\", "/");
+                let img1_1 = img1.replace("\\", "/");
+                let img1_2 = img1_1.replace("\\", "/");
+                let img1_3 = img1_2.replace("\\", "/");
+
+                let star = res.data.data.star;
+                    star = Math.floor(star);        // 소수점 버림
+                let stars = "";
+                if ( star == 0 ) { stars = "☆☆☆☆☆"; star = "0"; }
+                else if ( star == 1 ) { stars = "★☆☆☆☆"; }
+                else if ( star == 2 ) { stars = "★★☆☆☆"; }
+                else if ( star == 3 ) { stars = "★★★☆☆"; }
+                else if ( star == 4 ) { stars = "★★★★☆"; }
+                else if ( star >= 5 ) { stars = "★★★★★"; star = "5"; }
+
+                document.getElementById("pro_score").innerText = star + "점";
+                document.getElementById("pro_star").innerText =  stars;
+                document.getElementById("total_price_hidden").value = totalPrice;
+                document.getElementById("prod_img").style.backgroundImage = "url(" + img1_3 + ")";
+                document.getElementById("prod_name").innerText = name;
+                document.getElementById("prod_price").innerText = salePrice + "원";
+                document.getElementById("prod_netPrice").innerText = netPrice + "원";
+                document.getElementById("prod_discount").innerText = discount + "%";
+                document.getElementById("origin").innerText = origin;
+                document.getElementById("size_weight").innerText = sizeWeight;
+                document.getElementById("temp").innerText = tempText;
+                document.getElementById("delivery").innerText = deliveryText;
+                document.getElementById("earn_point").innerText = "1% 적립 " + earnPoint + "원";
+                document.getElementById("total_price").innerText = totalPrice_1;
+                document.getElementById("pro_type").innerText = proType;
+                document.getElementById("pro_name").innerText = proName;
+                document.getElementById("food_type").innerText = foodType;
+                document.getElementById("producer").innerText = producer;
+                document.getElementById("location").innerText = location;
+                document.getElementById("date_built").innerText = dateBuilt;
+                document.getElementById("date_valid").innerText = dateValid;
+                document.getElementById("brand_name").innerText = brName;
+                document.getElementById("brand_img").style.bacgkroundImage = "url:(" + brLogo + ")";
+                document.getElementById("brand_url").href = "/user/brand_goods_list?brIdx=" + brIdx +"&order=1";
+                document.getElementById("proDes").innerHTML = proDes;
+                document.getElementById("size_weight_1").innerText = sizeWeight + " | ";
+
+            }).catch(function (err) {
+                console.log(err);
+            });
+
+            $("#like_button").click(function (e) {
+                if (this.classList.contains("likeClicked")) {
+                    memIdx = parseInt(memIdx)
+                    console.log(memIdx)
+                    console.log(typeof memIdx)
+
+                    axios.delete("/api/memberslikes/delete?memIdx=" + memIdx + "&proIdx=" + prodIdx, {
+                    }).then(function () {
+                        alert("좋아요를 취소합니다")
+                        location.reload()
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                } else {
+                    axios.post("/api/memberslikes/create", {
+                        data: {
+                            memIdx: memIdx,
+                            proIdx: prodIdx
+                        }
+                    }).then(function () {
+                        alert("해당 상품을 좋아합니다.")
+                        location.reload()
+                    }).catch(function (err) {
+                        console.log(err)
+                        alert("로그인 후 이용 가능합니다.")
+                        location.href = "/user/mypage_userLogin";
+                    })
+                }
+            })
+
+            $("#goods_cart").click(function () {
+                let count = $(".item_ea").text()
+                console.log(memIdx);
+                if (memIdx !== "") {
+                    console.log(memIdx);
+                    console.log(prodIdx);
+                    console.log(count);
+                    axios.post("/api/basket/create", {
+                        data: {
+                            memIdx: memIdx,
+                            proIdx: prodIdx,
+                            proCount: count
+                        }
+                    }).then(function () {
+                        alert("장바구니에 등록되었습니다")
+                        location.reload()
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                } else {
+                    alert("비회원입니다.")
+                    let proidx_list = [];
+
+                    sessionStorage.setItem("noMem", prodIdx)
+                }
+            })
+
+
+            $(".plus_btn").click(function(e) {
+                e.preventDefault();                         // 이벤트 전파 방지
+                let stat = $('.item_ea').text();            // 현재 값을 가져옴.
+                let plusNum = parseInt(stat, 10);           // 숫자로 변환
+                plusNum++;                                  // 하나씩 더하기
+                if (plusNum > 10) {                         // 10개를 넘으려고 하면
+                    alert('더 이상 늘릴 수 없습니다.');         // 막기
+                    plusNum = 10;
+                }
+                $('.item_ea').text(plusNum);
+                let itemea =  $('.item_ea').text()
+                let totalprice = $("#total_price_hidden").val()
+                let total = itemea * totalprice;
+                let total_1 = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                let earnPoint_plus = Math.floor(total * 0.01);
+                earnPoint_plus = earnPoint_plus.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("earn_point").innerText = "1% 적립 " + earnPoint_plus + "원";
+
+                document.getElementById("total_price").innerText = total_1;
+
+            });
+
+            $(".minus_btn").click(function(e) {
+                e.preventDefault();
+                let stat = $('.item_ea').text();
+                let minusNum = parseInt(stat, 10);
+                minusNum--;
+                if (minusNum < 1) {
+                    alert('더이상 줄일 수 없습니다.');
+                    minusNum = 1;
+                }
+                $('.item_ea').text(minusNum);
+                let itemea =  $('.item_ea').text()
+                let totalprice = $("#total_prcie_hidden").val()
+                let total = itemea * totalprice;
+                let total_1 = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                let earnPoint_minus = Math.floor(total * 0.01);
+                console.log(earnPoint_minus)
+                earnPoint_minus = earnPoint_minus.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById("earn_point").innerText = "1% 적립 " + earnPoint_minus + "원";
+
+                document.getElementById("total_price").innerText = total_1;
+
+            });
+
+            /* 구매후기 리스트 */
+            axios.get('/api/productReview/userReview/list?proIdx='+prodIdx+'&page=0', {
+            }).then(function(res) {
+                let totalReview = res.data.data.length;
+                document.getElementById("review_total").innerText = "("+totalReview+")";
+
+                for (let i in res.data.data) {
+                    let name = res.data.data[i].memName;
+                        name = name.replace(/(?<=.{1})./gi, "*"); // 이름 마스킹처리
+                    let proCount = res.data.data[i].proCount;
+                    let files = res.data.data[i].files;
+                    let file_icon;
+                    if(files == null) {
+                        file_icon = "none";
+                    } else {
+                        file_icon = "inline-block";
+                    }
+                    let score = res.data.data[i].like;
+                    let like = "";
+                    switch(score) {
+                        case 0: case 1: case 2: case 3:
+                            like = "별로에요";
+                            break;
+                        case 4: case 5: case 6:
+                            like = "괜찮아요";
+                            break;
+                        case 7: case 8: case 9: case 10:
+                            like = "만족해요";
+                            break;
+                    }
+
+                    let regdate = res.data.data[i].regdate;
+                        regdate = regdate.substr(0, 10);
+                    let content = res.data.data[i].content;
+                    let ansFlag = res.data.data[i].ansFlag;
+                    if (ansFlag == "FALSE") {
+                        ansFlag = "none";
+                    } else {
+                        ansFlag = "block"
+                    }
+                    let ansContent = res.data.data[i].ansContent;
+
+                    $("#prod_review_tbody").append(
+                        '<tr class="review_click">'+
+                        '<td><span id="size_weight_1"></span>'+proCount+'</td>'+
+                        '<td><img src="/user/images/icon/ico_attach2.gif" style="display:'+file_icon+'; padding-right: 5px;">'+content+'</td>'+
+                        '<td>'+like+'</td>'+
+                        '<td>'+name+'</td>'+
+                        '<td>'+regdate+'</td></tr>'+
+                        '<tr class="review_detail">'+
+                        '<td colspan="6">'+
+                        '<div><p style="display:'+file_icon+'"><img src="'+files+'"></p><p>'+content+'</p></div>'+
+                        '<div style="display:'+ansFlag+'">'+
+                        '<span>헬로네이처</span>'+
+                        '<span><br>안녕하세요, 오늘이 맛있는 탐험 헬로네이처입니다.<br>'+ansContent+'<br>감사합니다.</span></div></td></tr>'
+                    )
+                }
+
+                /* 구매후기 상세보기 */
+                let article = (".review_board .review_show");
+                $(".review_board .review_click td").click(function() {
+                    let myArticle =$(this).parents().next("tr");
+                    if($(myArticle).hasClass('review_detail')) {
+                        $(article).removeClass('review_show').addClass('review_detail');
+                        $(myArticle).removeClass('review_detail').addClass('review_show');
+                    } else {
+                        $(myArticle).addClass('review_detail').removeClass('review_show');
+                    }
+                });
+
+                for (let i=res.data.pagination.totalPages; i>0; i--) {
+                    let pages = $('<div id="review_page_num" class="rev_page_num">').append(
+                        i+'</div>'
+                    )
+                    $('#review_page_prev').after(pages);
+                }
+
+                let pages = document.querySelectorAll(".rev_page_num");
+                for (let i=0; i<pages.length; i++) {
+                    pages[i].addEventListener('click', function () {
+                        let pageNum = parseInt(pages[i].innerText);
+                        let page = pageNum - 1;
+
+                        $("#prod_review_tbody").empty();
+
+                        axios.get('/api/productReview/userReview/list?proIdx='+prodIdx+'&page='+page, {
+                        }).then(function(res) {
+                            for (let i in res.data.data) {
+                                let name = res.data.data[i].memName;
+                                name = name.replace(/(?<=.{1})./gi, "*"); // 이름 마스킹처리
+                                let proCount = res.data.data[i].proCount;
+                                let files = res.data.data[i].files;
+                                let file_icon;
+                                if(files == "" || files == null) {
+                                    file_icon = "none";
+                                } else {
+                                    file_icon = "inline-block";
+                                }
+                                let score = res.data.data[i].like;
+                                let like = "";
+                                switch(score) {
+                                    case 0: case 1: case 2: case 3:
+                                        like = "별로에요";
+                                        break;
+                                    case 4: case 5: case 6:
+                                        like = "괜찮아요";
+                                        break;
+                                    case 7: case 8: case 9: case 10:
+                                        like = "만족해요";
+                                        break;
+                                }
+
+                                let regdate = res.data.data[i].regdate;
+                                regdate = regdate.substr(0, 10);
+                                let content = res.data.data[i].content;
+                                let sizeWeight = $("#size_weight").text();
+
+                                $("#prod_review_tbody").append(
+                                    '<tr class="review_click">'+
+                                    '<td>'+sizeWeight+' | '+proCount+'</td>'+
+                                    '<td><img src="/user/images/icon/ico_attach2.gif" style="display:'+file_icon+'; padding-right: 5px;">'+content+'</td>'+
+                                    '<td>'+like+'</td>'+
+                                    '<td>'+name+'</td>'+
+                                    '<td>'+regdate+'</td></tr>'+
+                                    '<tr class="review_detail">'+
+                                    '<td colspan="6"><div><p><img src="'+files+'"></p><p>'+content+'</p></div></td></tr>'
+                                )
+                            }
+
+                            /* 구매후기 상세보기 */
+                            let article = (".review_board .review_show");
+                            $(".review_board .review_click td").click(function() {
+                                let myArticle =$(this).parents().next("tr");
+                                if($(myArticle).hasClass('review_detail')) {
+                                    $(article).removeClass('review_show').addClass('review_detail');
+                                    $(myArticle).removeClass('review_detail').addClass('review_show');
+                                } else {
+                                    $(myArticle).addClass('review_detail').removeClass('review_show');
+                                }
+                            });
+
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    });
+                }
+
+                /* 만족도 필터 */
+                $("select[name=likeFilter]").change(function(){
+                    console.log($(this).val()); // 선택값이 바뀔 때마다 value값 가져오기
+                    let filter = $(this).val();
+                    let url = "";
+                    if (filter == "만족해요") {
+                        url = "/api/productReview/userReview/list?proIdx="+prodIdx+"&like=3";
+                    } else if (filter == "괜찮아요") {
+                        url = "/api/productReview/userReview/list?proIdx="+prodIdx+"&like=2";
+                    } else if (filter == "별로에요") {
+                        url = "/api/productReview/userReview/list?proIdx="+prodIdx+"&like=1";
+                    } else if (filter == "전체") {
+                        url = "/api/productReview/userReview/list?proIdx="+prodIdx;
+                    }
+
+                    $("#prod_review_tbody").empty();
+                    $(".rev_page_num").remove();
+
+                    axios.get(url, {
+                    }).then(function(res) {
+                        for (let i in res.data.data) {
+                            let name = res.data.data[i].memName;
+                            name = name.replace(/(?<=.{1})./gi, "*"); // 이름 마스킹처리
+                            let proCount = res.data.data[i].proCount;
+                            let files = res.data.data[i].files;
+                            let file_icon;
+                            if(files == null) {
+                                file_icon = "none";
+                            } else {
+                                file_icon = "inline-block";
+                            }
+                            let score = res.data.data[i].like;
+                            let like = "";
+                            switch(score) {
+                                case 0: case 1: case 2: case 3:
+                                    like = "별로에요";
+                                    break;
+                                case 4: case 5: case 6:
+                                    like = "괜찮아요";
+                                    break;
+                                case 7: case 8: case 9: case 10:
+                                    like = "만족해요";
+                                    break;
+                            }
+
+                            let regdate = res.data.data[i].regdate;
+                            regdate = regdate.substr(0, 10);
+                            let content = res.data.data[i].content;
+                            let sizeWeight = $("#size_weight").text();
+
+                            $("#prod_review_tbody").append(
+                                '<tr class="review_click">'+
+                                '<td>'+sizeWeight+' | '+proCount+'</td>'+
+                                '<td><img src="/user/images/icon/ico_attach2.gif" style="display:'+file_icon+'; padding-right: 5px;">'+content+'</td>'+
+                                '<td>'+like+'</td>'+
+                                '<td>'+name+'</td>'+
+                                '<td>'+regdate+'</td></tr>'+
+                                '<tr class="review_detail">'+
+                                '<td colspan="6"><div><p style="display:'+file_icon+'"><img src="'+files+'"></p><p>'+content+'</p></div></td></tr>'
+                            )
+                        }
+
+                        /* 구매후기 상세보기 */
+                        let article = (".review_board .review_show");
+                        $(".review_board .review_click td").click(function() {
+                            let myArticle =$(this).parents().next("tr");
+                            if($(myArticle).hasClass('review_detail')) {
+                                $(article).removeClass('review_show').addClass('review_detail');
+                                $(myArticle).removeClass('review_detail').addClass('review_show');
+                            } else {
+                                $(myArticle).addClass('review_detail').removeClass('review_show');
+                            }
+                        });
+
+                        for (let i=res.data.pagination.totalPages; i>0; i--) {
+                            let pages = $('<div id="review_page_num" class="rev_page_num">').append(
+                                i+'</div>'
+                            )
+                            $('#review_page_prev').after(pages);
+                        }
+
+                        let pages = document.querySelectorAll(".rev_page_num");
+                        for (let i=0; i<pages.length; i++) {
+                            pages[i].addEventListener('click', function () {
+                                let pageNum = parseInt(pages[i].innerText);
+                                let page = pageNum - 1;
+
+                                $("#prod_review_tbody").empty();
+
+                                axios.get(url+'&page='+page, {
+                                }).then(function(res) {
+                                    for (let i in res.data.data) {
+                                        let name = res.data.data[i].memName;
+                                        name = name.replace(/(?<=.{1})./gi, "*"); // 이름 마스킹처리
+                                        let proCount = res.data.data[i].proCount;
+                                        let files = res.data.data[i].files;
+                                        let file_icon;
+                                        if(files == "" || files == null) {
+                                            file_icon = "none";
+                                        } else {
+                                            file_icon = "inline-block";
+                                        }
+                                        let score = res.data.data[i].like;
+                                        let like = "";
+                                        switch(score) {
+                                            case 0: case 1: case 2: case 3:
+                                                like = "별로에요";
+                                                break;
+                                            case 4: case 5: case 6:
+                                                like = "괜찮아요";
+                                                break;
+                                            case 7: case 8: case 9: case 10:
+                                                like = "만족해요";
+                                                break;
+                                        }
+
+                                        let regdate = res.data.data[i].regdate;
+                                        regdate = regdate.substr(0, 10);
+                                        let content = res.data.data[i].content;
+                                        let sizeWeight = $("#size_weight").text();
+
+                                        $("#prod_review_tbody").append(
+                                            '<tr class="review_click">'+
+                                            '<td>'+sizeWeight+' | '+proCount+'</td>'+
+                                            '<td><img src="/user/images/icon/ico_attach2.gif" style="display:'+file_icon+'; padding-right: 5px;">'+content+'</td>'+
+                                            '<td>'+like+'</td>'+
+                                            '<td>'+name+'</td>'+
+                                            '<td>'+regdate+'</td></tr>'+
+                                            '<tr class="review_detail">'+
+                                            '<td colspan="6"><div><p><img src="'+files+'"></p><p>'+content+'</p></div></td></tr>'
+                                        )
+                                    }
+
+                                    /* 구매후기 상세보기 */
+                                    let article = (".review_board .review_show");
+                                    $(".review_board .review_click td").click(function() {
+                                        let myArticle =$(this).parents().next("tr");
+                                        if($(myArticle).hasClass('review_detail')) {
+                                            $(article).removeClass('review_show').addClass('review_detail');
+                                            $(myArticle).removeClass('review_detail').addClass('review_show');
+                                        } else {
+                                            $(myArticle).addClass('review_detail').removeClass('review_show');
+                                        }
+                                    });
+
+                                }).catch(function(err) {
+                                    console.log(err);
+                                });
+                            });
+                        }
+
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                });
+
+            }).catch(function(err) {
+                console.log(err);
+            });
+
+
+            $('#qna_btn').click(function (){
+                $('#qna_box').toggle();
+            });
+
+            /* 상품문의 */
+            $("#prod_question_btn").on('click', function() {
+                let qna_content = $("#qna_content").val();
+                if (memIdx == "" || memIdx == null) {
+                    alert('로그인 후 이용 가능합니다.');
+                    location.href = "/user/mypage_userLogin";
+                } else {
+                    axios.post('/api/productquestion/create', {
+                        data: {
+                            memIdx: memIdx,
+                            content: qna_content,
+                            proIdx: prodIdx,
+                        }
+                    }).then(function () {
+                        alert('문의가 정상적으로 등록되었습니다.');
+                        location.reload();
+                    }).catch(function (err) {
+                        console.log(err);
+                    });
+                }
+            });
+
+            /* 상품문의 리스트 */
+            axios.get('/api/productquestion/detail/list?proIdx='+prodIdx+'&page=0', {
+            }).then(function(res) {
+                for (let i in res.data.data) {
+                    let content = res.data.data[i].content;
+                    let name = res.data.data[i].name;
+                        name = name.replace(/(?<=.{1})./gi, "*"); // 이름 마스킹처리
+                    let regdate = res.data.data[i].regdate;
+                        regdate = regdate.substr(0, 10);
+                    let ansFlag = res.data.data[i].ansFlag;
+                    let answer, style, font;
+                    if (ansFlag == "FALSE") {
+                        answer = "답변대기";
+                        font = "color: #666; font-weight: normal";
+                        style = "none";
+                    } else {
+                        answer = "답변완료";
+                        font = "color: #00B081; font-weight: bold";
+                        style = "block"
+                    }
+                    let ansContent = res.data.data[i].ansContent;
+
+                    $("#prod_question_tbody").append(
+                        '<tr class="product_qna_click">'+
+                        '<td>'+content+'</td>'+
+                        '<td>'+name+'</td>'+
+                        '<td>'+regdate+'</td>'+
+                        '<td class="answer" style="'+font+'">'+answer+'</td></tr>'+
+                        '<tr class="product_qna_detail">'+
+                        '<td colspan="4">'+
+                        '<div><span>'+content+'</span></div>'+
+                        '<div style="display: '+style+'">'+
+                        '<span>헬로네이처</span>'+
+                        '<span><br>안녕하세요, 오늘이 맛있는 탐험 헬로네이처입니다.<br>'+ansContent+'<br>감사합니다.</span></div></td></tr>'
+                    )
+                }
+
+                /* 상품문의 상세보기 */
+                let article = (".product_qna_board .product_qna_show");
+                $(".product_qna_board .product_qna_click td").click(function() {
+                    let myArticle =$(this).parents().next("tr");
+                    if($(myArticle).hasClass('product_qna_detail')) {
+                        $(article).removeClass('product_qna_show').addClass('product_qna_detail');
+                        $(myArticle).removeClass('product_qna_detail').addClass('product_qna_show');
+                    } else {
+                        $(myArticle).addClass('product_qna_detail').removeClass('product_qna_show');
+                    }
+                });
+
+                for (let i=res.data.pagination.totalPages; i>=0; i--) {
+                    let pages = $('<div id="prod_qna_page_num" class="page_num">').append(
+                        (i+1)+'</div>'
+                    )
+                    $('#prod_qna_page_prev').after(pages);
+                }
+
+                let pages = document.querySelectorAll(".page_num");
+                for (let i=0; i<pages.length; i++) {
+                    pages[i].addEventListener('click', function() {
+                        let pageNum = parseInt(pages[i].innerText);
+                        let page = pageNum - 1;
+
+                        $('#prod_question_tbody').empty();
+
+                        axios.get('/api/productquestion/detail/list?proIdx='+prodIdx+'&page='+page, {
+                        }).then(function(res) {
+                            for (let i in res.data.data) {
+                                console.log(res.data.data);
+                                let content = res.data.data[i].content;
+                                let name = res.data.data[i].name;
+                                    name = name.replace(/(?<=.{1})./gi, "*"); // 이름 마스킹처리
+                                let regdate = res.data.data[i].regdate;
+                                    regdate = regdate.substr(0, 10);
+                                let ansFlag = res.data.data[i].ansFlag;
+                                let answer, style, font;
+                                if (ansFlag == "FALSE") {
+                                    answer = "답변대기";
+                                    font = "color: #666; font-weight: normal";
+                                    style = "none";
+                                } else {
+                                    answer = "답변완료";
+                                    font = "color: #00B081; font-weight: bold";
+                                    style = "block"
+                                }
+                                let ansContent = res.data.data[i].ansContent;
+
+                                $("#prod_question_tbody").append(
+                                    '<tr class="product_qna_click">'+
+                                    '<td>'+content+'</td>'+
+                                    '<td>'+name+'</td>'+
+                                    '<td>'+regdate+'</td>'+
+                                    '<td class="answer" style="'+font+'">'+answer+'</td></tr>'+
+                                    '<tr class="product_qna_detail">'+
+                                    '<td colspan="4">'+
+                                    '<div><span>'+content+'</span></div>'+
+                                    '<div style="display: '+style+'">'+
+                                    '<span>헬로네이처</span>'+
+                                    '<span><br>안녕하세요, 오늘이 맛있는 탐험 헬로네이처입니다.<br>'+ansContent+'<br>감사합니다.</span></div></td></tr>'
+                                )
+                            }
+
+                            /* 상품문의 상세보기 */
+                            let article = (".product_qna_board .product_qna_show");
+                            $(".product_qna_board .product_qna_click td").click(function() {
+                                let myArticle =$(this).parents().next("tr");
+                                if($(myArticle).hasClass('product_qna_detail')) {
+                                    $(article).removeClass('product_qna_show').addClass('product_qna_detail');
+                                    $(myArticle).removeClass('product_qna_detail').addClass('product_qna_show');
+                                } else {
+                                    $(myArticle).addClass('product_qna_detail').removeClass('product_qna_show');
+                                }
+                            });
+
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    });
+                }
+            }).catch(function(err) {
+                console.log(err);
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="container">
+
+    <!--header thymeleaf-->
+    <div th:replace="/user/fragment/header::header"></div>
+
+    <!-- main 시작 -->
+    <main>
+        <section id="product_detail">
+            <div class="product_bg">
+                <div class="product_mold">
+                    <!-- 좋아요/공유버튼 -->
+                    <div class="prod_like_share">
+                        <div class="like_button" id="like_button"></div>
+                        <div class="share_button" onclick="shareTwitter()"></div>
+                    </div>
+                    <!-- 좋아요/공유버튼 끝 -->
+
+                    <div class="prod_img" id="prod_img">상품이미지</div>
+
+                    <!-- 상품정보 -->
+                    <div class="prod_info">
+
+                        <!-- 상품정보(1) -->
+                        <p class="goods_name" id="prod_name"></p>
+                        <div class="goods_star">
+                            <span class="item_star review" id="pro_score"></span>
+                            <div class="rating" id="pro_star">
+<!--                                <div class="star-wrap">-->
+<!--                                    <div class="star"><i class="fas fa-star"></i></div>-->
+<!--                                </div>-->
+<!--                                <div class="star-wrap">-->
+<!--                                    <div class="star"><i class="fas fa-star"></i></div>-->
+<!--                                </div>-->
+<!--                                <div class="star-wrap">-->
+<!--                                    <div class="star"><i class="fas fa-star"></i></div>-->
+<!--                                </div>-->
+<!--                                <div class="star-wrap">-->
+<!--                                    <div class="star"><i class="fas fa-star"></i></div>-->
+<!--                                </div>-->
+<!--                                <div class="star-wrap">-->
+<!--                                    <div class="star"><i class="fas fa-star"></i></div>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+                        <p class="goods_price">
+                            <span id="prod_price"></span>       <!-- 최종판매가 -->
+                            <del id="prod_netPrice"></del>      <!-- 정상가 -->
+                        </p>
+                        <!-- 상품정보(1) 끝 -->
+
+                        <!-- 상품정보(2) -->
+                        <input type="hidden" id="hidden_sizeWeight" value="">
+                        <div class="goods_info">
+                            <dl class="list fst">
+                                <dt class="tit">원산지</dt>
+                                <dd class="desc" id="origin"></dd>
+                            </dl>
+                            <dl class="list">
+                                <dt class="tit">규격/중량</dt>
+                                <dd class="desc" id="size_weight"></dd>
+                            </dl>
+                            <dl class="list">
+                                <dt class="tit">보관온도</dt>
+                                <dd class="desc" id="temp"></dd>
+                            </dl>
+                            <dl class="list" id="discount_box">
+                                <dt class="tit">혜택</dt>
+                                <dd class="desc" id="prod_discount"></dd>
+                            </dl>
+                            <dl class="list">
+                                <dt class="tit">배송방법</dt>
+                                <dd class="desc" id="delivery"></dd>
+                            </dl>
+                            <!--                                <dl class="list list_nopackage">-->
+                            <!--                                    <dt class="tit"><del>구매수량</del></dt>-->
+                            <!--                                    <dd class="desc"><del>내용</del></dd>-->
+                            <!--                                </dl>-->
+                            <!--                                <dl class="list">-->
+                            <!--                                    <dt class="tit"><del>제목</del></dt>-->
+                            <!--                                    <dd class="desc"><del>내용</del></dd>-->
+                            <!--                                </dl>-->
+                        </div>
+                        <!-- 상품정보(2) 끝 -->
+
+                        <div id="cartPut">
+                            <div class="cart_option cartList cart_type2">
+                                <div class="inner_option">
+                                    <div class="in_option">
+                                        <div class="list_goods">
+                                            <ul class="list list_nopackage">
+                                                <li class="on">
+                                                        <span class="btn_position">
+                                                            <button type="button" class="btn_del">
+                                                                <span class="txt">삭제하기</span>
+                                                            </button>
+                                                        </span>
+                                                    <span class="name">
+                                                            "상품명"
+                                                        </span>
+                                                    <span class="tit_item">구매수량</span>
+                                                    <div class="item_count">
+                                                        <button class="minus_btn"></button>
+                                                        <span class="item_ea" style="top: 15%">1</span>
+                                                        <button class="plus_btn"></button>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="total">
+                                            <div class="price">
+                                                <input type="hidden" id="total_price_hidden">
+                                                <strong class="tit">총 상품금액 :</strong>
+                                                <span class="sum">
+                                                        <span class="num" id="total_price"></span>
+                                                        <span class="won">원</span>
+                                                    </span>
+                                            </div>
+                                            <p class="txt_point">
+                                                <span class="ico">적립</span>
+                                                <span id="earn_point" style="color: #777;"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="group_btn off">
+                                        <div class="view_function">
+<!--                                            <button class="btn buy_now" onclick="location.href='/user/mypage_userOrdersheet'">바로 구매</button>-->
+                                        </div>
+                                        <span class="btn_type1">
+                                            <button type="button" class="txt_type" id="goods_cart">장바구니 담기</button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 상품정보 끝 -->
+
+                    <!-- brand -->
+                    <a href="/user/brand_goods_list/" class="prod_brand" id="brand_url">
+                        <div class="prod_brand_img" id="brand_img"></div>
+                        <span id="brand_name"></span>
+                        <img src="/user/images/icon/ico_arrow_right_20x20.png" alt="화살표">
+                    </a>
+                    <a href="#" class="deli_info">배송안내</a>
+                    <!-- brand -->
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="layout-wrapper goods-view-area">
+                <div class="goods-view-infomation detail_wrap_outer" id="goods-view-infomation">
+                    <!-- 상단 고정 : 상품설명 / 상세정보 / 후기 / 문의  시작-->
+                    <div id="goods-tab-top" class="goods-view-tab">
+                        <ul class="goods-view-infomation-tab-group">
+                            <li class="goods-view-infomation-tab">
+                                <a href="#goods-description" class="goods-view-infomation-tab-anchor">상품설명</a>
+                            </li>
+                            <li class="goods-view-infomation-tab">
+                                <a href="#goods-infomation" class="goods-view-infomation-tab-anchor">상세정보</a>
+                            </li>
+                            <li class="goods-view-infomation-tab goods-view-review-tab">
+                                <a href="#goods-review" class="goods-view-infomation-tab-anchor">후기
+                                    <span class="count_review" id="review_total"></span>
+                                </a>
+                            </li>
+                            <li class="goods-view-infomation-tab qna-show">
+                                <a href="#goods-qna" class="goods-view-infomation-tab-anchor">문의</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 상단 고정 : 상품설명 / 상세정보 / 후기 / 문의  끝-->
+
+                    <div class="goods-view-infomation-content __active" id="goods-description">
+
+                        <!-- proDes -->
+                        <div class="main_title_wrap" id="proDes"></div>
+                        <!-- proDes-->
+                        <div class="goods_info_wrap" id="goods-infomation">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <th>상품명</th>
+                                    <td id="pro_type">상품정보고시 내용</td>
+                                    <th>제품명</th>
+                                    <td id="pro_name">상품정보고시 내용</td>
+                                </tr>
+                                <tr>
+                                    <th>식품의 유형</th>
+                                    <td id="food_type">상품정보고시 내용</td>
+                                    <th>생산자</th>
+                                    <td id="producer">상품정보고시 내용</td>
+                                </tr>
+                                <tr>
+                                    <th>소재지</th>
+                                    <td id="location">상품정보고시 내용</td>
+                                    <th>제조연월일</th>
+                                    <td id="date_built">상품정보고시 내용</td>
+                                </tr>
+                                <tr>
+                                    <th>유통기한</th>
+                                    <td id="date_valid">상품정보고시 내용</td>
+                                    <th>소비자상담 관련 전화번호</th>
+                                    <td>헬로네이처 고객센터 (02-1234-1234)</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 취소/교환/반품 안내 -->
+                        <div class="about_deli_wrap">
+                            <div class="about_deli unfold">
+                                <h4>취소∙교환∙반품 안내</h4>
+                                <p class="about_deli_close"><span class="about_deli_open">닫기</span></p>
+                            </div>
+                            <div class="about_deil_info_box">
+                                <div class="about_deli_info1">
+                                    <div class="tit">
+                                        <span>01. 주문 취소</span>
+                                    </div>
+                                    <div class="info">
+                                        <p class="info_tit">결제완료</p>
+                                        <p class="info_info"><b>마이페이지 > 주문배송</b> 메뉴에서 [주문 취소] 버튼을 눌러 전체 주문을 취소할 수 있습니다.
+                                            일부 상품에 대한 주문 취소는 고객센터로 연락 주시기 바랍니다.</p>
+                                        <p class="info_tit">상품준비완료∙상품포장중</p>
+                                        <p class="info_info">상품준비완료∙상품포장중에는 고객센터로 연락 주시기 바랍니다.</p>
+                                    </div>
+                                </div>
+
+                                <div class="about_deli_info2">
+                                    <div class="tit">
+                                        <span>02. 교환∙반품</span>
+                                    </div>
+                                    <div class="info">
+                                        <p class="info_tit">구매자 귀책</p>
+                                        <p class="info_info">교환∙반품 신청은 <b>배송 완료 후 7일 이내</b>에 고객센터로 연락 주시기 바랍니다.</p>
+                                        <p class="info_tit">판매자 귀책</p>
+                                        <p class="info_info">상품이 표시/광고 내용과 다르거나 계약 내용과 다른 경우 상품을 받으신 날부터 3개월 이내, 또는 사실을
+                                            알게 된 날(알 수 있었던 날)부터 30일 이내에 신청 가능합니다.</p>
+                                        <p class="info_small">※ 신선 / 냉장 / 냉동식품과 같이 재판매가 불가한 상품의 경우 단순 변심, 주문 착오 사유로
+                                            교환∙반품이 불가합니다.</p>
+                                        <p class="info_small">※ 신선 / 냉장 / 냉동식품에 문제가 있는 경우, 2일 이내 상품 상태를 확인할 수 있는 사진을
+                                            첨부하여 고객센터로 문의하시기 바랍니다.</p>
+                                    </div>
+                                </div>
+
+                                <div class="about_deli_info3">
+                                    <div class="tit">
+                                        <span>03. 교환∙반품 배송비</span>
+                                    </div>
+                                    <div class="info">
+                                        <p class="info_tit">구매자 귀책</p>
+                                        <p class="info_info">교환∙반품의 경우 고객님께서 배송비를 부담하셔야 합니다.</p>
+                                        <p class="info_tit">판매자 귀책</p>
+                                        <p class="info_info">상품의 불량/하자 또는 표시 광고 및 계약 내용과 다른 경우 해당 상품의 배송비는 헬로네이처에서
+                                            부담합니다.</p>
+                                        <p class="info_tit">변심 반품</p>
+                                        <p class="info_info">변심 반품의 배송비는 전액 고객 부담이며 환불 배송비는 아래와 같습니다. 반품 상품 및 쿠폰 적용을 제외한
+                                            최종 결제 금액 기준으로 차등 적용됩니다.</p>
+                                        <ul class="info3_box">
+                                            <li class="info_tit">일반 고객</li>
+                                            <li>∙ 4만원 이상 : 3,000원</li>
+                                            <li>∙ 4만원 미만 : 6,000원</li>
+                                            <li class="info_tit">헬로패스 가입 고객</li>
+                                            <li>∙ 14,800원 이상 : 3,000원</li>
+                                            <li>∙ 14,800원 미만 : 6,000원</li>
+                                            <li class="info_tit">주문 시 배송비를 지불한 경우</li>
+                                            <li>∙ 최종 결제 금액과 상관없이 모두 3,000원</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="about_deli_info4">
+                                    <div class="tit">
+                                        <span>04. 교환∙반품 제한</span>
+                                    </div>
+                                    <div class="info">
+                                        <p class="info_tit">전자상거래 등에서의 소비자보호에 관한 법률에 따라 다음의 경우 청약철회가 제한될 수 있습니다.</p>
+                                        <p class="info_info">1. 소비자에게 책임이 있는 사유로 상품이 멸실되거나 훼손된 경우 (단, 내용 확인을 위한 포장 개봉의
+                                            경우는 예외)<br>
+                                            2. 소비자의 사용 또는 일부 소비로 상품의 가치가 현저히 감소한 경우<br>
+                                            3. 시간이 지나 다시 판매하기 곤란할 정도로 상품 등의 가치가 현저히 감소한 경우<br>
+                                            4. 복제가 가능한 상품 등의 포장을 훼손한 경우<br>
+                                            5. 소비자의 주문에 따라 개별적으로 생산되는 상품으로 재판매가 불가능한 경우</p>
+                                    </div>
+                                </div>
+
+                                <div class="about_deli_info5">
+                                    <div class="tit">
+                                        <span>05. 고객센터</span>
+                                    </div>
+                                    <div class="info">
+                                        <table>
+                                            <tr>
+                                                <th>전화 문의</th>
+                                                <td>1644 - 4339</td>
+                                            </tr>
+                                            <tr>
+                                                <th>1:1 문의</th>
+                                                <td>로그인 > 마이페이지 > 1:1문의</td>
+                                            </tr>
+                                            <tr>
+                                                <th>카카오톡 문의</th>
+                                                <td>ID: 헬로네이처</td>
+                                            </tr>
+                                            <tr>
+                                                <th>운영시간</th>
+                                                <td>매일 08:00 ~18:00</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 취소/교환/반품 안내 끝 -->
+
+                        <!-- 배송 관련 안내 -->
+                        <div class="about_deli_wrap">
+                            <div class="about_deli">
+                                <h4>배송관련 안내</h4>
+                                <span>배송 과정 중 기상 악화 및 도로교통 상황에 따라 부득이하게 지연 배송이 발생될 수 있습니다.</span>
+                            </div>
+                        </div>
+                        <!-- 배송 관련 안내 끝-->
+
+                        <!-- 구매후기 시작 -->
+                        <div id="goods-review" class="review_wrap">
+                            <!-- 구매후기 타이틀 -->
+                            <div class="review_tit">
+                                <p>구매후기</p>
+                                <p>
+                                    <select name="likeFilter">
+                                        <option value="전체">전체</option>
+                                        <option value="만족해요">만족해요</option>
+                                        <option value="괜찮아요">괜찮아요</option>
+                                        <option value="별로에요">별로에요</option>
+                                    </select>
+                                </p>
+                            </div>
+                            <!-- 구매후기 타이틀 끝 -->
+
+                            <!-- 구매후기 게시판 -->
+                            <div class="review_box" id="review_list_box">
+                                <table class="review_board">
+                                    <colgroup>
+                                        <col width="120">
+                                        <col width="550">
+                                        <col width="120">
+                                        <col width="120">
+                                        <col width="100">
+                                    </colgroup>
+                                    <thead id="prod_review_thead">
+                                    <tr>
+                                        <th>중량/개수</th>
+                                        <th>내용</th>
+                                        <th>만족도</th>
+                                        <th>작성자</th>
+                                        <th>날짜</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="prod_review_tbody" style="font-size: 13px;">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- 구매후기 게시판 끝 -->
+
+                            <!-- 구매후기 페이징 -->
+                            <div id="review_pagination">
+                                <div id="review_page_first"><img src="/user/images/icon/pagination_first.png"></div>
+                                <div id="review_page_prev"><img src="/user/images/icon/pagination_prev.png"></div>
+                                <div id="review_page_next"><img src="/user/images/icon/pagination_next.png"></div>
+                                <div id="review_page_last"><img src="/user/images/icon/pagination_last.png"></div>
+                            </div>
+                            <!-- 구매후기 페이징 끝 -->
+                        </div>
+                        <!-- 구매후기 끝 -->
+
+
+                        <!-- 상품문의 시작 -->
+                        <div id="goods-qna" class="product_qna_wrap">
+                            <!-- 상품문의 타이틀 -->
+                            <div class="product_qna_tit">
+                                <p>상품문의</p>
+                                <div id="qna_btn" class="qna_tit" style="cursor: pointer;">문의작성</div>
+                            </div>
+                            <!-- 상품문의 타이틀 끝 -->
+
+                            <!-- 상품작성 시작 -->
+                            <div id="qna_box" class="qna_box" style="display: none;">
+                                <textarea id="qna_content" class="qna_textarea" placeholder="궁금한 사항을 작성해 주세요."
+                                          maxlength="2000"></textarea>
+                                <ul>
+                                    <li> · 상품문의 이외 문의사항은 <span>1:1 문의</span>를 이용해주세요.</li>
+                                    <li> · 해당 상품과 무관하거나 부적절한 내용의 문의는 통보 없이 삭제될 수 있습니다.</li>
+                                </ul>
+                                <button type="button" class="qna_button" id="prod_question_btn">등록</button>
+                            </div>
+                            <!-- 상품작성 끝 -->
+
+
+                            <!-- 상품문의 게시판 -->
+                            <div class="product_qna_box" id="qna_list_box">
+                                <!-- 상품문의 목록 -->
+                                <table class="product_qna_board">
+                                    <colgroup>
+                                        <col width="">
+                                        <col width="100">
+                                        <col width="100">
+                                        <col width="100">
+                                    </colgroup>
+                                    <thead id="prod_question_thead">
+                                    <tr>
+                                        <th>내용</th>
+                                        <th>작성자</th>
+                                        <th>작성일</th>
+                                        <th>답변상태</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="prod_question_tbody" style="font-size: 13px;">
+                                        <!-- 상품문의 공간 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- 상품문의 게시판 끝 -->
+
+                            <!-- 상품문의 페이징 -->
+                            <div id="prod_qna_pagination">
+                                <div id="prod_qna_page_first"><img src="/user/images/icon/pagination_first.png"></div>
+                                <div id="prod_qna_page_prev"><img src="/user/images/icon/pagination_prev.png"></div>
+                                <div id="prod_qna_page_next"><img src="/user/images/icon/pagination_next.png"></div>
+                                <div id="prod_qna_page_last"><img src="/user/images/icon/pagination_last.png"></div>
+                            </div>
+                            <!-- 상품문의 페이징 끝 -->
+                        </div>
+                        <!-- 상품문의 끝 -->
+
+                        <script src="/user/js/category.js"></script>
+                    </div>
+                </div>
+                <div th:replace="/user/fragment/footer::footer"></div>
+            </div>
+        </section>
+    </main>
+    <!-- main 끝 -->
+    <!--footer thymeleaf-->
+    <!--footer thymeleaf-->
+</div>
+
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+
+</body>
+</html>

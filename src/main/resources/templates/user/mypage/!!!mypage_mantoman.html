@@ -1,0 +1,169 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1:1문의</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(6) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(6) > a { color: #5dab99;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</head>
+<script>
+    $(function (){
+        let memIdx = $("#hidden_user").val();
+
+        axios.get('/api/Question/user/list/' + memIdx, {
+
+        }).then(function (response){
+            for (let i in response.data.data){
+                let $id = response.data.data[i].idx
+                let $type = response.data.data[i].type;
+                let $ansFlag = response.data.data[i].ansFlag;
+                let $content = response.data.data[i].content;
+                let $ansContent = response.data.data[i].ansContent;
+                let $ansDate = response.data.data[i].ansDate;
+                let $regdate = response.data.data[i].regdate;
+                $regdate = $regdate.toString().substring(0, 10);
+                let k = parseInt(i)
+
+
+                // 답변상태 텍스트로 찍어주기
+                if($ansFlag === "FALSE"){
+                    $ansFlag = "답변대기"
+
+                }else if($ansFlag === "TRUE"){
+                    $ansFlag = "답변완료"
+
+                }
+
+
+                // 타입 텍스트로 찍어주기
+                if($type == 1){
+                    $type = "취소/환불"
+                }else if($type == 2){
+                    $type = "반품/교환"
+                }else if($type == 3){
+                    $type = "배송관련"
+                }else if($type == 4){
+                    $type = "상품문의"
+                }else if($type == 5){
+                    $type = "쿠폰/이벤트"
+                }else if($type == 6){
+                    $type = "헬로패스"
+                }else if($type == 7){
+                    $type = "더그린배송"
+                }else if($type == 8){
+                    $type = "회원정보"
+                }else if($type == 9){
+                    $type = "사이트/앱 오류"
+                }else if($type == 10){
+                    $type = "상품제안"
+                }else if($type == 11){
+                    $type = "기타"
+                }
+
+                let ansdate
+                if($ansDate === null){
+                     ansdate = "none";
+                     $ansDate = $regdate
+                }else{
+                     ansdate = "inline-block";
+                    $ansDate = "답변날짜 : " + $ansDate;
+                }
+
+                let row = $('<div>').append(
+                    '<div class="mantoman_list_box" id="mantoman_list_box_'+ k +'"><div class="mantoman_list_txt">' +
+                    '<div class="mantoman_post_date">' +
+                    '<p>' + $ansDate + '</p></div>' +
+                    '<a href="#" class="mantoman_list_category">' + $type +
+                    '<p class="mantoman_flag_box"><span class="mantoman_flag">'+ $ansFlag +'</span></p></a></div>' +
+                    '<div class="mantoman_list_overview" id="mantoman_list_overview_'+ k +'"><a href="#" alt="문의내역"></a></div></div>' +
+                    '<div class="mantoman_contents_qna" id="mantoman_contents_qna_'+ k +'"><div class="mantoman_q">' +
+                    '<p class="mtom_del" style="cursor: pointer; font-size: 13px; color: #2e383c; float: right;"><input type="hidden" value="'+$id+'">삭제</p>' +
+                    '<p class="q_flag"></span>' +
+                    '<p>'+ $content +'</p></div>' +
+                    '<div class="mantoman_a" style="display:'+ ansdate +'"><p class="a_flag"></p>' +
+                    '<p class="mantoman_a_date">'+ $ansDate + '</p><p>'+ $ansContent + '</p></div></div>'
+                )
+
+                row.append('</div>')
+                $('.mantoman_list > h5').after(row);
+
+                $("#mantoman_list_overview_" + i).on("click", function(e) {
+                    $('#mantoman_contents_qna_' + i).toggle();
+                })
+            }
+
+            $(".mtom_del").click(function (){
+                confirm("삭제 하시겠습니까?")
+                if(confirm) {
+                    let id = $(this).children("input").val()
+                    axios.delete("/api/Question/delete/" + id, {}).then(function () {
+                        alert("1:1 문의가 삭제되었습니다")
+                        location.reload();
+                    }).catch(function (err){
+                        console.log(err)
+                    })
+                }
+            })
+
+        }).catch(function (err){
+            console.log(err);
+        })
+    });
+</script>
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="contents">
+                <div th:replace="/user/fragment/section::section"></div>
+            </div>
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <div class="main_leftaside1">
+                    <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+                </div>
+                <div class="main_contents">                    
+                    <div class="contents_box1">
+                        <h2 class="contents_name" style="color: #ffffff">1:1 문의</h2>
+                    </div>                    
+                    <div class="mantoman_guide">
+                        <h5 class="mantoman_title">
+                            <a href="/user/mypage_faq"><strong class="empha_faq">FAQ</strong>를 확인하시면</a><br>
+                            답변을 더 빠르게 찾을 수 있습니다.
+                        </h5>
+                    </div>
+                    <a href="/user/mypage_enrollMantoman" class="button_submit_new">1:1 문의</a>
+                    <!-- 문의하신 내역 제목 시작 -->
+                    <div class="mantoman_list">
+                        <h5>문의하신 내역</h5>
+                    </div>
+                </div>         
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+</body>
+</html>
+

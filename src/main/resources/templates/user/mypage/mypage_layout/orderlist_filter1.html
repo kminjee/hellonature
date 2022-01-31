@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>최근 1개월</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function(){
+        axios.get('/api/orderlist/')
+    })
+</script>
+<body>    
+    <h2>최근 1개월</h2>
+    <div class="contents_box4">
+        <div class="contents_box4_inner1">
+            <div class="order_date">
+                <p>2021.07.27</p>
+            </div>
+            <div class="default_ship">
+                <p>기본 배송지</p>
+            </div>
+        </div>
+        <div class="order_detail_button">
+            <a href="#" alt="주문상세페이지 이동"></a>
+        </div>
+    </div>
+    <div class="contents_box5">
+        <div class="order_info">
+            <div class="order_info_left">
+                <p class="order_info_font1">택배배송</p>
+                <div class="order_info_line"></div>
+                <p class="order_info_font2">07.29(목) 도착</p>
+            </div>
+            <div class="order_info_right">
+                <p><a href="#" class="order_info_font3">배송완료</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="contents_box6">
+        <div class="product_image"></div>
+        <div class="product_info">
+            <p>[행복담원] 서귀포 하우스 감귤 500g</p>
+            <div class="contents_box6_inner">
+                <p>500g</p>
+                <div class="product_info_line"></div>
+                <p>1개</p>
+            </div>                            
+        </div>
+        <div class="mantoman_button_box">
+            <input type="button" value="1:1문의" class="mantoman_button">
+        </div>
+    </div>  
+</body>
+</html>

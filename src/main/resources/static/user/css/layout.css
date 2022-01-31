@@ -1,0 +1,116 @@
+:root {
+    --hello_main_1: #0db081;
+    --hello_font_1: #333;
+    --hello_bg_1: #f4f5f5;
+}
+
+/* header 시작 */
+/* header 상단 배너 */
+#eventLanding { line-height: inherit }
+.top_bnr_bg {width: 100%; height: 42px; background-color: #447d84;}
+.top_bnr_mold {width: 1050px; height: 100%; margin: 0 auto; }
+.top_bnr_box div:first-child {margin-top: 9px; margin-left: 410px; display: inline-block; }
+.top_bnr_box div:last-child {margin-top: 9px; float: right;}
+.top_bnr_mold div a span {color: #fff; font-weight: 300; letter-spacing: 0.5px; font-size: 15px; }
+.bnr_arr { width: 6px; height: 11.5px; margin-left: 24px; font-size: 15px; vertical-align: inherit; }
+.top_brn_close img {width: 12px; height: 12px; vertical-align: inherit; }
+.top_bnr_box button {background: none; border: 0; margin-top: 5px;}
+/* nav 시작 */
+.nav_bg {width: 100%; height: 130px; }
+.nav_mold {width: 1050px; height: 100%; margin: 0 auto;}
+.nav_userMenu {width: 100%; height: 43px; margin: 0 auto; position: relative;}
+/* nav 더그린배송 버튼 */
+.nav_theGreenDeli {width: 135px; height: 21.5px; padding-top: 10px; float: left; }
+/* nav 회원가입, 로그인, 고객센터  */
+.login_wrap label {margin: 0; padding: 0;}
+.login_wrap > .regist::after { content: "|"; color: black; display: inline-block; padding: 0 10px; }
+.login_wrap > .login::after { content: "|"; color: black; display: inline-block; padding: 0 10px; }
+
+.header_callcenter {margin-top: -3px;}
+.header_callcenter img {float: right; width: 8px; height: 5px; margin-left: 6px; margin-top: 6px; }
+.dropbtn { background-color: #fff; padding: 1px; border: none; font-size: 12.5px; cursor: pointer; color: #333; margin-top: -3px; font-family: 'Noto Sans KR'; padding-bottom: 5px; margin-right: 5px;}
+.dropdown {position: relative; display: inline-block;}
+.dropdown-content {position: absolute; display: none; margin-top: 0px; margin-left: -27px; border: 1px solid #ddd; background-color: #fff; min-width: 90px; box-shadow: 0px 5px 5px 0px rgba(158, 158, 158, 0.041); }
+.dropdown-content a {float: left; color: var(--hello_font_1); padding: 6px 5.5px; text-decoration: none; display: block; font-size: 13px; letter-spacing: -0.5px;}
+.dropdown-content a:last-child {padding-bottom: 10px;}
+.dropdown:hover .dropdown-content {display: block; }
+.dropdown:hover .dropbtn {background-color: #fff; }
+.regist, .login, .header_callcenter {font-family: 'Noto Sans KR', sans-serif; margin-top: -3px; font-size: 12px; display: inline-block; }
+.regist:link, .regist:visited, .regist:hover, .regist:focus {color: #155c65; font-family: 'Noto Sans KR', sans-serif;}
+.login_wrap {margin-top: 14px; height: 13px; float: right; padding: 0; display: flex; justify-content: space-between; position: relative;}
+/* nav 헬로네이처 메인 로고 */
+.logo_top_wrap {width: 1050px; padding-top: 31.5px; }
+.logo_top{display: flex; justify-content: center; margin-bottom: 5px;}
+.logo_top img {width: 94.5px; height: 95px;}
+/* nav 카테고리 */
+/* 상단 메뉴 고정 */
+#top_menu{margin-top: 5px; width: 100%; height: 56px; transition: 0.3s; background-color: #fff;}
+#top_menu_slide .category_mold {width: 1050px; height: 100%; margin: 0 auto;}
+#top_menu_slide.stickyA {position: fixed; top: 0; width: 100%; height: 56px;  background-color: #fff; z-index:10;}
+#goods-tab-top.stickyB {position: fixed; top: 0; width: 100%; height: 56px;  background-color: #fff; z-index:10;}
+.category { float: left; }
+.category .cate_menu1 a {width: 110px; float: left; text-align: left; }
+.category li {display: inline-block;}
+.category a {font-family: 'Noto Sans KR', sans-serif; font-weight: 500; background-color: transparent; text-decoration: none; overflow: hidden; float: left; width: 100px; height: 40px; padding: 18px 0 0; font-size: 16px; color: var(--hello_font_1); line-height: 20px; text-align: center;}
+.category .cate_menu1 .ico { float: left; width: 16px; height: 14px; margin: 4.5px 14px 0 0; background: url(../images/icon/ico_category.png) no-repeat;}
+.category .cate_menu1 a.on .ico, .category .cate_menu1 a:hover .ico {background: url(../images/icon/ico_category_h.png) no-repeat 0 0;}
+.category .cate_menu1 a:hover span { border-bottom: none;}
+.category a:hover span {color: var(--hello_main_1); border-bottom: 1px solid var(--hello_main_1);}
+/* nav 검색 / 마이페이지 / 장바구니 */
+.search_my_cart_box {float: right; width: 353px; height: 56px; display: flex; align-items: center; justify-content: space-between;}
+.search_my_cart_box img { width: 27.5px; height: 26px;}
+.icon_mypage img, .icon_cart img { width: 34px; height: 35px;}
+.searchbar_wrap {width: 245px; height: 35px; border-radius: 17px; background-color: var(--hello_bg_1); position: relative;}
+.searchbar_wrap img { width: 33.5px; height: 35px; margin-left: 25px; position: absolute;}
+.searchbar_wrap input[type="text"] {padding:2px 0 0 17px ; width: 170px; height: 33px;background-color: rgba(255, 255, 255, 0.1); border: 0px solid #fff; color: var(--hello_font_1);}
+.searchbar_wrap input[type="text"]:focus {border: 0px solid #fff;}
+/* header 끝 */
+
+/* footer 시작 */
+.footer_bg {width: 100%; height: 260px; clear: both;}
+.footer_mold {width: 1050px; height: 100%; margin: 0 auto; position: relative;}
+/* footer 로고 / 로그인,채용,고객센터 */
+.footer_mold_top {width: 1050px; height: 44px; padding-top: 40px;}
+.footer_mold_brandname {display: inline-block; align-items: center;}
+.footer_mold_brandname span {font-size: 35.5px; font-family: netmarbleM; font-weight: 700; color: var(--hello_main_1); }
+.footer_login_wrap{float: right; margin-top: 10px; display: flex; justify-content: space-between;}
+.footer_login_wrap span{color: #979798; font-size: 16px; }
+.footer_login_wrap a::after { content: "|"; color: #979798; display: inline-block; padding: 0 10px; font-size: 15px;}
+.footer_login_wrap a:last-child::after {content:" ";}
+/* footer 사업자정보확인 */
+#footer_info_btn {background-color: #fff; border: none; padding: 0; }
+#footer_info_btn .ico {background: url(../images/icon/footer_info1_check.png) no-repeat center ; background-size: 12px 7px; padding-top: 2px; padding-left: 14px; margin-left: 6px;}
+.footer_info1 {margin-top: 23px; font-size: 16px; font-weight: 700; color: #979798; display: inline-block; }
+.footer_info1 + div > a, .footer_info1 + div  {display: inline-block;}
+.footer_info1_check {width: 12px; height: 6.5px; padding-bottom: 2px; padding-left: 3px;}
+#footer_info_none {font-size: 14px; color: #999; margin: 22px 2px; display: none;}
+#footer_info_none li {margin: 3px 0;}
+.footer_info2_wrap {width: 451px; height: 19px; align-items: center; display: flex; justify-content: space-between; margin-top: 18px; clear: both;}
+.footer_info2_wrap a span {font-size: 15px; color: #979798; }
+.footer_info3 {margin-top: 18px; font-size: 15px; color: #979798; font-weight: 300;}
+.footer_info_line1 {position: absolute; border-right: 1.7px solid #979798; width: 2px; height: 14px; margin: 1px 0 0 134px;}
+.footer_info_line2 {position: absolute; border-right: 1.7px solid #979798; width: 2px; height: 14px; margin: 1px 0 0 244px;}
+.footer_info_line3 {position: absolute; border-right: 1.7px solid #979798; width: 2px; height: 14px; margin: 1px 0 0 325px;}
+/* footer 끝 */
+
+
+/* aside 시작 */
+.quick_area { position: fixed; bottom: 50px; right: 10px; width: 152px; z-index: 100;}
+.q_bnr_deli { width: 150.5px; height: 150.5px; margin-bottom: -1px;}
+.q_bnr_list1, .q_bnr_list2, .q_bnr_list3 {font-family: 'Noto Sans KR', sans-serif;border: 1px solid #eee; background-color: #fff; display: inline-block; height: 34px; width: 33%; margin-right: -5.5px; text-align: center; align-items: center; margin-top: 0;}
+.q_bnr_list1, .q_bnr_list2 {border-right: none;}
+.q_bnr_list1 a, .q_bnr_list2 a, .q_bnr_list3 a {padding-top: 7px; margin-right: 2px;}
+.q_bnr_list label a {font-size: 13px; font-weight: 300; letter-spacing: -0.8px; }
+/* aside 끝 */
+
+
+/* 2depth category */
+.gnb_bg {width: 1050px; margin: 0 auto; /*border:1px solid red;*/ z-index: 100;}
+.gnb_box {position: absolute; width: 550px; margin-top: 55px; z-index: 100;}
+#gnb_nav .fir_dep_box {width: 275px; height: 36px; background-color: pink; padding: 7px 0; display: inline-block; z-index: 100;}
+#gnb_nav .cate-parent {width: 275px; height: 30px; padding: 10px 0px; background: #f7f7f7;}
+#gnb_nav .cate-parent img {width: 33px; margin-left: 32px; margin-top: -3px;}
+#gnb_nav .cate-parent div {position: absolute; display: inline-block; margin: 0 0 0 13px;}
+.cate_1dep {width: 275px; height: 600px;}
+.cate_2dep {position: absolute; margin-left: 275px; width: 275px; height: 550px; background: #f0f0f0; margin-top: -600px;}
+#gnb_nav .menu {padding: 10px 0 16px 20px; width: 255px; height: 24px;}

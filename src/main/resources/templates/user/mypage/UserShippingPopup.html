@@ -1,0 +1,58 @@
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송지 정보</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/inner.css}">
+</head>
+<body>
+    <section id="content">
+        <div id="address_edit_box">
+            <h2 class="address_list_title">배송지 정보</h2>
+            <div class="address_list_order_address">
+                <table class="addr_list_table">
+                    <tbody>
+                        <tr>
+                            <th>배송지</th>
+                            <td>입력주소</td>
+                            <td><button class="addr_edit_btn">수정</button></td>
+                        </tr>
+                        <tr>
+                            <th>정보</th>
+                            <td><span>이예솔 </span>/<span> 010-1234-1234</span></td>
+                        </tr>
+                        <tr>
+                            <th>상세정보</th>
+                            <td><span>배송받을위치 </span>/<span> 배송위치상세정보</span></td>
+                        </tr>
+                    </tbody>    
+                </table>
+                <table class="addr_list_table">
+                    <tbody>
+                        <tr>
+                            <th>배송지</th>
+                            <td>입력주소</td>
+                            <td><button class="addr_edit_btn">수정</button></td>
+                        </tr>
+                        <tr>
+                            <th>정보</th>
+                            <td><span>받는사람</span>/<span>연락처</span></td>
+                        </tr>
+                        <tr>
+                            <th>상세정보</th>
+                            <td><span>배송받을위치</span>/<span>배송위치상세정보</span></td>
+                        </tr>
+                    </tbody>    
+                </table>
+                <div id="select_add_btn">
+                <!-- <p><button id="address_choice_ok">선택</button></p> -->
+                <p><button id="add_new_address" onClick="location.href='/mypage_addShipping'">배송지 추가</button></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+</body>
+</html>

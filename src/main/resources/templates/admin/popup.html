@@ -1,0 +1,41 @@
+<html
+>
+<head>
+<title>모달창 예제화면</title>
+
+</head>
+<body>
+  <p>
+      <button type="button" onClick="document.getElementById('mw_temp').style.display='block'">
+        <img src="./img/search_icon.png" alt="" style="width: 30px; border: 1px solid #266266;">
+      </button>
+  </p>
+  <div id="mw_temp" class="mw">
+      <div class="bg"><!--이란에는 내용을 넣지 마십시오.--></div>
+      <div class="fg">
+        <div class="Modal">
+          <div id="modal_title" class="green_title">
+            <p>브랜드 찾기</p>
+        </div>
+          <form class="modal_cateBox" method="" action="#" id="modal_form">
+            <div><span>브랜드명</span><input type="text"><input type="button" value="검색"></div>
+            <div class="modal_list">
+              <span>목록</span>
+              <ul>
+                  <li>경복궁</li>
+                  <li>계절밥상</li>
+                  <li>고래감자탕</li>
+                  <li>고려감자탕</li>
+                  <li>고메공방</li>
+                  <li>곰표</li>
+              </ul>
+            </div>
+            <p>  
+              <button onclick="document.getElementById('mw_temp').style.display='none'" type="submit">확인</button>
+            </p>
+          </form>
+        </div>
+      </div>
+  </div>
+</body>
+</html>

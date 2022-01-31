@@ -1,0 +1,111 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인정보수정</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0s auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(7) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(7) > a { color: #5dab99;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function () {
+        let urlidx = $("#section_hidden").val();
+
+        axios.get('/api/member/read/' + urlidx, {}).then(function (response) {
+            let email = response.data.data.email;
+            $(".edit1_email_data").text(email);
+
+        });
+
+        $(".button_submit").on('click', function() {
+            let userpw = $("#pwd").val();
+            let useremail = $(".edit1_email_data").text();
+
+            axios.post('/api/login/user', {
+                data : {
+                    id : useremail,
+                    password : userpw
+                }
+            }).then(function(res) {
+                if(res.data.resultCode === "OK") {
+                    alert("확인되었습니다")
+                    location.href = '/user/mypage_editMyinfo';
+                }else if(res.data.resultCode === "NO"){
+                    alert("비밀번호가 틀렸습니다 한번 더 확인해주세요")
+                }
+            }).catch(function (err){
+                console.log(err)
+            })
+        });
+    });
+
+</script>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <!-- main_contents 시작 -->
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">개인 정보 수정</h2>
+                </div>
+                <!-- check_password_form 시작 -->
+                <div class="check_password_form">
+                    <h3>
+                        고객님의 소중한 개인 정보 보호를 위해<br>
+                        비밀번호를 다시 한번 입력해주세요.
+                    </h3>
+                    <ul class="form_list">
+                        <li>
+                            <h5 class="list_title_e">이메일</h5>
+                            <p class="edit1_email_data"></p>
+                            <input type="hidden" readonly="readonly">
+                        </li>
+                        <li>
+                            <h5 class="list_title_e">비밀번호</h5>
+                            <input type="password" name="pwd" id="pwd" placeholder="영문+숫자 10자 이상으로 입력해주세요.">
+                            <div class="caution_not_input">
+                                비밀번호를 입력해 주세요.
+                            </div>
+                        </li>
+                        <button type="submit" class="button_submit">확인</button>
+                    </ul>
+                    <!-- check_password_form 끝 -->
+                </div>
+                <!-- main_contents 끝 -->
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+</body>
+</html>

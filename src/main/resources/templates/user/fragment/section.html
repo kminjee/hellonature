@@ -1,0 +1,117 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<body th:fragment="section" sec:authorize="isAuthenticated()">
+<link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/section.css}">
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script>
+    $(function (){
+        let urlidx = $("#section_hidden").val()
+
+        axios.get("/api/member/myPage/" + urlidx, {}).then(function (response){
+            console.log(response.data.data)
+            let idx = response.data.data.idx;
+            let name = response.data.data.name;
+            let hellocash = response.data.data.hellocash;
+            let couponCount = response.data.data.couponCount;
+            let hellopayFlag = response.data.data.hellopayFlag;
+            let theGreenFlag = response.data.data.theGreenFlag;
+            let regdate = response.data.data.regdate;
+            let now = new Date(Date.now())
+            regdate = new Date(regdate);
+
+
+            console.log(regdate.toString())
+            console.log(now.toString())
+
+            function getFormatDate(regdate){
+                var year = date.getFullYear();              //yyyy
+                var month = (1 + date.getMonth());          //M
+                month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+                var day = date.getDate();                   //d
+                day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+                return  year + '년 ' + month + '월 ' + day + '일';       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+            }
+
+            var date = new Date(regdate)
+            date = getFormatDate(regdate);
+
+
+           /* if(hellopayFlag != null){
+                $("#hellopay_value").text(regdate)
+            }else{
+                $("#hellopay_value").val("미가입")
+            }
+*/
+            $("#hellopay_value").text(date)
+
+            if(theGreenFlag === "FALSE"){
+                $("#mem_helloPass").val("미가입")
+            }else{
+                $("#mem_helloPass").val("이용중")
+                $("#mem_helloPass").css("color", "white")
+            }
+            $("#mem_name").text(name + "님")
+            $("#mem_hellocash").text(hellocash + " 원")
+            $(".coupon_total").text(couponCount + " 개")
+        })
+    })
+</script>
+    <!-- section 시작 -->
+    <div class="section" id="section_article" >
+        <div class="section_mypage">
+            <input type="hidden" th:value="${session['idx']}" id="section_hidden">
+            <div class="section_mypage_div">
+                <div class="section_mypage_hello">
+                    <div class="hello_info">
+                        <p>반가워요.<a href="/user/mypage_orderlist"><span class="name" id="mem_name"></span></a></p>
+                    </div>
+                    <div class="hello_percent">
+                        <p><span>적립 1%</span></p>
+                    </div>
+                </div>
+                <div class="section_mypage_hellocash">
+                    <div class="hellocash">
+                        <a href="/user/mypage_hellocash"><p class="section_name" id="hellocash_val">헬로캐시</p></a>
+                    </div>
+                    <div class="hellocash_total">
+                        <p id="mem_hellocash"></p>
+                    </div>
+                </div>
+                <div class="section_mypage_coupon">
+                    <div class="coupon">
+                        <a href="/user/mypage_coupon"><p class="section_name" id="coupon_val">쿠폰</p></a>
+                    </div>
+                    <div class="coupon_total">
+                        <p></p>
+                    </div>
+                </div>
+                <div class="section_mypage_hellopay">
+                    <div class="hellopay">
+                        <a href="/user/mypage_hellopay"><p class="section_name" id="hellopay_val">가입일</p></a>
+                    </div>
+                    <div class="hellopay_total">
+                        <p id="hellopay_value"></p>
+                    </div>
+                </div>
+                <div class="section_mypage_hellopass">
+                    <div class="hellopass">
+                        <a href="/user/mypage_thegreen"><p class="section_name" id="hellopass_val">더그린</p></a>
+                    </div>
+                    <div class="hellopass_button">
+                        <input type="button" name="hellopay" id="mem_helloPass" class="section_bar">
+                    </div>
+                </div>
+            </div>
+            <!-- 배너 페이지 시작 -->
+            <div class="section_banner">
+                <a><img src="/user/images/mypage.img/section_banner.png"></a>
+            </div>
+            <!-- 배너 페이지 끝 -->
+        </div>
+    <!-- section 끝 -->
+    </div>
+</body>
+</html>

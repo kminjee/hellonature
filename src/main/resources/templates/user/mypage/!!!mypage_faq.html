@@ -1,0 +1,147 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(1) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(1) > a { color: #5dab99;}
+        .faq_clicked_button > input[type="button"] { background-color: #5dab99 !important; color: #fff !important; border: 1px solid #5dab99 !important;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function (){
+        $('.faq_category_box > div').click(function (e){
+            $('.hr').empty();
+            let type = $(this).children("input").eq(1).val();
+            axios.get('/api/faq/list?type='+type, {
+
+            }).then(function (response){
+                for(let i in response.data.data){
+                    let $subject = response.data.data[i].subject;
+                    let $title = response.data.data[i].title;
+                    let $content = response.data.data[i].content;
+
+                    let row = $('<div class="center_faq_move" id="center_faq_move'+ i +'">').append(
+                        '<div class="center_faq_txt">' +
+                        '<span>' + $subject + '</span>' +
+                        '<div class="overview"></div></div></div>' +
+                        '<div class="center_faq_box"><div class="center_faq_list"><div class="faq_list_title"><p>Q</p>'+
+                        '<p class="faq_title">'+$title+'</p></div>' +
+                        '<div class="faq_list_linebox"><div class="faq_list_line"></div></div>' +
+                        '<div class="faq_list_content"><p class="faq_list_answer">A</p>' +
+                        '<p class="faq_content">'+$content+'</p></div></div></div>'
+                    )
+                    $('.hr').append(row);
+
+
+                    $("#center_faq_move" + i).on("click", function(e){
+                        console.log($(this).children("div").eq(1))
+                        $(this).children("div").eq(1).toggle();
+                    })
+                }
+            })
+        })
+    })
+
+    // $(function (){
+    //
+    //     axios.get('/api/faq/read/14',{
+    //     }).then(function (response){
+    //         console.log(response)
+    //         let $title =response.data.data.title;
+    //         let $content = response.data.data.content;
+    //
+    //         $('.faq_title').text($title);
+    //         $('.faq_content').text($content);
+    //
+    //     }).catch(function (err){
+    //         console.log(err)
+    //     })
+    // });
+</script>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside2">
+                <div th:replace="/user/fragment/sidebar2::sidebar2"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">
+                        FAQ
+                    </h2>
+                </div>
+                <div class="faq_category_box">
+                    <div class="faq_button1">
+                        <input type="button" value="자주하는 질문" class="faq_menu" />
+                        <input type="hidden" value="1">
+                    </div>
+                    <div class="faq_button2">
+                        <input type="button" value="회원서비스/이용" class="faq_menu" />
+                        <input type="hidden" value="2">
+                    </div>
+                    <div class="faq_button3">
+                        <input type="button" value="쿠폰/적립금" class="faq_menu" />
+                        <input type="hidden" value="3">
+                    </div>
+                    <div class="faq_button4">
+                        <input type="button" value="취소/반품/환불" class="faq_menu" />
+                        <input type="hidden" value="4">
+                    </div>
+                    <div class="faq_button5">
+                        <input type="button" value="주문/결제" class="faq_menu" />
+                        <input type="hidden" value="5">
+                    </div>
+                    <div class="faq_button6">
+                        <input type="button" value="배송" class="faq_menu" />
+                        <input type="hidden" value="6">
+                    </div>
+                    <div class="faq_button7">
+                        <input type="button" value="더그린배송" class="faq_menu" />
+                        <input type="hidden" value="7">
+                    </div>
+                    <div class="faq_button8">
+                        <input type="button" value="T건강습관앱" class="faq_menu" />
+                        <input type="hidden" value="8">
+                    </div>
+                    <script type="text/javascript" th:src="@{user/js/mypage.js/check.js}"></script>
+                </div>
+                <div class="faq_container">
+                    <div class="hr">
+                        <hr/>
+                    </div>
+                </div>
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+</body>
+</html>

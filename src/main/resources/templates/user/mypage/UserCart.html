@@ -1,0 +1,339 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charSet="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 장바구니</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/inner.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common2.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .main {
+            margin-bottom: 50px !important;
+        }
+    </style>
+    <script>
+        $(function () {
+
+            let memIdx = $("#hidden_user").val();   // 헤더에서 가져온 로그인된 회원번호
+
+            axios.get('/api/basket/member/list?memIdx=' + memIdx, {}).then(function (res) {
+
+                let ul = $('.goods_cart_itembox');
+
+                for (let i in res.data.data.product) {
+                    let basIdx = res.data.data.product[i].basIdx;       // 장바구니번호
+                    let proIdx = res.data.data.product[i].proIdx;       // 상품번호
+                    let img = res.data.data.product[i].img;             // 이미지
+                    let name = res.data.data.product[i].name;           // 상품명
+                    let count = res.data.data.product[i].count;         // 총수량
+                    let price = res.data.data.product[i].price;         // 판매가 13500
+                    let netPrice = res.data.data.product[i].netPrice;   // 정상가 15000
+                    let totPrice = price * count;
+                    let totNetPrice = netPrice * count;
+                    let salePrice = res.data.data.product[i].salePrice;
+                    let style = "";
+                    if (salePrice == 0 || salePrice == null) {
+                        style = "none";
+                    } else {
+                        style = "block";
+                    }
+
+                    let li = $('<li class="goods_cart_item">').append(
+                        '<input type="hidden" id="hidden_basIdx" value="' + basIdx + '">' +
+                        '<input type="hidden" id="hidden_proIdx" class="hidden_proIdx" value="' + proIdx + '">' +
+                        '<div class="inner_goods_cart_item">' +
+                        '<div><img src="' + img + '" class="pro_img"></div>' +
+                        '<div><span class="prod_name">' + name + '</span></div>' +
+                        '<div class="item_count">' +
+                        '<button class="minus_btn"><img src="/user/images/icon/ico_minus_on.svg" style="width: 25px;"></button>' +
+                        '<span class="item_ea">' + count + '</span>' +
+                        '<button class="plus_btn"><img src="/user/images/icon/ico_plus_on.svg" style="width: 25px;"></button>' +
+                        '</div>' +
+                        '<div id="totalPrice" class="totalPrice">' +
+                        '<del class="total_net" style="display:'+style+'">' + count * netPrice + '원</del>' +
+                        '<p class="total_real">' +  count * price + '원</p>' +
+                        '</div>' +
+                        '<input type="hidden" id="hidden_price" value="' + price + '">' +               // 할인가
+                        '<input type="hidden" id="hidden_totalPrice" value="' + netPrice + '">' +        // 할인가 총금액
+                        '<input type="hidden" id="hidden_netPrice" value="' + count *  netPrice * salePrice / 100 + '">' +          // 정상가
+                        '<input type="hidden" id="hidden_totalNetPrice" value="' + totNetPrice + '">' +    // 정가 총금액
+                        '<input type="hidden" id="hidden_totalCount" value="">' +                        // 총수량
+                        '<input type="hidden" id="hidden_salePrice" class="hidden_salePrice" value="' + netPrice * salePrice / 100 + '">' + //할인금액
+                        '<input type="hidden" id="hidden_saleTotPrice" class="hidden_saleTotPrice" value="' + count * netPrice * salePrice / 100 + '">' + //총 할인금액
+                        '<div id="delete">✖</div>' +
+                        '</div></li>'
+                    )
+                    ul.append(li);
+                }
+
+                /* 배송 도착 예정일 계산 */
+                let now = new Date();
+                let month = ("0" + (1 + now.getMonth())).slice(-2);
+                now.setDate(now.getDate() + 2);
+                let day = ("0" + now.getDate()).slice(-2);
+                document.getElementById('delivery_date').innerText = month + "월 " + day + "일 도착 예정";
+
+
+                /* 초기 장바구니화면, 등록된 각 아이템 수량+정가 합을 모두 합한 정가 총 금액 띄우기 */
+                let hiddenTotNet = document.querySelectorAll("#hidden_totalNetPrice");
+                let hiddenTotPrice = document.querySelectorAll("#hidden_netPrice");
+                let sum_1 = 0;
+                let sum_2 = 0;
+
+                for (let i = 0; i < hiddenTotNet.length; i++) {
+                    sum_1 += parseInt(hiddenTotNet[i].value);
+                }
+
+                for (let j = 0; j < hiddenTotPrice.length; j++) {
+                    sum_2 += parseInt(hiddenTotPrice[j].value);
+                }
+
+                document.getElementById("net_price").innerText = String(sum_1);
+                document.getElementById("sale_price").innerText = String(sum_2);
+                document.getElementById("final_price").innerText = String(sum_1 - sum_2 + 2000);
+
+                $(".emph").text("구매 시" + parseInt($("#final_price").text()) * 0.01 + "원 적립")
+
+
+                $(".plus_btn").click(function (e) {
+                    let count = parseInt($(this).siblings("span").text()) + 1;
+                    if (count <= 10) {
+                        $(this).siblings("span").text(count)
+                        let hidden_totalPrice = $(this).parent().parent().children("#hidden_totalPrice").val();
+                        let hidden_Price = $(this).parent().parent().children("#hidden_price").val();
+                        let totalPrice = $(this).parent().parent().children(".totalPrice").children(".total_net");
+                        let Price = $(this).parent().parent().children(".totalPrice").children(".total_real");
+                        totalPrice.text(count * hidden_totalPrice + "원")
+                        Price.text(count * hidden_Price + "원")
+
+                        let hidden_discount = $(this).parent().parent().children("#hidden_salePrice").val()
+                        $(this).parent().parent().children("#hidden_saleTotPrice").val(count * hidden_discount)
+
+                        let row = 0;
+                        let totalALL = document.querySelectorAll(".totalPrice");
+                        for (let i = 0; i < totalALL.length; i++) {
+                            row += parseInt(totalALL[i].innerText);
+                            document.getElementById("net_price").innerText = row;
+                        }
+
+                        let discount_row = 0;
+                        let saleALL = document.querySelectorAll(".hidden_saleTotPrice");
+                        console.log(saleALL)
+                        for (let i = 0; i < saleALL.length; i++) {
+                            discount_row += parseInt(saleALL[i].value);
+                            document.getElementById("sale_price").innerText = discount_row;
+                        }
+
+                        document.getElementById("final_price").innerText = parseInt(document.getElementById("net_price").innerText) - parseInt(document.getElementById("sale_price").innerText) + 2000
+                        $(".emph").text("구매 시" + parseInt($("#final_price").text()) * 0.01 + "원 적립")
+                    } else {
+                        alert("더이상 늘릴 수 없습니다")
+                    }
+                })
+
+                $(".minus_btn").click(function (e) {
+                    let count = parseInt($(this).siblings("span").text()) - 1;
+                    if (count >= 1) {
+                        $(this).siblings("span").text(count)
+                        let hidden_totalPrice = $(this).parent().parent().children("#hidden_totalPrice").val();
+                        let hidden_Price = $(this).parent().parent().children("#hidden_price").val();
+                        let totalPrice = $(this).parent().parent().children(".totalPrice").children(".total_net");
+                        let Price = $(this).parent().parent().children(".totalPrice").children(".total_real");
+                        totalPrice.text(count * hidden_totalPrice + "원")
+                        Price.text(count * hidden_Price + "원")
+
+
+                        let hidden_discount = $(this).parent().parent().children("#hidden_salePrice").val()
+                        $(this).parent().parent().children("#hidden_saleTotPrice").val(count * hidden_discount)
+
+                        let row = 0;
+                        let totalALL = document.querySelectorAll(".totalPrice");
+                        for (let i = 0; i < totalALL.length; i++) {
+                            row += parseInt(totalALL[i].innerText);
+                            document.getElementById("net_price").innerText = row;
+                        }
+
+                        let discount_row = 0;
+                        let saleALL = document.querySelectorAll(".hidden_saleTotPrice");
+                        console.log(saleALL)
+                        for (let i = 0; i < saleALL.length; i++) {
+                            discount_row += parseInt(saleALL[i].value);
+                            document.getElementById("sale_price").innerText = discount_row;
+                        }
+
+                        document.getElementById("final_price").innerText = parseInt(document.getElementById("net_price").innerText) - parseInt(document.getElementById("sale_price").innerText) + 2000
+                        $(".emph").text("구매 시" + parseInt($("#final_price").text()) * 0.01 + "원 적립")
+                    } else {
+                        alert("더이상 줄일 수 없습니다")
+                    }
+                })
+
+
+                /* 장바구니 삭제하기 */
+                let deleteBtn = document.querySelectorAll("#delete");
+                for (let i = 0; i < deleteBtn.length; i++) {
+                    deleteBtn[i].addEventListener('click', function () {
+                        let basIdxEl = deleteBtn[i].parentNode.previousSibling.previousSibling;
+                        let basIdx = basIdxEl.value;
+                        axios.delete('/api/basket/delete/' + basIdx, {}).then(function (err) {
+                            alert("해당 항목을 장바구니에서 삭제했습니다")
+                            location.reload()
+                        }).catch(function (err) {
+                            console.log(err)
+                        });
+                    });
+                }
+                ;
+
+            }).catch(function (err) {
+                console.log(err);
+            });
+        });
+
+        function order() {
+            let memIdx = $("#hidden_user").val();
+            if (memIdx === '') {
+                alert("로그인을 해주세요")
+            } else {
+                let hidden_proIdx = document.querySelectorAll(".hidden_proIdx")
+                let prod_name = document.querySelectorAll(".prod_name")
+                let itemEA = document.querySelectorAll(".item_ea")
+                let pro_img = document.querySelectorAll(".pro_img")
+                let netPrice = document.getElementById("net_price").innerText;
+                let salePrice = document.getElementById("sale_price").innerText;
+                let num = document.getElementById("num").innerText;
+                let totalPrice = document.querySelectorAll(".total_net");
+                let realPrice = document.querySelectorAll(".total_real");
+
+                let prodIdx = [];
+                let prodName = [];
+                let proEA = [];
+                let proIMG = [];
+                let totalList = [];
+                let realPriceList = [];
+                for (let i = 0; i < hidden_proIdx.length; i++) {
+                    prodIdx.push(hidden_proIdx[i].value)
+                    prodName.push(prod_name[i].innerText)
+                    proEA.push(itemEA[i].innerText)
+                    proIMG.push(pro_img[i].src)
+                    totalList.push(totalPrice[i].innerText)
+                    realPriceList.push(realPrice[i].innerText)
+                }
+
+
+                sessionStorage.setItem("prodIdx", prodIdx)
+                sessionStorage.setItem("prodName", prodName)
+                sessionStorage.setItem("proEA", proEA)
+                sessionStorage.setItem("proIMG", proIMG)
+                sessionStorage.setItem("netPrice", netPrice)
+                sessionStorage.setItem("salePrice", salePrice)
+                sessionStorage.setItem("num", num)
+                sessionStorage.setItem("totalPrice", totalList)
+                sessionStorage.setItem("realPriceList", realPriceList)
+
+                location.href = "/user/mypage_userOrdersheet"
+            }
+        }
+    </script>
+    <!-- axios -->
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="main">
+            <section id="content">
+                <div id="goods_cart_box">
+                    <div id="goods_cart_title">
+                        <h1>장바구니</h1>
+                    </div>
+                    <!-- 장바구니 내용 전체 감싸는 박스 -->
+                    <div id="goods_cart_item_box">
+                        <div class="goods_cart_wrap">
+                            <div id="cartItemsList">
+                                <div class="goods_cart_listbox">
+                                    <div class="goods_cart_dail_date">
+                                        <span>새벽배송</span>
+                                        <span id="delivery_date"></span>
+                                    </div>
+                                    <ul class="goods_cart_itembox">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="inner_result">
+                                <div class="amount_view">
+                                    <dl class="amount">
+                                        <dt class="tit">상품금액</dt>
+                                        <dd class="price">
+                                            <span class="num" id="net_price"></span>
+                                            <span class="won">원</span>
+                                        </dd>
+                                    </dl>
+                                    <dl class="amount">
+                                        <dt class="tit">상품할인금액</dt>
+                                        <dd class="price">
+                                            <span class="num" id="sale_price"></span>
+                                            <span class="won">원</span>
+                                        </dd>
+                                    </dl>
+                                    <dl class="amount">
+                                        <dt class="tit">배송비</dt>
+                                        <dd class="price">
+                                            <span class="num" id="num">2,000</span>
+                                            <span class="won">원</span>
+                                        </dd>
+                                    </dl>
+                                    <dl class="amount_lst">
+                                        <dt class="tit">결제예정금액</dt>
+                                        <dd class="price">
+                                            <span class="num" id="final_price"></span>
+                                            <span class="won">원</span>
+                                        </dd>
+                                    </dl>
+                                    <dl class="reserve">
+                                        <dd class="bage">적립</dd>
+                                        <dd class="emph">구매 시 183원 적립</dd>
+                                    </dl>
+                                </div>
+                                <button id="order_btn" onclick="order()">주문하기</button>
+                                <div class="order_bottom_msg">
+                                    <ul>
+                                        <li>‘입금확인’ 상태일 때는 주문 내역 상세에서 직접 주문취소가 가능합니다.</li>
+                                        <li>‘입금확인’ 이후 상태에는 고객센터로 문의해주세요.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/regist.js}"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/regist2.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

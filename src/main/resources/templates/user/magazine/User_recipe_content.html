@@ -1,0 +1,596 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- head -->
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelloNature-Magazine-Recipe-Content</title>
+    <link rel="stylesheet" th:href="@{/user/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/user/css/magazine.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- axios -->
+    <script>
+        $(function() {
+
+            const currUrl = new URL(location.href);
+            const searchParams = currUrl.searchParams;
+            const idx = searchParams.get("idx");
+
+            let memIdx = $("#hidden_user").val();
+
+            let url;
+            if (memIdx == "" || memIdx == null) { url = "/api/magazine/detail?idx="+idx; }
+            else { url = "/api/magazine/detail?idx="+idx+"&memIdx="+memIdx; }
+
+            axios.get(url, {
+
+            }).then(function(res) {
+                console.log(res.data.data);
+                let title = res.data.data.title;
+                let des = res.data.data.des;
+                let img = res.data.data.img;
+                let ingredients = res.data.data.cookIngredient;
+                let content = res.data.data.content;
+                let time = res.data.data.cookTime;
+                let kcal = res.data.data.cookKcal;
+                let cookLevel = res.data.data.cookLevel;
+                let likeCnt = res.data.data.like;
+                let likeFlag = res.data.data.likeFlag;
+
+                /* 난이도 */
+                let level = "";
+                switch(cookLevel) {
+                    case 1: level = "초급"; break;
+                    case 2: level = "중급"; break;
+                    case 3: level = "고급"; break;
+                }
+
+                document.getElementById("cook_title_1").innerText = title;          // 레시피명
+                document.getElementById("cook_des").innerText = des;                // 설명
+                document.getElementById("cook_title_2").innerText = title;          // 레시피명
+                document.getElementById("cook_img").src = img;                      // 이미지
+                document.getElementById("cook_time").innerText = time;              // 시간
+                document.getElementById("cook_level").innerText = level;            // 난이도
+                document.getElementById("cook_kcal").innerText = kcal + "Kcal";     // 칼로리
+                document.getElementById("cook_like").innerText = likeCnt;           // 좋아요수
+                document.getElementById("rec_content_wrap").innerHTML = content;    // 만드는법 (ul 태그 통쨰로 db에 담으면 됨!)
+
+                /* 만드는법 */
+                let recCookPrev = document.querySelector('.rec_cook_btn_prev');
+                let recCookNext = document.querySelector('.rec_cook_btn_next');
+                let recCookBox = document.querySelector('.rec_cook_box');
+                let recCook = document.querySelectorAll('.rec_cook');
+                let recCookCnt = recCook.length;
+                let recCookIdx = 0;
+                let recCookWidth = 510;
+                let recCookMargin = 30;
+                let last_li = document.querySelector('.rec_cook:last-child');
+
+                last_li.style.marginRight = -recCookMargin + 'px';
+                recCookBox.style.width = (recCookWidth + recCookMargin) * recCookCnt - recCookMargin + 'px';
+
+                function moveRecCook(num) {
+                    recCookBox.style.left = -num * (recCookWidth + recCookMargin) + 'px';
+                    recCookIdx = num;
+                }
+
+                if (recCookIdx == 0) {                                      // 현재 위치가 0 이라면
+                    recCookPrev.classList.add("disabled");                  // 이전버튼을 비활성화
+                }
+
+                recCookNext.addEventListener('click', function() {          // 다음버튼 클릭 시
+                    if (recCookIdx < recCookCnt - 2) {                      // 현재 위치가 총 길이보다 낮다면
+                        moveRecCook(recCookIdx + 1);                        // 한칸 앞으로 이동하고
+                        recCookPrev.classList.remove("disabled");           // 이전버튼을 활성화하면서
+                        if (recCookIdx == recCookCnt - 2) {                 // 현재 인덱스가 총 길이와 같다면
+                            recCookNext.classList.add("disabled");          // 다음버튼을 비활성화
+                        }
+                    }
+                });
+
+                recCookPrev.addEventListener('click', function() {           // 이전버튼 클릭 시
+                    if (recCookIdx > 0) {                                    // 현재 위치가 0 보다 높으면
+                        moveRecCook(recCookIdx - 1);                         // 한칸 뒤로 이동하고
+                        recCookNext.classList.remove("disabled");            // 다음버튼을 활성화하면서
+                        if (recCookIdx == 0) {                               // 현재 위치가 0 이라면
+                            recCookPrev.classList.add("disabled");           // 이전버튼을 비활성화
+                        }
+                    }
+                });
+
+
+
+                /* 필요한 재료 */
+                let ingreArr = [];
+                ingreArr = ingredients.split(",");
+                for (let i=0; i<ingreArr.length; i++) {
+                    ingreArr[i] = ingreArr[i].split("-");
+                    let ingrebox = $("#cook_ingredients");
+                    let ingre = $("<tr>").append(
+                        '<td>'+ingreArr[i][0]+'</td><td>'+ingreArr[i][1]+'</td></tr>'
+                    )
+                    ingrebox.after(ingre);
+                }
+
+                /* 좋아요 */
+                let likeBtn = document.querySelector('.spec_like_img');
+                if (likeFlag === "TRUE") { likeBtn.classList.add('spec_like_clicked'); };
+
+                likeBtn.addEventListener('click', function() {
+                    if (memIdx == "" || memIdx == null) {
+                        alert('로그인 후 이용 가능합니다');
+                        location.href = "/user/mypage_userLogin";
+                    } else {
+                        if (likeBtn.classList.contains('spec_like_clicked')) {
+                            axios.delete('/api/memberslikes/delete?memIdx='+memIdx+'&magIdx='+idx, {
+                            }).then(function() {
+                                alert('좋아요 취소 완료!');
+                                location.reload();
+                            }).catch(function(err) {
+                                console.log(err);
+                            });
+                        } else {
+                            axios.post('/api/memberslikes/create', {
+                                data: {
+                                    memIdx: memIdx,
+                                    mgIdx: idx
+                                }
+                            }).then(function() {
+                                alert('좋아요 등록 성공!');
+                                location.reload();
+                            }).catch(function(err) {
+                                console.log(err);
+                            });
+                        };
+                    };
+                });
+
+                /* 재료담기 (ingreList) */
+                if (res.data.data.ingreList.length == 0) {                                          // 상품이 존재하지 않으면
+                    document.querySelector('.rec_prod_btn_prev').style.display = "none";            // 이전 슬라이드 버튼 비활성화
+                    document.querySelector('.rec_prod_btn_next').style.display = "none";            // 다음 슬라이드 버튼 비활성화
+                    document.querySelector('.rec_prod_wrap').innerHTML = "상품이 존재하지 않습니다."    // 빈칸에 문구 넣기
+                }
+
+                let ingreul = $(".rec_prod_box")
+                for (let i=0; i<res.data.data.ingreList.length; i++) {
+                    let proIdx = res.data.data.ingreList[i].idx;
+                    let img = res.data.data.ingreList[i].img;
+                    let name = res.data.data.ingreList[i].name;
+                    let netPrice = res.data.data.ingreList[i].netPrice;
+                    let discount = res.data.data.ingreList[i].salePrice;
+                    let ingrestyle, ingreicon;
+                    if (discount == 0 || discount == null) { ingrestyle = "none"; ingreicon = "none"; }
+                    else { ingrestyle = "inline"; ingreicon = "inline-block"; }
+
+                    let temp = discount * 0.01;       // 10 * 0.01 = 0.1
+                    let salePrice = netPrice * temp;  // 30,000 * 0.1 = 3,000
+                    let price = netPrice - salePrice; // 30,000 - 3,000 = 27,000
+
+                    netPrice = netPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    price = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    let bestFlag = res.data.data.ingreList[i].bestFlag;
+                    if (bestFlag == "FALSE") { bestFlag = "none"; }
+                    else { bestFlag = "inline-block"; }
+
+                    let ingreli = $('<li class="rec_prod">').append(
+                        '<div class="rec_prod_ico">'+
+                        '<span class="rec_prod_best" style="display:'+bestFlag+'">Best</span>'+
+                        '<span class="rec_item_dc" style="display:'+ingreicon+'">'+discount+'%</span></div>'+
+                        '<div class="rec_prod_item">'+
+                        '<div class="rec_prod_img" style="cursor: pointer">'+
+                        '<a onclick="location.href=\'/user/product?prodIdx='+proIdx+'\'">'+
+                        '<img src="'+img+'"></a></div>'+
+                        '<div class="rec_prod_info">'+
+                        '<div class="rec_prod_title" style="cursor: pointer">'+
+                        '<a onclick="location.href=\'/user/product?prodIdx='+proIdx+'\'">'+
+                        '<span class="rec_prod_name">'+name+'</span></a></div>'+
+                        '<div class="rec_prod_basket">'+
+                        '<p class="cont_item_price"><span class="price_comma">'+price+'</span>원<span class="cont_item_sale" style="display:'+ingrestyle+'"><span class="price_comma">'+netPrice+'</span>원</span></p>'+
+                        '<p class="rec_prod_cart"><input type="hidden" value="'+proIdx+'"><button id="rec_prod_btn"><img src="/user/images/magazine/main/price_cart.png"></button></p></div></div></div></li>'
+                    )
+                    ingreul.append(ingreli);
+
+                    let recProdPrev = document.querySelector('.rec_prod_btn_prev');
+                    let recProdNext = document.querySelector('.rec_prod_btn_next');
+                    let recProdBox = document.querySelector('.rec_prod_box');
+                    let recProd = document.querySelectorAll('.rec_prod');
+                    let recProdCnt = recProd.length;
+                    let recProdIdx = 0;
+                    let recProdWidth = 250;
+                    let recProdMargin = 16.7;
+                    let last_prod_li = document.querySelector('.rec_prod:last-child');
+
+                    // last_prod_li.style.marginRight = -recProdMargin + 'px';
+                    recProdBox.style.width = (recProdWidth + recProdMargin) * recProdCnt - recProdMargin + 'px';
+
+                    if (recProdCnt <= 4) {                                // 총 길이가 4 와 같거나 넘지 않는다면
+                        recProdPrev.classList.add("disabled");            // 이전버튼 비활성화
+                    } else {                                              // 그렇지 않으면 (총 길이가 4를 넘는다면)
+                        recProdPrev.classList.remove("disabled");         // 이전버튼 활성화 (무한슬라이드하기 위해)
+                    }
+
+                    if (recProdIdx >= recProdCnt - 4) {                   // 현재 위치가 총 길이보다 높다면
+                        recProdNext.classList.add("disabled");            // 다음버튼 비활성화
+                    } else {                                              // 그렇지 않으면 (현재 위치가 총 길이보다 높지 않다면)
+                        recProdNext.classList.remove("disabled");         // 다음버튼 활성화
+                    }
+
+                    function moveRecProd(num) {
+                        recProdBox.style.left = -num * (recProdWidth + recProdMargin) + 'px';
+                        recProdIdx = num;
+                    }
+                    recProdNext.addEventListener('click', function() {      // 다음버튼 클릭 시
+                        if (recProdIdx < recProdCnt - 4) {                  // 현재 위치가 총 길이보다 낮다면
+                            moveRecProd(recProdIdx + 1);                    // 한칸 앞으로 이동
+                        } else {                                            // 그렇지 않으면 (현재 위치가 총 길이보다 높아질 경우)
+                            moveRecProd(0);                                 // 처음 위치로 이동
+                        }
+                    });
+
+                    recProdPrev.addEventListener('click', function() {      // 이전버튼 클릭 시
+                        if (recProdIdx > 0) {                               // 현재 위치가 0 보다 높으면
+                            moveRecProd(recProdIdx - 1);                    // 한칸 뒤로 이동
+                        } else {                                            // 그렇지 않으면 (현재 위치가 0보다 낮아질 경우)
+                            moveRecProd(recProdCnt - 4);                    // 마지막으로 위치로 이동
+                        }
+                    });
+                };
+
+                /* 장바구니 */
+                let cartBtn1 = document.querySelectorAll("#rec_prod_btn");
+                for (let i=0; i<cartBtn1.length; i++) {
+                    cartBtn1[i].addEventListener('click', function () {
+                        console.log(cartBtn1[i])
+                        let itemEl = cartBtn1[i].previousSibling; // <input type="hidden" value="'+proIdx+'">
+                        let proIdx = itemEl.value; // proIdx
+                        if (memIdx !== "") {
+                            axios.post('/api/basket/create', {
+                                data: {
+                                    memIdx: memIdx,
+                                    proIdx: proIdx,
+                                    proCount: 1
+                                }
+                            }).then(function () {
+                                alert('장바구니에 등록되었습니다');
+                                location.reload();
+                            }).catch(function (err) {
+                                console.log(err);
+                            });
+                        } else {
+                            alert('비회원입니다.');
+                            let proIdx_list = [];
+                            sessionStorage.setItem("noMem", proIdx)
+                        }
+                    });
+                }
+
+
+
+                /* 관련상품 (relList) */
+                if (res.data.data.relList.length == 0) {                                            // 상품이 존재하지 않으면
+                    document.querySelector('.rec_item_btn_prev').style.display = "none";            // 이전 슬라이드 버튼 비활성화
+                    document.querySelector('.rec_item_btn_next').style.display = "none";            // 다음 슬라이드 버튼 비활성화
+                    document.querySelector('.rec_item_wrap').innerHTML = "상품이 존재하지 않습니다."    // 빈칸에 문구 넣기
+                }
+
+                let relul = $(".rec_item_box")
+                for (let i=0; i<res.data.data.relList.length; i++) {
+                    let proIdx = res.data.data.relList[i].idx;
+                    let img = res.data.data.relList[i].img;
+                    let name = res.data.data.relList[i].name;
+                    let netPrice = res.data.data.relList[i].netPrice;
+                    let discount = res.data.data.relList[i].salePrice;
+                    let style, icon;
+                    if (discount == 0 || discount == null) { style = "none"; icon = "none"; }
+                    else { style = "inline"; icon = "inline-block"; }
+
+                    let temp = discount * 0.01;       // 10 * 0.01 = 0.1
+                    let salePrice = netPrice * temp;  // 30000 * 0.1 = 3000
+                    let price = netPrice - salePrice; // 30000 - 3000 = 27000
+
+                    netPrice = netPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    price = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    let bestFlag = res.data.data.relList[i].bestFlag;
+                    if (bestFlag == "FALSE") {
+                        bestFlag = "none";
+                    } else {
+                        bestFlag = "inline-block";
+                    }
+
+                    let relli = $('<li class="rec_item">').append(
+                        '<div class="rec_item_ico">' +
+                        '<span class="rec_item_best" style="display:' + bestFlag + '">Best</span>' +
+                        '<span class="rec_item_dc" style="display:' + icon + '">' + discount + '%</span></div>' +
+                        '<div class="rec_item_item">' +
+                        '<div class="rec_item_img" style="cursor: pointer">' +
+                        '<a onclick="location.href=\'/user/product?prodIdx=' + proIdx + '\'">' +
+                        '<img src="' + img + '"></a></div>' +
+                        '<div class="rec_item_info">' +
+                        '<div class="rec_item_title" style="cursor: pointer">' +
+                        '<a onclick="location.href=\'/user/product?prodIdx=' + proIdx + '\'">' +
+                        '<span class="rec_item_name">' + name + '</span></a></div>' +
+                        '<div class="rec_item_basket">' +
+                        '<p class="cont_item_price"><span class="price_comma">' + price + '</span>원<span class="cont_item_sale" style="display:' + style + '"><span class="price_comma">' + netPrice + '</span>원</span></p>' +
+                        '<p class="rec_item_cart"><input type="hidden" value="' + proIdx + '"><button id="rec_item_btn"><img src="/user/images/magazine/main/price_cart.png"></button></p></div></div></div></li>'
+                    )
+                    relul.append(relli);
+
+                    let recItemPrev = document.querySelector('.rec_item_btn_prev');
+                    let recItemNext = document.querySelector('.rec_item_btn_next');
+                    let recItemBox = document.querySelector('.rec_item_box');
+                    let recItem = document.querySelectorAll('.rec_item');
+                    let recItemCnt = recItem.length;
+                    let recItemIdx = 0;
+                    let recItemWidth = 250;
+                    let recItemMargin = 16.7;
+                    let last_item_li = document.querySelector('.rec_item:last-child');
+
+                    // g last_item_li.style.marginRight = -recItemMargin + 'px';
+                    recItemBox.style.width = (recItemWidth + recItemMargin) * recItemCnt - recItemMargin + 'px';
+
+                    if (recItemCnt <= 4) {                                // 총 길이가 4 와 같거나 넘지 않는다면
+                        recItemPrev.classList.add("disabled");            // 이전버튼 비활성화
+                    } else {                                              // 그렇지 않으면 (총 길이가 4를 넘는다면)
+                        recItemPrev.classList.remove("disabled");  // 이전버튼 활성화 (무한슬라이드하기 위해)
+                    }
+
+                    if (recItemIdx >= recItemCnt - 4) {                   // 현재 위치가 총 길이보다 높다면
+                        recItemNext.classList.add("disabled");            // 다음버튼 비활성화
+                    } else {                                              // 그렇지 않으면 (현재 위치가 총 길이보다 높지 않다면)
+                        recItemNext.classList.remove("disabled");  // 다음버튼 활성화
+                    }
+
+                    function moveRecItem(num) {
+                        recItemBox.style.left = -num * (recItemWidth + recItemMargin) + 'px';
+                        recItemIdx = num;
+                    }
+
+                    recItemNext.addEventListener('click', function () {
+                        if (recItemIdx < recItemCnt - 4) {
+                            moveRecItem(recItemIdx + 1);
+                        } else {
+                            moveRecItem(0);
+                        }
+                    });
+
+                    recItemPrev.addEventListener('click', function () {
+                        if (recItemIdx > 0) {
+                            moveRecItem(recItemIdx - 1);
+                        } else {
+                            moveRecItem(recItemCnt - 4);
+                        }
+                    });
+                }
+
+                /* 장바구니 */
+                let cartBtn2 = document.querySelectorAll("#rec_item_btn");
+                for (let i = 0; i < cartBtn2.length; i++) {
+                    cartBtn2[i].addEventListener('click', function () {
+                        console.log(cartBtn2[i])
+                        let itemEl = cartBtn2[i].previousSibling;
+                        let proIdx = itemEl.value;
+                        if (memIdx !== "") {
+                            axios.post('/api/basket/create', {
+                                data: {
+                                    memIdx: memIdx,
+                                    proIdx: proIdx,
+                                    proCount: 1
+                                }
+                            }).then(function () {
+                                alert('장바구니에 등록되었습니다');
+                                location.reload();
+                            }).catch(function (err) {
+                                console.log(err);
+                            });
+                        } else {
+                            alert('비회원입니다.');
+                            let proIdx_list = [];
+                            sessionStorage.setItem("noMem", proIdx)
+                        }
+                    });
+                }
+
+            }).catch(function(err) {
+                console.log(err);
+            });
+        });
+    </script>
+    <!-- axios -->
+</head>
+<!-- head 끝 -->
+
+<body>
+    <!-- container -->
+    <div id="container">
+            <!-- header -->
+        <div th:replace="/user/fragment/header::header"></div>
+            <!-- header 끝 -->
+
+    <!-- main -->
+    <main>
+        <!-- magazine_content -->
+        <section id="magazine_content" class="clearfix">
+            <div id="rec_title" class="mg_cont_tit width clearfix">레시피</div>
+
+            <!-- 레시피 소개 -->
+            <div class="rec_cont_info">
+                <table class="width">
+                    <tr>
+                        <td>제목</td>
+                        <td id="cook_title_1"></td>
+                    </tr>
+                    <tr>
+                        <td>설명</td>
+                        <td id="cook_des"></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- 레시피 소개 끝 -->
+
+            <!-- 레시피명 -->
+            <div class="rec_cont_title width">
+                <p>Hello Nature</p>
+                <hr class="divider02">
+                <p id="cook_title_2"></p>
+            </div>
+            <!-- 레시피명 끝 -->
+
+            <!-- 레시피 재료 -->
+            <div class="rec_cont_ingredient width">
+                <span class="rec_cont_img"><img id="cook_img" src=""></span>
+                <span class="rec_require">
+                            <table class="rec_inner_require">
+                                <tr id="cook_ingredients">
+                                    <td>필요한 재료 <span>2인분 기준</span></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </span>
+            </div>
+            <!-- 레시피 재료 끝 -->
+
+            <!-- 레시피 시간, 난이도, 칼로리, 좋아요 -->
+            <div class="rec_cont_spec width clearfix">
+                <p class="rec_spec_item">
+                    <span class="rec_spec_item_img spec_time_img"></span>
+                    <span class="rec_spec_txt" id="cook_time"></span>
+                </p>
+                <p class="rec_spec_item">
+                    <span class="rec_spec_item_img spec_grade_img"></span>
+                    <span class="rec_spec_txt" id="cook_level"></span>
+                </p>
+                <p class="rec_spec_item">
+                    <span class="rec_spec_item_img spec_kcal_img"></span>
+                    <span class="rec_spec_txt" id="cook_kcal"></span>
+                </p>
+                <p class="rec_spec_item">
+                    <span class="rec_spec_item_img spec_like_img" id="likeBtn"></span>
+                    <span class="rec_cont_like_cnt" id="cook_like"></span>
+                </p>
+            </div>
+            <!-- 레시피 시간, 난이도, 칼로리, 좋아요 끝 -->
+
+            <!-- 만드는 법 (2 column slide) -->
+            <div class="recipe_cooking clearfix">
+                <p class="rec_cook_tlt">만드는 법</p>
+                <div class="rec_cook_controls width">
+                    <div class="rec_cook_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                    <div class="rec_cook_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                </div>
+                <div class="rec_cook_wrap" id="rec_content_wrap">
+                </div>
+            </div>
+            <!-- 만드는 법 (2 column slide) 끝 -->
+
+            <!-- 재료담기 (4 column slide) -->
+            <div class="recipe_product width clearfix">
+                <p>재료담기</p>
+                <div class="rec_prod_controls">
+                    <div class="rec_prod_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                    <div class="rec_prod_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                </div>
+                <div class="rec_prod_wrap">
+                    <ul class="rec_prod_box">
+                    </ul>
+                </div>
+            </div>
+            <!-- 재료담기 (4 column slide) 끝 -->
+
+            <hr class="divider01">
+
+            <!-- 관련상품 (4 column slide) -->
+            <div class="recipe_item width clearfix">
+                <p>관련상품</p>
+                <div class="rec_item_controls">
+                    <div class="rec_item_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                    <div class="rec_item_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                </div>
+                <div class="rec_item_wrap">
+                    <ul class="rec_item_box">
+                    </ul>
+                </div>
+            </div>
+            <!-- 관련상품 (4 column slide) 끝 -->
+
+            <hr class="divider01">
+
+            <!-- 비슷한 레시피 (3 column slide) -->
+            <div class="recipe_another width clearfix">
+                <p>추천 레시피</p>
+                <div class="rec_ano_controls">
+                    <div class="rec_ano_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                    <div class="rec_ano_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                </div>
+                <div class="rec_ano_wrap">
+                    <ul class="rec_ano_box">
+                        <li class="rec_ano">
+                            <a href="/user/magazine/recipe_content?idx=13">
+                                <img src="/uploads/magazine/2021-10-23-05-37-29_20211006114735725.jpg" alt="">
+                                <div class="rec_ano_info">
+                                    <p class="rec_ano_title">치즈왕계란말이</p>
+                                    <p class="rec_ano_spec">
+                                        <span class="rec_ano_grade">중급</span>
+                                        <span class="rec_ano_time">30분</span>
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="rec_ano">
+                            <a href="/user/magazine/recipe_content?idx=15">
+                                <img src="/uploads/magazine/2021-10-25-15-01-09_20210604155322678.jpg" alt="">
+                                <div class="rec_ano_info">
+                                    <p class="rec_ano_title">레몬 딜 버터</p>
+                                    <p class="rec_ano_spec">
+                                        <span class="rec_ano_grade">초급</span>
+                                        <span class="rec_ano_time">5분</span>
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="rec_ano">
+                            <a href="/user/magazine/recipe_content?idx=16">
+                                <img src="/uploads/magazine/2021-10-25-15-34-36_20210610101620753.jpg" alt="">
+                                <div class="rec_ano_info">
+                                    <p class="rec_ano_title">만두 그라탕</p>
+                                    <p class="rec_ano_spec">
+                                        <span class="rec_ano_grade">초급</span>
+                                        <span class="rec_ano_time">30분</span>
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 비슷한 레시피 (3 column slide) 끝 -->
+
+            <!-- 목록버튼 -->
+            <div class="board_page_btn width">
+                <input type="button" onclick="location.href='/user/magazine/recipe?page=0'" value="목록" id="backBtn">
+            </div>
+            <!-- 목록버튼 끝 -->
+
+        </section>
+        <!-- magazine_content 끝 -->
+    </main>
+    <!-- main 끝 -->
+
+    <div th:replace="/user/fragment/footer::footer"></div>
+
+</div>
+<!-- container 끝 -->
+<script type="text/javascript" th:src="@{/user/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/recipe.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

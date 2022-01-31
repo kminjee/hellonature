@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자주하는 질문</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<!--<script>-->
+<!--    $(function (){-->
+<!--        axios.get('/api/faq/list', {-->
+<!--        }).then(function (response){-->
+<!--            for(let i in response.data.data){-->
+<!--                let $title = response.data.data[i].title;-->
+<!--                let $type = response.data.data[i].type;-->
+
+<!--                let row = $('<div class="center_faq_move">').append(-->
+<!--                    '<div class="center_faq_txt">' +-->
+<!--                    '<span>' + $title + '</span>' +-->
+<!--                    '<div class="overview"></div></div></div>'-->
+<!--                )-->
+<!--                $(".hr").after(row);-->
+<!--            }-->
+<!--        }).catch(function (err){-->
+<!--            console.log(err);-->
+<!--        })-->
+<!--    });-->
+
+<!--    $(function (){-->
+
+<!--        axios.get('/api/faq/read/14',{-->
+<!--        }).then(function (response){-->
+<!--            console.log(response)-->
+<!--            let $title =response.data.data.title;-->
+<!--            let $content = response.data.data.content;-->
+
+<!--            $('.faq_title').text($title);-->
+<!--            $('.faq_content').text($content);-->
+
+<!--        }).catch(function (err){-->
+<!--            console.log(err)-->
+<!--        })-->
+<!--    });-->
+
+
+<!--</script>-->
+<body>
+    <div class="faq_container">
+        <div class="hr">
+            <hr/>
+        </div>
+<!--        <div class="center_faq_move">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>교환/반품 신청은 어떻게 하나요?</span>-->
+<!--                <div class="overview"></div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+
+<!--        <div class="center_faq_box1">-->
+<!--            <div class="center_faq_list">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p class="faq_title"></p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <p class="faq_content">-->
+
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="center_faq_move2">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span> title </span>-->
+<!--                <div class="overview"></div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box2">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>title</p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+                        content
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="center_faq_move3">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>주문이 안돼요.</span>-->
+<!--                <div class="overview">-->
+<!--                </div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box3">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>주문이 안돼요.</p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <b>PC 사용 시</b>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 결제 보안 프로그램 오류로 인해 정상적으로 주문되지 않을 수 있습니다.-->
+<!--                    </p>-->
+<!--                    <p style="padding-left: 7.5px">-->
+<!--                        전체 브라우저 종료 후 재시도 부탁드립니다.-->
+<!--                    </p>-->
+<!--                    <b>모바일 앱 사용 시</b>-->
+
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 와이파이 환경에서 주문한 경우 접속한 와이파이 환경에 따라 주문이 정상적으로 이뤄지지 않을 수 있습니다. -->
+<!--                    </p>-->
+<!--                    <p style="padding-left: 7.5px">-->
+<!--                        데이터로 전환하신 후 다시 시도 부탁드립니다-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 다른 앱과 충돌이 발생해 주문이 정상적으로 이뤄지지 않는 경우도 있습니다.-->
+<!--                    </p>-->
+<!--                    <p style="padding-left: 7.5px">-->
+<!--                        이 경우 앱을 완전히 종료하신 후 다시 접속 부탁드립니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 지속적인 오류 발생 시 크롬 브라우저를 이용해 접속 부탁드립니다. -->
+<!--                    </p>-->
+<!--                    <p style="padding-left: 7.5px">-->
+<!--                        (문제 발생 시 고객센터에 말씀해주시면 최대한 빠르게 원인 파악 및 해결해드리겠습니다.) -->
+<!--                    </p>-->
+<!--                    <b>주문/결제에 문제가 있는 경우</b>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        헬로네이처 고객센터로 문의해주시면 -->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        본인 확인 후 최대한 빠르게 도와드리겠습니다.-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="center_faq_move4">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>고객센터 연락을 하지 않고 바로 취소하고 싶어요.</span>-->
+<!--                <div class="overview">-->
+<!--                </div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box4">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>고객센터 연락을 하지 않고 바로 취소하고 싶어요. </p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        <b>[결제완료]</b>단계에서 고객센터에 연락하지 않고 직접 전체 취소하실 수 있습니다.-->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        (단, <b>[결제완료]</b> 부분 취소는 고객센터로 문의)-->
+<!--                    </p>-->
+<!--                    <p><b>마이페이지 > 주문/배송 메뉴에서 [주문 취소 ]</b> 버튼을 눌러 접수해 주세요.</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="center_faq_move5">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>배송 종류는 어떻게 되나요?</span>-->
+<!--                <div class="overview">-->
+<!--                </div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box5">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>배송 종류는 어떻게 되나요?</p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <b>1.새벽배송</b>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        헬로네이처 배송 종류에 대해 안내드립니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        다음 날 오전 7시까지 도착합니다.-->
+<!--                    </p>-->
+<!--                    <p style="font-size: 12px">-->
+<!--                        • 새벽 출입이 불가한 섬, 공단,  학교 기숙사, 병원, 관공서의 경우 새벽배송이 어렵습니다.-->
+<!--                    </p>-->
+<!--                    <b>2.택배배송</b>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        밤 9시 전까지 주문 및 결제 완료 시  -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        전국 어디나 다음 날 바로 도착합니다. (공휴일 제외) -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        로젠택배로 배송되며, 택배사 및 수령 시간은 지정하실 수 없습니다.  -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        제주를 제외한 도서/산간 지역은 배송이 제한될 수 있습니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        * 군부대 사서함의 경우 배송사에 따라 배송이 불가할 수 있습니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 9.5px;">-->
+<!--                        군부대 사서함 배송을 원하실 경우 고객센터를 통해 -->
+<!--                    </p>-->
+<!--                    <p style="padding-left: 9.5px">-->
+<!--                        우체국 택배로 배송사 지정 후 주문해 주시기 바랍니다. -->
+<!--                    </p>-->
+<!--                    <b>3.생산자배송</b>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        산지에서 고객님께 바로 배송하는 상품으로 전국 어디서나 -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        택배로 받으실 수 있습니다. 다만, 제주를 비롯한 -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        일부 도서산간지역은 배송이 제한될 수 있습니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        같은 장바구니 주문이라도  -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        생산자배송 상품은 다른 상품과 별도 배송됩니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        * 그 밖에 상품명에 도착일 또는 출고일을 지정한 경우  -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 9.5px;">-->
+<!--                        별도 배송될 수 있는 점 참고 부탁드립니다. -->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="center_faq_move6">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>더그린배송이 궁금해요.</span>-->
+<!--                <div class="overview">-->
+<!--                </div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box6">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>더그린배송이 궁금해요.</p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        더그린배송은 다시 쓰는 '더그린박스'와 100% 자연 성분 아이스팩 '더그린 아이스팩'을-->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        이용하는 헬로네이처만의 <b>친환경 배송 서비스</b>입니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        <b>• 더그린박스</b> : 튼튼한 쌀포대 소재와 자투리천을 활용하여 만든 <b>재사용 가능한 배송 박스</b>입니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 8px;">-->
+<!--                        배송받은 더그린박스는 납작하게 접어 보관했다가 다음 주문 시 문 앞에 내어두시면 헬로네이처가-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 8px;">-->
+<!--                        수거 후 친환경 세제로 세척해 재사용합니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px;">-->
+<!--                        <b>• 더그린 아이스팩</b> : 재생종이 팩에 물과 전분을 넣어 얼린 <b>100% 자연 성분 아이스팩</b>입니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 8px;">-->
+<!--                        수령한 더그린 아이스팩은 내용물을 배수구에 따라 버린 후 일반 종량제 봉투로 배출하면 됩니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 8px;">-->
+<!--                        또는 다음 주문 시 더그린박스에 넣어두거나, 배송용 종이봉투에 넣어 더그린박스 옆에 내어두면-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 8px;">-->
+<!--                        헬로네이처가 수거합니다.-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="center_faq_move7">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>헬로캐시란 무엇인가요?</span>-->
+<!--                <div class="overview">-->
+<!--                </div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box7">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>헬로캐시란 무엇인가요?</p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <b>헬로캐시</b>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 헬로캐시는 적립캐시와 충전캐시가 합산된 통합 적립금으로 상품 구매 시 단독으로 또는 다른 결제 수단과 함-->
+<!--                    </p>-->
+<!--                    <p style="padding-left: 8px; margin-bottom: 0px">-->
+<!--                        께 사용할 수 있습니다.-->
+<!--                    </p>-->
+<!--                    <p class="margin-bottom: 0px">-->
+<!--                        • 헬로캐시 사용 시 적립일을 기준으로 순차 차감됩니다. 단, 적립캐시와 충전캐시를 구분해 사용할 수 없습니다.-->
+<!--                    </p>-->
+<!--                    <b>적립캐시</b>-->
+<!--                    <p>-->
+<!--                        • 상품 구매, 구매후기 작성, 이벤트 참여 등 헬로네이처 서비스를 이용하며 무상으로 지급받은 적립금입니다.-->
+<!--                    </p>-->
+<!--                    <b>충전캐시</b>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 적립금 구매, 상품권 구매, 기프트카드 등 유상으로 충전 또는 발급받은 적립금입니다.-->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        • 충전캐시로 결제 시 현금영수증 발행이 가능합니다. (주문/결제 페이지에서 현금영수증 신청 정보 입력)-->
+<!--                    </p>-->
+
+<!--                    <p style="margin-bottom: 0px; font-size: 12px; color: #ccc; color: rgb(102, 102, 102);">-->
+<!--                        ※ 헬로캐시 유효기간은 적립일로부터 1년입니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; font-size: 12px; color: #ccc; color: rgb(102, 102, 102);">-->
+<!--                        ※ 충전캐시의 소멸 시효는 5년이므로 유효기간이 경과한 후에도 소멸 시효 이내 해당 적립금 사용을 요청할 수 있습니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; font-size: 12px; color: #ccc; color: rgb(102, 102, 102);">-->
+<!--                        ※ 적립캐시는 현금으로 환급할 수 없습니다. -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; font-size: 12px; color: #ccc; color: rgb(102, 102, 102);">-->
+<!--                        ※ 충전캐시는 적립일 기준으로 5년이 경과하지 않은 경우 환불 요청할 수 있으며, 이 경우 잔액의 90%를 환불받을 수 있습니다. -->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="center_faq_move8">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>고객센터 운영 시간이 궁금해요.</span>-->
+<!--                <div class="overview">-->
+<!--                </div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box8">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>고객센터 운영 시간이 궁금해요. </p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <b>헬로네이처 고객센터 운영 안내 </b>-->
+<!--                    <p>-->
+<!--                        월요일~일요일  08:00 ~ 18:00 (일요일 점심시간 12:00~13:00) -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 전화문의 : <b>1644 - 4339</b> -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 1:1문의 : 헬로네이처 로그인 > 마이페이지 > 1:1문의-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 카카오톡 문의 : 카카오톡ID '헬로네이처'-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="center_faq_move9">-->
+<!--            <div class="center_faq_txt">-->
+<!--                <span>문 앞이 아닌 공동현관에 배송되었어요.</span>-->
+<!--                <div class="overview">-->
+<!--                </div>-->
+<!--            </div>                        -->
+<!--        </div>-->
+<!--        <div class="center_faq_box9">-->
+<!--            <div class="center_faq_list1">-->
+<!--                <div class="faq_list_title">-->
+<!--                    <p>Q</p>-->
+<!--                    <p>문 앞이 아닌 공동현관에 배송되었어요.</p>-->
+<!--                </div>-->
+<!--                <div class="faq_list_linebox">-->
+<!--                    <div class="faq_list_line"></div>-->
+<!--                </div>-->
+<!--                <div class="faq_list_content">-->
+<!--                    <p class="faq_list_answer">-->
+<!--                        A-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        새벽배송 시 공동현관 출입이 어려운 경우 -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        부득이하게 1층(또는 지하주차장)공동 현관 앞-->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        또는 경비실 앞으로 배송할 수 있습니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 주문 시 공동현관 출입방법 내 -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px; padding-left: 8px;">-->
+<!--                        비밀번호 미입력 또는 불일치 시-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        • 경비원 부재 시-->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        • 공동현관 키패드 오작동 시-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        정확한 문 앞 배송을 위해  -->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        공동현관 출입방법을 정확하게 입력 부탁드립니다.-->
+<!--                    </p>-->
+<!--                    <p style="margin-bottom: 0px">-->
+<!--                        예) 별 1234 샵, 호출 1234 종 -->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</body>
+</html>

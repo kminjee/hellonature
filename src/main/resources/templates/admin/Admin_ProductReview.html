@@ -1,0 +1,354 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 상품 관리 | 상품 후기</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script src="/admin/js/checkbox.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script>
+        $(function (){
+            let page = $('.page').val();
+            axios.get("/api/productReview/list?page=" + page, {
+            }).then(function (response){
+                let tb = $('<tbody class="tbody">')
+                for (let i in response.data.data){
+                    let $id = response.data.data[i].idx;
+                    let $name = response.data.data[i].proName;
+                    let $proIdx = response.data.data[i].proIdx;
+                    let $userid = response.data.data[i].memEmail;
+                    let $hp = response.data.data[i].memHp;
+                    let $regdate = response.data.data[i].regdate;
+                    let $ansFlag = response.data.data[i].ansFlag;
+                    let $writer = response.data.data[i].memName;
+                    $regdate = $regdate.toString().substring(0, 10);
+                    let k = parseInt(i)
+
+                    if($ansFlag == 'TRUE'){
+                        $ansFlag = '답변완료'
+                    }else if($ansFlag == 'FALSE'){
+                        $ansFlag = '답변대기'
+                    }
+
+                    let row = $('<tr>').append(
+                        '<td><input type="checkbox" id="PR_check_' + k + '"name="review" onclick="PR_checkSelectAll()" value="'+$id+'"><label for="PR_check_' + k + '"></label></td>' +
+                        '<td>'+$name+'</td>' +
+                        '<td>'+$proIdx+'</td>' +
+                        '<td>'+ $userid + '/ <br>' + $hp +'/ <br>' + $writer +'</td>' +
+                        '<td>'+ $regdate + '</td>'+
+                        '<td class="ansFlag"><input type="button" class="detail" value=' + $ansFlag + '><input type="hidden" value="'+ $id +'" ></td></tr>'
+                    )
+                    tb.append(row)
+                }
+                tb.append($('</tbody>'));
+                $(".thead").after(tb)
+
+                $(".detail").click(function (e) {
+                    $("#ajax_hidden").val($(this).next().val());
+                    let id = $("#ajax_hidden").val();
+
+                    sessionStorage.setItem("idx1", id);
+
+                    $("#content").empty();
+                    $.ajax({
+                        type: 'GET',
+                        url: '/admin/productanswer',
+                        datatype: 'html/text',
+                        success: function (result) {
+                            $("#content").html(result).trigger("create");
+                        }
+                    })
+                })
+
+                for(let i = response.data.pagination.totalPages; i > 0; i--){
+                    let pages = $('<li class="page_num" id="page_num '+ i +'" value="' + (i - 1) +'">').append(
+                        i + '</li>'
+                    )
+                    $('#prev').after(pages);
+                }
+                $('.page_num').click(function(e){
+                    $('.tbody').empty();
+
+                    $('.page').val($(this).val());
+                    let page = $('.page').val();
+
+                    axios.get('/api/productReview/list?page=' + page, {
+
+                    }).then(function(response){
+                        let tb = $('<tbody class="tbody">')
+                        for (let i in response.data.data){
+                            let $id = response.data.data[i].idx;
+                            let $name = response.data.data[i].proName;
+                            let $proIdx = response.data.data[i].proIdx;
+                            let $userid = response.data.data[i].memEmail;
+                            let $hp = response.data.data[i].memHp;
+                            let $regdate = response.data.data[i].regdate;
+                            let $ansFlag = response.data.data[i].ansFlag;
+                            let $writer = response.data.data[i].memName;
+                            $regdate = $regdate.toString().substring(0, 10);
+                            let k = parseInt(i)
+
+                            if($ansFlag == 'TRUE'){
+                                $ansFlag = '답변완료'
+                            }else if($ansFlag == 'FALSE'){
+                                $ansFlag = '답변대기'
+                            }
+
+                            let row = $('<tr>').append(
+                                '<td><input type="checkbox" id="PR_check_' + k + '"name="review" onclick="PR_checkSelectAll()" value="'+$id+'"><label for="PR_check_' + k + '"></label></td>' +
+                                '<td>'+$name+'</td>' +
+                                '<td>'+$proIdx+'</td>' +
+                                '<td>'+ $userid + '/ <br>' + $hp +'/ <br>' + $writer +'</td>' +
+                                '<td>'+ $regdate + '</td>'+
+                                '<td class="ansFlag"><input type="button" class="detail" value=' + $ansFlag + '><input type="hidden" value="'+ $id +'"></td></tr>'
+                            )
+                            tb.append(row)
+                        }
+                        tb.append($('</tbody>'));
+                        $(".thead").after(tb)
+                    })
+                })
+            }).catch(function (err){
+                console.log(err)
+            })
+        })
+
+        function sendit(){
+            $('.tbody').empty();
+            let ansFlag = $("#select").val()
+            let search = $("#title").val()
+            let page = $('.page').val()
+            let url = '/api/productReview/list?ansFlag='+ansFlag;
+
+            if(ansFlag == ""){
+                url = '/api/productReview/list?page='+ page;
+            }else if(ansFlag != ""){
+                url = url + '&page=' + page;
+            }
+            if(search == ""){
+                url = url;
+            }else if(search != ""){
+                url = url + '&name=' + search;
+            }
+            console.log(url);
+            axios.get(url, {
+            }).then(function (response){
+
+                let tb = $('<tbody class="tbody">')
+                for (let i in response.data.data){
+                    let $id = response.data.data[i].idx;
+                    let $name = response.data.data[i].name;
+                    let $proIdx = response.data.data[i].proIdx;
+                    let $userid = response.data.data[i].userid;
+                    let $hp = response.data.data[i].hp;
+                    let $regdate = response.data.data[i].regdate;
+                    let $ansFlag = response.data.data[i].ansFlag;
+                    let $writer = response.data.data[i].writer;
+                    $regdate = $regdate.toString().substring(0, 10);
+                    let k = parseInt(i)
+                    if($ansFlag == 'TRUE'){
+                        $ansFlag = '답변완료'
+                    }else if($ansFlag == 'FALSE'){
+                        $ansFlag = '답변대기'
+                    }
+
+                    let row = $('<tr>').append(
+                        '<td><input type="checkbox" id="PR_check_' + k + '"name="review" onclick="PR_checkSelectAll()" value="'+$id+'"><label for="PR_check_' + k + '"></label></td>' +
+                        '<td>'+$name+'</td>' +
+                        '<td>'+$proIdx+'</td>' +
+                        '<td>'+ $userid + '/ <br>' + $hp +'/ <br>' + $writer +'</td>' +
+                        '<td>'+ $regdate + '</td>'+
+                        '<td class="ansFlag"><input type="button" class="detail" value=' + $ansFlag + '><input type="hidden" value="'+ $id +'"></td></tr>'
+                    )
+                    tb.append(row)
+                }
+                tb.append($('</tbody>'));
+                $(".thead").after(tb)
+
+                $(".detail").click(function (e) {
+                    $("#ajax_hidden").val($(this).next().val());
+                    let id = $("#ajax_hidden").val();
+
+                    sessionStorage.setItem("idx1", id);
+
+                    $("#content").empty();
+                    $.ajax({
+                        type: 'GET',
+                        url: '/admin/productanswer?idx1=' + id,
+                        datatype: 'html/text',
+                        success: function (result) {
+                            $("#content").html(result).trigger("create");
+                        }
+                    })
+                })
+                $("#Maxprev").siblings(".page_num").remove();
+                for(let i = response.data.pagination.totalPages; i > 0; i--){
+                    let pages = $('<li class="page_num" id="page_num '+ i +'" value="' + (i - 1) +'">').append(
+                        i + '</li>'
+                    )
+                    $('#prev').after(pages);
+                }
+
+                $('.page_num').click(function(e){
+                    $('.tbody').empty();
+
+                    $('.page').val($(this).val());
+                    let page = $('.page').val();
+
+                    axios.get("/api/productReview/list?page="+ page, {
+
+                    }).then(function(response){
+                        let tb = $('<tbody class="tbody">')
+                        for (let i in response.data.data){
+                            let $id = response.data.data[i].idx;
+                            let $name = response.data.data[i].proName;
+                            let $proIdx = response.data.data[i].proIdx;
+                            let $userid = response.data.data[i].memEmail;
+                            let $hp = response.data.data[i].memHp;
+                            let $regdate = response.data.data[i].regdate;
+                            let $ansFlag = response.data.data[i].ansFlag;
+                            let $writer = response.data.data[i].memName;
+                            $regdate = $regdate.toString().substring(0, 10);
+
+                            let k = parseInt(i)
+                            if($ansFlag == 'TRUE'){
+                                $ansFlag = '답변완료'
+                            }else if($ansFlag == 'FALSE'){
+                                $ansFlag = '답변대기'
+                            }
+
+                            let row = $('<tr>').append(
+                                '<td><input type="checkbox" id="PR_check_' + k + '"name="review" onclick="PR_checkSelectAll()" value="'+$id+'"><label for="PR_check_' + k + '"></label></td>' +
+                                '<td>'+$name+'</td>' +
+                                '<td>'+$proIdx+'</td>' +
+                                '<td>'+ $userid + '/ <br>' + $hp +'/ <br>' + $writer +'</td>' +
+                                '<td>'+ $regdate + '</td>'+
+                                '<td class="ansFlag"><input type="button" class="detail" value=' + $ansFlag + '><input type="hidden" value="'+ $id +'"></td></tr>'
+                            )
+                            tb.append(row)
+                        }
+                        tb.append($('</tbody>'));
+                        $(".thead").after(tb)
+                    })
+                })
+            }).catch(function(err){
+                console.log(err);
+                alert('검색실패')
+            })
+        }
+
+        $(function () {
+            //선택삭제
+            $('#delbtn').click(function (){
+                confirm("정말 삭제하시겠습니까?")
+                let id = [];
+                ($("input:checkbox[name='review']:checked").each(function (e){
+                    id.push($(this).val())
+                }));
+                id = String(id)
+                console.log(id)
+
+                if(confirm){
+                    axios.delete("/api/productReview/deleteList/" + id,  {
+                    }).then(function (){
+                        alert("상품후기 삭제 성공")
+                        location.reload();
+                    })
+                }
+            }).catch(function (err){
+                console.log(err)
+            })
+        })
+    </script>
+</head>
+<body>
+    <!--content_title 시작-->
+    <div class="content_title">
+        <p>전체 상품 관리<span>상품 후기</span></p>
+    </div>
+    <!--content_title 끝-->
+    <!--Review_list 시작-->
+    <div class="Review_list">
+        <!--PR_c1 시작-->
+        <div class="PR_c1">
+            <!--form 시작-->
+            <form name="pro_review_search">
+                <p id="PR_c1_title" class="product_title"><label>후기 조회</label></p>
+                <!--table 시작-->
+                <table>
+                    <tr>
+                        <th width="100">상품 검색</th>
+                        <td>
+                            <select style="width: 90px; padding-left: 10px;" id="select">
+                                <option value="">전체</option>
+                                <option value="TRUE">답변완료</option>
+                                <option value="FALSE">답변대기</option>
+                            </select>
+                            <input type="text" name="text" placeholder="상품명을 입력하세요" id="title">
+                        </td>
+                    </tr>
+                </table>
+                <!--table 끝-->
+                <!--PR_c1_btnBox 시작-->
+                <div class="bottom_btn" id="PR_c1_btnBox">
+                    <span><input type="button" name="button" value="초기화"></span>
+                    <span><input type="button" name="button" value="검색" onclick="sendit()"></span>
+                </div>
+                <!--PR_c1_btnBox 끝-->
+            </form>
+            <!--form 끝-->
+        </div>
+        <!--PR_c1 끝-->
+        <!--PR_c2 시작-->
+        <div class="PR_c2">
+            <!--OL_c2_title 시작-->
+            <div id="PR_c2_title" class="green_title">
+                <p>상품 후기 목록 <span>(<span>현재 등록 후기 : 2개</span> <span>답변대기 : 1개</span> <span>답변완료 : 1개</span>)</span></p>
+            </div>
+            <!--PR_c2_title 끝-->
+            <!--form 시작-->
+            <form name="review_list">
+                <span>
+                    <input type="button" name="button" value="선택삭제" id="delbtn">
+                </span>
+                <!--table 시작-->
+                <table width="100%" class="list_table">
+                    <thead class="thead">
+                        <tr>
+                            <th width="5%"><input type="checkbox" id="PR_check" name="selectall" onclick="PR_selectAll(this)"><label for="PR_check"></label></th>
+                            <th width="15%">상품명</th>
+                            <th width="15%">상품번호</th>
+                            <th width="25%">아이디/연락처/작성자</th>
+                            <th width="25%">등록/처리날짜</th>
+                            <th width="15%">답변상태</th>
+                        </tr>
+                    </thead>
+                </table>
+                <!--table 끝-->
+                <!-- pageBox 시작-->
+                <div class="pageBox">
+                    <ul>
+                        <li id="Maxprev"><a href="#"><<</a></li>
+                        <li id="prev"><</li>
+                        <li>></li>
+                        <li id="Maxnext"><a href="#">>></a></li>
+                    </ul>
+                    <input type="hidden" id="ajax_hidden">
+                    <input type="hidden" value="0" class="page">
+                </div>
+                <!-- pageBox 끝-->
+            </form>
+            <!--form 끝-->
+        </div>
+        <!--PR_c2 끝-->
+    </div>
+    <!--Review_list 끝-->
+</body>
+</html>

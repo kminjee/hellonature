@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org/">
+
+<!-- head -->
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelloNature-Recommend-fresh</title>
+    <link rel="stylesheet" th:href="@{/user/css/recommend.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- axios -->
+    <script>
+    </script>
+    <!-- axios -->
+</head>
+<!-- head 끝 -->
+<body>
+    <!-- container -->
+    <div id="container">
+        <!-- header -->
+        <div th:replace="/user/fragment/header::header"></div>
+        <!-- header 끝 -->
+
+        <!-- main -->
+        <main>
+            <!-- fresh content -->
+            <div id="recommend_wrapper">
+                <div id="recommend_content">
+                    <div class="page_article">
+                        <!-- 헬로네이처 추천 메뉴 -->
+                        <div class="recommend_top_menu">
+                            <ul class="recommend_category">
+                                <li onclick="location.href='/user/recommend/fresh'">
+                                    <img src="/user/images/recommend/recommend1.webp" alt="">
+                                    <p>
+                                        <span>더신선</span>
+                                        <span>신선 그 이상의 신선</span>
+                                    </p>
+                                </li>
+                                <li onclick="location.href='/user/recommend/store'">
+                                    <img src="/user/images/recommend/recommend2.webp" alt="">
+                                    <p>
+                                        <span>팝업스토어</span>
+                                        <span>지금 가장 핫한 그 제품들</span>
+                                    </p>
+                                </li>
+                                <li onclick="location.href='/user/recommend/event'">
+                                    <img src="/user/images/recommend/recommend3.webp" alt="">
+                                    <p>
+                                        <span>기획전·이벤트</span>
+                                        <span>현재 진행중인 다양한 이벤트</span>
+                                    </p>
+                                </li>
+                                <li onclick="location.href='/user/innerbrand'">
+                                    <img src="/user/images/recommend/recommend4.webp" alt="">
+                                    <p>
+                                        <span>브랜드관</span>
+                                        <span>헬로네이처의 프리미엄 브랜드들</span>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 헬로네이처 추천 메뉴 끝 -->
+
+                        <!-- 진행중, 종료 -->
+                        <div class="event_type">
+                            <div class="event_type_top">
+                                <h2>기획전·이벤트</h2>
+                            </div>
+
+                            <div class="event_type_box">
+                                <ul>
+                                    <li class="on">
+                                        <a href="#none" id="event_type1">진행중</a>
+                                    </li>
+                                    <li class>
+                                        <a href="#none" id="event_type2">종료</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <!-- 진행중, 종료 끝 -->
+
+                        <!-- 리스트 시작 -->
+                        <div class="event_list">
+
+                            <!-- 진행중 -->
+                            <ul class="list1">
+                                <li class="event_list_item">
+                                    <a href="/brand_goods_list">
+                                        <div class="event_dday" style="display: none">
+                                            <span>종료</span>
+                                            <span>1일전</span>
+                                        </div>
+                                        <div class="event_image">
+                                            <img src="/user/images/recommend/event/ing/20200618105241282.jpg" alt="">
+                                        </div>
+                                        <div class="event_title">
+                                            <p class="event_name">본앤브레드</p>
+                                            <p class="event_period">
+                                                <span>2020.06.15 ~ 2033.06.23</span>
+                                                <span>기획전</span>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="event_list_item">
+                                    <a href="">
+                                        <div class="event_dday" style="display: none">
+                                            <span>종료</span>
+                                            <span>9일전</span>
+                                        </div>
+                                        <div class="event_image">
+                                            <img src="/user/images/recommend/event/ing/20210127174258717.jpg" alt="">
+                                        </div>
+                                        <div class="event_title">
+                                            <p class="event_name">해동 없이 싱싱할 때 바로 조리하세요</p>
+                                            <p class="event_period">
+                                                <span>2021.07.01 ~ 2021.12.31</span>
+                                                <span>기획전</span>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="event_list_item">
+                                    <a href="/user/funstaurant/">
+                                        <div class="event_dday" style="display: none">
+                                            <span>종료</span>
+                                            <span>1일전</span>
+                                        </div>
+                                        <div class="event_image">
+                                            <img src="/user/images/recommend/event/ing/20210910232621590.jpg" alt="">
+                                        </div>
+                                        <div class="event_title">
+                                            <p class="event_name">31회차 우승상품 스윗마요 떡볶이</p>
+                                            <p class="event_period">
+                                                <span>2020.11.06 ~ 2022.12.31</span>
+                                                <span>기획전</span>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- 종료 -->
+                            <ul class="list2" style="display: none;">
+                                <li class="event_list_item">
+                                    <a href="">
+                                        <div class="event_image">
+                                            <img src="/user/images/recommend/event/done/20210315115125570.jpg" alt="">
+                                        </div>
+                                        <div class="event_title">
+                                            <p class="event_name">소중한 나의 한끼 사수 환상의 먹조합: 라면편</p>
+                                            <p class="event_period">
+                                                <span>2021.03.16 ~ 2021.03.30</span>
+                                                <span>기획전</span>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="event_list_item">
+                                    <a href="">
+                                        <div class="event_image">
+                                            <img src="/user/images/recommend/event/done/20210122092649121.jpg" alt="">
+                                        </div>
+                                        <div class="event_title">
+                                            <p class="event_name">커피계의 뉴웨이브, 웨이브온을 만나다.</p>
+                                            <p class="event_period">
+                                                <span>2021.01.06 ~ 2021.01.20</span>
+                                                <span>기획전</span>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 리스트 끝 -->
+                    </div>
+                </div>
+            </div>
+            <!-- fresh content 끝-->
+        </main>
+        <!-- main 끝 -->
+
+        <!-- footer -->
+        <!--footer thymeleaf-->
+        <!--    <div th:replace="/user/fragment/footer::footer"></div>-->
+        <div th:replace="/user/fragment/footer::footer"></div>
+        <!-- footer 끝 -->
+
+        <!-- aside -->
+        <!-- aside 끝 -->
+    </div>
+    <!-- container 끝 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/user/js/event.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

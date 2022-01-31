@@ -1,0 +1,141 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로패스</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(4) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(4) > a { color: #5dab99;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="/user/js/script.js"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function (){
+        let memIdx = $("#hidden_user").val()
+
+        axios.get('/api/hellopass/read/' + memIdx, {
+
+        }).then(function (response){
+            let $type = response.data.data.type;
+            let $dateEnd = response.data.data.dateEnd;
+            let $dday = response.data.data.dday;
+            let $dateStart = response.data.data.dateStart;
+            let $addPay = response.data.data.addPay;
+            let $flag = response.data.data.flag;
+
+            $dateEnd = $dateEnd.toString().substring(0, 10);
+            $dateStart = $dateStart.toString().substring(0, 10);
+
+            $('.hellopass_box1_2').text($type);
+            $('#hellopass_flag').text($flag);
+            $('.hellopass_box1_3').text("종료일" + $dateEnd);
+            $('#hellopass_day').text("D - " + $dday);
+            $('.hellopass_payment_time').text($dateStart);
+            $('.hellopass_title').text($type);
+            $('.hellopass_price').text($addPay);
+            $('#date_start').text($dateStart);
+            $('#add_pay').text($addPay);
+            $('#date').text($dateStart + " - " + $dateEnd);
+
+        }).catch(function (err){
+            console.log(err);
+        });
+    });
+</script>
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="contents">
+                <div th:replace="/user/fragment/section::section"></div>
+            </div>
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <div class="main_leftaside3">
+                    <div th:replace="/user/fragment/sidebar3::sidebar3"></div>
+                <!-- main_leftaside 끝 -->
+                </div>
+                <!-- main_contents 시작 -->
+                <div class="main_contents">                    
+                    <div class="contents_box1">
+                        <h2 class="contents_name">헬로패스</h2>                        
+                    </div> 
+                    <div class="hellopass_box1">
+                        <div class="hellopass_box1_inner">
+                            <p class="hellopass_box1_1">헬로패스</p>
+                            <p class="hellopass_box1_2">헬로패스 3개월 무료권 <span id="hellopass_flag">이용중</span></p>
+                            <p class="hellopass_box1_3">종료일 2021.10.20 <span id="hellopass_day">D-58</span></p>
+                        </div>                        
+                    </div>
+                    <p id="hellopass_tin">자동 결제를 통해 저렴한 가격으로 동일한 혜택을 받아보세요.</p>
+                    <div class="hellopass_link_move1">
+                        <div class="hellopass_link_txt1">
+                            <a href="#">결제 내역</a>
+                            <div class="hellocash_help_button2">
+                                <a href="#" alt="헬로패스 결제내역 오버뷰"></a>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="hellopass_overview">
+                        <div class="hellopass_payment">
+                            <div class="hellopass_payment_txt">
+                                <span class="hellopass_payment_time">2021.07.20</span>
+                                <p class="hellopass_title">헬로패스 3개월 무료권</p>
+                            </div>
+                            <p class="hellopass_price">0원</p>                            
+                        </div>
+                        <div class="allow_table hellopass_payment_table">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>결제일</th>
+                                        <td id="date_start">2021.07.20</td>
+                                    </tr>
+                                    <tr>
+                                        <th>결제금액</th>
+                                        <td id="add_pay">0원</td>
+                                    </tr>
+                                    <tr>
+                                        <th>이용기간</th>
+                                        <td id="date">2021.07.20-2021.10.20 (93일)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="hellopass_link_move2" id="hellopass_button_before">
+                        <div class="hellopass_link_txt2" onClick="location.href='/mypage_cancelHellopass'">
+                            <a href="/mypage_cancelHellopass">헬로패스 해지하기</a>
+                            <div class="link_move">
+                                <a href="/mypage_cancelHellopass" alt="헬로패스 해지하기"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hellopay_button_area">
+                        <button type="submit" class="hellopay_inputcard_submit" id="hellopass_apply" onClick="location.href='/mypage_payhellopass'">헬로패스 신청</button>
+                    </div>
+                <!-- main_contents 끝 -->        
+                </div>
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+</body>
+</html>
+

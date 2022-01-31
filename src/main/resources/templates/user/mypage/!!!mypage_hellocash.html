@@ -1,0 +1,265 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로캐쉬</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(1) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(1) > a {
+            color: #5dab99;
+        }
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script2.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(function () {
+            $(".overview").click(function (e){
+                if( $(".contents_hellocash_box3").css("display") === "none") {
+                    $(".contents_hellocash_box3").css("display", "block");
+                }else{
+                    $(".contents_hellocash_box3").css("display", "none");
+                }
+            })
+
+        const offset = new Date().getTimezoneOffset() * 60000;
+            const now = new Date(Date.now() - offset);
+            const now_result = now.toISOString().substring(0, 10);
+
+            let date_start = '';
+            let date_end = '';
+            let memIdx = $("#hidden_user").val()
+
+            axios.get("/api/member/myPage/" + memIdx, {}).then(function (response){
+                let hellocash = response.data.data.hellocash;
+
+                $(".hellocash_won > p").text(hellocash)
+            })
+
+            $(".filter_outline > div").click(function (e) {
+
+                if ($(this).children("a").text() === "최근 1개월") {
+                    $("#hello_list").empty()
+                    let month = new Date();
+                    month.setMonth(month.getMonth() - 1);
+                    let month_result = month.toISOString().substring(0, 10);
+                    date_end = now_result;
+                    date_start = month_result;
+                } else if ($(this).children("a").text() === "3개월") {
+                    $("#hello_list").empty()
+                    let three_month = new Date();
+                    three_month.setMonth(three_month.getMonth() - 3);
+                    let three_month_result = three_month.toISOString().substring(0, 10);
+                    date_end = now_result;
+                    date_start = three_month_result;
+                } else if ($(this).children("a").text() === "6개월") {
+                    $("#hello_list").empty()
+                    let six_month = new Date();
+                    six_month.setMonth(six_month.getMonth() - 6);
+                    let sis_month_result = six_month.toISOString().substring(0, 10);
+                    date_end = now_result;
+                    date_start = sis_month_result;
+                } else if ($(this).children("a").text() === "기간 조회") {
+                    if (document.getElementById("mg_period").style.display === 'block') {
+                        document.getElementById("mg_period").style.display = 'none';
+                    } else document.getElementById("mg_period").style.display = 'block';
+                    return false;
+                }
+
+                axios.get("/api/hellocash/list?dateStart=" + date_start + "&dateEnd=" + date_end + "&memIdx=" + memIdx, {}).then(function (response) {
+
+                    for (let i in response.data.data) {
+                        let idx = response.data.data[i].idx;
+                        let $point = response.data.data[i].point;
+                        let $dateVal = response.data.data[i].dateVal;
+                        let $title = response.data.data[i].title;
+                        let $dateUsed = response.data.data[i].dateUsed;
+
+                        if($dateUsed === null){
+                            $point = "+" + $point
+                        }else{
+                            $point = "-" + $point
+                            $dateVal = $dateUsed
+                        }
+
+                        let row = $('<div class="contents_hellocash_box1">').append(
+                            '<div class="hellocash_savingbox1"><p>' + $title + '</p>' +
+                            '<div class="hellocash_savingbox1_inner"><p>' + $dateVal + '</p><div class="hellocash_saving_line"></div><p>'+idx+'</p></div>' +
+                            '<div class="hellocash_savingbox2" style="margin-left: 700px;"><p>' + $point + '<span>원</span></p></div></div>'
+                        )
+
+                        $("#hello_list").append(row)
+                    }
+
+                }).catch(function (err) {
+                    console.log(err)
+                })
+            })
+
+            $("#mg_ol_sc").click(function () {
+                $("#hello_list").empty();
+                date_start = $("#date_start").val();
+                date_end = $("#date_end").val();
+
+                axios.get("/api/hellocash/list?dateStart=" + date_start + "&dateEnd=" + date_end + "&memIdx=" + memIdx, {}).then(function (response) {
+
+                    for (let i in response.data.data) {
+                        let idx = response.data.data[i].idx;
+                        let $point = response.data.data[i].point;
+                        let $dateVal = response.data.data[i].dateVal;
+                        let $title = response.data.data[i].title;
+                        let $dateUsed = response.data.data[i].dateUsed;
+
+                        if($dateUsed === null){
+                            $point = "+" + $point
+                        }else{
+                            $point = "-" + $point
+                            $dateVal = $dateUsed
+                        }
+
+                        let row = $('<div class="contents_hellocash_box1">').append(
+                            '<div class="hellocash_savingbox1"><p>' + $title + '</p>' +
+                            '<div class="hellocash_savingbox1_inner"><p>' + $dateVal + '</p><div class="hellocash_saving_line"></div><p>'+idx+'</p></div>' +
+                            '<div class="hellocash_savingbox2" style="margin-left: 700px;"><p>' + $point + '<span>원</span></p></div></div>'
+                        )
+
+                        $("#hello_list").append(row)
+                    }
+
+                }).catch(function (err) {
+                    console.log(err)
+                })
+            })
+        })
+
+    </script>
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside3">
+                <div th:replace="/user/fragment/sidebar3::sidebar3"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">헬로캐시</h2>
+                </div>
+                <div class="contents_box4_hellocash">
+                    <div class="hellocash">
+                        <p>헬로캐시</p>
+                    </div>
+                    <div class="hellocash_won">
+                        <p>60</p><span>원</span>
+                    </div>
+                </div>
+                <div class="contents_box3">
+                    <div class="filter_outline">
+                        <div><a href="#">최근 1개월</a></div>
+                        <div><a href="#">3개월</a></div>
+                        <div><a href="#">6개월</a></div>
+                        <div><a href="#">기간 조회</a></div>
+                    </div>
+                </div>
+                <div id="mg_period" style="float:right; display: none;">
+                    <input type="date" id="date_start"> - <input type="date" id="date_end"><input type="button"
+                                                                                                  value="조회하기"
+                                                                                                  id="mg_ol_sc">
+                </div>
+                <div id="hello_list">
+
+                </div>
+                <div class="contents_hellocash_box2">
+                    <div class="contents_hellocash_box2_inner">
+                        <div class="hellocash_help">
+                            <p>헬로캐시 이용안내</p>
+                        </div>
+                    </div>
+                    <div class="hellocash_help_button overview">
+                        <a href="#" alt="헬로캐시 이용안내 오버뷰"></a>
+                    </div>
+                </div>
+                <div class="contents_hellocash_box3">
+                    <div class="hellocash_help_list1">
+                        <div class="hellocash_help_list_title1 help_list_title">
+                            <p>헬로캐시</p>
+                        </div>
+                        <div class="hellocash_help_list_contents1 help_list_content">
+                            <p>헬로캐시는 적립캐시와 충전캐시가 합산된 통합 적립금으로 상품 구매 시 단독으로 또는 다른 결제 수단과 함께 사용할 수 있습니다.</p>
+                            <p>헬로캐시 사용 시 적립일을 기준으로 순차 차감됩니다. 단, 적립캐시와 충전캐시를 구분하여 사용할 수는 없습니다.</p>
+                        </div>
+                    </div>
+                    <div class="hellocash_help_list2">
+                        <div class="hellocash_help_list_title2 help_list_title">
+                            <p>적립캐시</p>
+                        </div>
+                        <div class="hellocash_help_list_contents2 help_list_content">
+                            <p>상품 구매, 작성 가능한 후기, 이벤트 참여 등 헬로네이처 서비스를 이용하는 경우 무상으로 지급되는 적립금입니다.</p>
+                        </div>
+                    </div>
+                    <div class="hellocash_help_list3">
+                        <div class="hellocash_help_list_title3 help_list_title">
+                            <p>충전캐시</p>
+                        </div>
+                        <div class="hellocash_help_list_contents3 help_list_content">
+                            <p>적립금 구매, 상품권 구매, 기프트 카드 등 유상으로 충전 및 발급받은 적립금입니다.</p>
+                            <p>충전캐시 결제 시 현금영수증 발행이 가능합니다. (장바구니 단계 결제 페이지에서 현금영수증 신청 정보 입력)</p>
+                        </div>
+                    </div>
+                    <div class="hellocash_help_list4">
+                        <div class="hellocash_help_list_title4 help_list_title">
+                            <p>유의사항</p>
+                        </div>
+                        <div class="hellocash_help_list_contents4 help_list_content">
+                            <p>헬로캐시의 유효기간은 적립일로부터 1년입니다. 단, 충전캐시의 소멸시효는 5년이므로 유효기간이 경과한 후에도 소멸시효 이내 해당 적립금 사용을 요청할 수
+                                있습니다.</p>
+                            <p>적립캐시는 현금으로 환불이 불가하고, 충전캐시는 적립일을 기준으로 아직 5년이 경과하지 않은 경우 환불을 요청할 수 있으며, 이 경우 잔액의 90%를 환불 받을
+                                수 있습니다. 자세한 사항은 고객센터(1644-4339)를 통해 문의하시기 바랍니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>
+

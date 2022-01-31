@@ -1,0 +1,60 @@
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    function sendit(){
+        alert('파일 메소드 실행')
+        let title =$('#title').val()
+        var content = CKEDITOR.instances.content.getData();
+        let writer =$('#writer').val()
+
+        console.log(title)
+        console.log(content)
+        console.log(writer)
+
+        const formData = new FormData();
+        const file =  document.getElementById("file");
+        const file1 = document.getElementById("file1");
+        console.log(file.files[0]);
+        console.log(file1.files[0]);
+
+        formData.append("file", file.files[0]);
+        formData.append("file1", file1.files[0]);
+        formData.append("title", title);
+        formData.append("content", content);
+        formData.append("writer", writer);
+
+        axios.post('/api/file', formData ,{headers: {'Content-Type': 'multipart/form-data'}
+        }).then(function (response){
+            console.log(response)
+            alert("업로드가 이루어졌습니다");
+        }).catch(function (err) {
+            console.log(err)
+        });
+    };
+</script>
+<body>
+<h2>하이</h2>
+<form onsubmit="return sendit()" enctype="multipart/form-data" target="_blank">
+    <p> 제목: <input type="text" id="title" name="title"></p>
+    <p> 작성자: <input type="text"  id="writer" name="writer"></p>
+    <p> 내용: <textarea id="content" name="content"></textarea></p>
+    <script>
+        CKEDITOR.replace( 'content', {
+            height: 100,
+            filebrowserUploadUrl: "/image/upload"
+        });
+    </script>
+    <input type="file" id="file" name="file">
+    <input type="file" id="file1" name="file">
+    <input type="submit" value="등록">
+</form>
+</body>
+</html>

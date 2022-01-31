@@ -1,0 +1,146 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로네이처 추천 관리 | 브랜드관</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="/admin/js/Admin.imeage.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    function sendit(){
+        let data = {
+            name: $('#name').val(),
+            des: $('#des').val(),
+            state: $('input[name="state"]:checked').val(),
+            dateStart: $('#date_start').val(),
+            dateEnd: $('#date_end').val()
+        }
+
+        let files = ($('input[name="file"]'));
+        let fileList = [];
+        let formData = new FormData();
+
+        for(let i = 0; i < files.length; i++){
+            fileList.push(files[i].files[0]);
+            formData.append('files', files[i].files[0]);
+            console.log(fileList)
+        }
+        formData.append("key", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+        axios.post('/api/brand/create', formData, {
+            headers: {'Content-Type': 'multipart/form-data'}
+        }).then(function(response){
+            alert('브랜드가 등록되었습니다')
+            $.ajax({
+                type:"GET",
+                url : "/admin/BrandList",
+                datatype : "html/text",
+                success: function(result){
+                    $("#content").html(result).trigger("create");
+                }
+            });
+
+        }).catch(function (err){
+            console.log(err)
+            return false;
+        })
+        $.ajax({
+            type:"GET",
+            url : "/admin/BrandList",
+            datatype : "html/text",
+            success: function(result){
+                console.log(result)
+                $("#content").html(result).trigger("create");
+            }
+        });
+    }
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title">
+    <p>헬로네이처 추천 관리<span>브랜드관</span></p>
+</div>
+<!--content_title 끝-->
+<!--content_title_click 시작-->
+<div class="content_title_click">
+    <a onclick="BL_location_1()">브랜드 목록</a>
+    <a onclick="BL_location_2()" id="BL_click_2">브랜드 등록</a>
+</div>
+<!--content_title_click 끝-->
+<!--Bcreate 시작-->
+<div class="Bcreate">
+    <!--form 시작-->
+    <form name="brand_create" enctype="multipart/form-data">
+        <p class="product_title" id="BC_c1_title"><label>브랜드 등록</label></p>
+        <!--table 시작-->
+        <table class="brand">
+            <tr>
+                <th>브랜드명</th>
+                <td><input type="text" name="text" placeholder="20자 이내로 입력하세요" maxlength="20" id="name"></td>
+            </tr>
+            <tr>
+                <th>브랜드 설명</th>
+                <td><input type="text" name="text" placeholder="100자 이내로 입력하세요" maxlength="100" id="des"></td>
+            </tr>
+            <tr>
+                <th>입점 기간</th>
+                <td>
+                    <input type="date" id="date_start" name="date"> - <input type="date" name="date" id="date_end">
+                </td>
+            </tr>
+            <tr>
+                <th>브랜드 로고</th>
+                <td>
+                    <div class="file_input_div_k">
+                        <img src="" class="file_input_button_k" id="BCT_img">
+                        <input type="file" class="file_input_hidden_k" id="BCT_input" name="file">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>입점 상태</th>
+                <td>
+                    <span><input type="radio" name="state" value="1">입점대기</span>
+                    <span><input type="radio" name="state" value="2" checked>입점중</span>
+                    <span><input type="radio" name="state" value="3">입점중지</span>
+                    <span><input type="radio" name="state" value="4">입점종료</span>
+                </td>
+            </tr>
+            <tr>
+                <th>브랜드 배너</th>
+                <td>
+                    <div class="banner_button">
+                        <div class="file_input_div_b">
+                            <input type="button" value="파일 등록" class="file_input_button_b">
+                            <input type="file" class="file_input_hidden_b" id="BCT_bannerinput" name="file">
+                        </div>
+                        <input type="submit" value="등록" style="border-radius: 5px;">
+                    </div>
+                    <div class="banner_content">
+                        <img src="" id="BCT_banner">
+                    </div>
+                    <div class="banner_notice">권장크기 : 1000 x 1000 (윈도대상 750 x 1000)<br>쇼핑검색에 노출되지 않는 경우 <u>가이드를 확인해주세요.</u></div>
+                </td>
+            </tr>
+        </table>
+        <!--table 끝-->
+        <!--BC_c1_btnBox 시작-->
+        <div id="BC_c1_btnBox" class="bottom_btn">
+            <span><input type="reset" name="reset" value="초기화"></span>
+            <span><input type="button" name="submit" value="등록" onclick="sendit()"></span>
+        </div>
+        <!--BC_c1_btnBox 끝-->
+    </form>
+    <!--form 끝-->
+</div>
+<!--Bcreate 끝-->
+</body>
+</html>

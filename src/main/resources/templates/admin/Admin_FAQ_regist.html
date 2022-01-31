@@ -1,0 +1,120 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 | FAQ 관리</title>
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script>
+        function sendit(){
+            let title = $('#title').val()
+            let content = CKEDITOR.instances.FAQ_edit.getData();
+            let type = $('#select').val()
+            let subject = $("#subject").val();
+            console.log(title)
+            console.log(content)
+            console.log(type)
+
+            if(type!="선택") {
+                axios.post("/api/faq/create", {
+                    data: {
+                        type: type,
+                        content: content,
+                        title: title,
+                        subject : subject
+                    }
+                }).then(function () {
+                    alert("faq가 등록되었습니다")
+                    $.ajax({
+                        type:"GET",
+                        url : "/admin/FAQ",
+                        datatype : "html/text",
+                        success: function(result){
+                            $("#content").html(result).trigger("create");
+                        }
+                    });
+                })
+            }else{
+                alert("분류를 선택해주세요")
+                $.ajax({
+                    type:"GET",
+                    url : "/admin/FAQ_regist",
+                    datatype : "html/text",
+                    success: function(result){
+                        $("#content").html(result).trigger("create");
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <!--content_title 시작-->
+    <div class="content_title"><p>고객센터<span>FAQ 관리</span></p></div> 
+    <!--content_title 끝-->  
+    <!--FAQregist 시작-->
+    <div class="FAQregist">
+        <!--form 시작-->
+        <form name="FAQ_create">
+            <p class="product_title_s" id="FQr_c1_title"><label>FAQ 등록</label></p>
+            <!--table 시작-->
+            <table>
+                <tr>
+                    <th>분류</th>
+                    <td>
+                        <select id="select">
+                            <option>선택</option>
+                            <option value="1">자주하는 질문</option>
+                            <option value="2">회원서비스/이용</option>
+                            <option value="3">쿠폰/적립금</option>
+                            <option value="4">취소/반품/환불</option>
+                            <option value="5">주문/결제</option>
+                            <option value="6">배송</option>
+                            <option value="7">더그린배송</option>
+                            <option value="8">T건강습관앱</option>
+                        </select> 
+                    </td>
+                </tr>
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" name="text" id="title" placeholder="100자 이내로 입력하세요" maxlength="100"></td>
+                </tr>
+                <tr>
+                    <th>소제목</th>
+                    <td><input type="text" name="text" id="subject" placeholder="100자 이내로 입력하세요"></td>
+                </tr>
+            </table>
+            <!--table 끝-->
+            <!--FQr_c2_title 시작-->
+            <div id="FQr_c2_title" class="green_title">
+                <p>HTML</p>
+            </div>
+            <!--FQr_c2_title 끝-->
+            <!-- CKEditor 시작-->
+            <textarea name="productText" id="FAQ_edit" cols="30" rows="10"></textarea>
+            <script type="text/javascript">
+                CKEDITOR.replace('FAQ_edit'
+                            , {height: 300                                             
+                        });
+            </script>
+            <!-- CKEditor 끝-->
+            <!--FQr_c1_btnBox 시작-->
+            <div id="FQr_c1_btnBox" class="bottom_btn">
+                <span><input type="reset" name="reset" value="초기화"></span>
+                <span><input type="button" name="submit" value="등록" onclick="sendit()"></span>
+            </div>
+            <!--FQr_c1_btnBox 끝-->
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--FAQregist 끝-->
+</body>
+</html>

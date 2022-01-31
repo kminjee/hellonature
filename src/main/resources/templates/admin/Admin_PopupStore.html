@@ -1,0 +1,254 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로네이처 추천 관리 | 팝업스토어</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="/admin/js/popup.js"></script>
+    <script src="/admin/js/Admin.imeage.js"></script>
+    <script src="/admin/js/Admin.cate.js"></script>
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    function sendit(){
+
+        let data = {
+            title: $('#title').val(),
+            des: $('#des').val(),
+            brIdx: $("#br_id_hidden").val(),
+            content: CKEDITOR.instances.PS_editor.getData(),
+            dateStart: $('#date_start').val(),
+            dateEnd: $('#date_end').val()
+        }
+
+        console.log(data.title);
+
+        let files = ($('input[name="file"]'));
+        let fileList = [];
+        let formData = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            fileList.push(files[i].files[0]);
+            formData.append('files', files[i].files[0]);
+            console.log(fileList)
+        }
+        formData.append("key", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+        axios.post('/api/popupstore/create', formData, {
+            headers: {'Content-type': 'multipart/form-data'}
+        }).then(function (){
+            alert("팝업스토어가 등록되었습니다")
+        }).catch(function (err){
+            console.log(err)
+        })
+    }
+
+    axios.get("/api/brand/list", {}).then(function (response) {
+        console.log(response.data.data)
+        for (let i in response.data.data) {
+            let $id = response.data.data[i].idx;
+            let $name = response.data.data[i].name;
+
+            let row = $('<li value="' + $id + '" class="brlist">').append(
+                $name + '</li>'
+            )
+
+            $('.brand_list').append(row)
+        }
+        $('.brand_list > li').click(function (e) {
+            $(this).add(".brand_list > li").addClass("on")
+            $(".brand_list > li").not($(this)).removeClass("on")
+
+            $('#br_name_hidden').val($(this).text());
+            $('#br_id_hidden').val($(this).val());
+        })
+    }).catch(function (err) {
+
+        console.log(err)
+    })
+
+    $(function(){
+        axios.get('/api/popupstore/read/1', {
+
+        }).then(function(response){
+            let title = response.data.data.title;
+            let des = response.data.data.des;
+            let brIdx = response.data.data.brIdx;
+            let dateStart = response.data.data.dateStart;
+            let dateEnd = response.data.data.dateEnd;
+            let content = response.data.data.content;
+
+
+            $('#title').val(title);
+            $('#des').val(des);
+            $('#brand').val(brIdx);
+            $('#date_start').val(dateStart);
+            $('#date_end').val(dateEnd);
+            CKEDITOR.instances.PS_editor.setData(content);
+
+        })
+    })
+
+    function edit(){
+        let data = {
+            idx: 1,
+            title: $('#title').val(),
+            des: $('#des').val(),
+            brIdx : $('#br_id_hidden').val(),
+            content: CKEDITOR.instances.PS_editor.getData(),
+            dateStart: $('#date_start').val(),
+            dateEnd: $('#date_end').val()
+        }
+
+        let files = ($('input[name="file"]'));
+        let fileList = [];
+        let formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            fileList.push(files[i].files[0]);
+            formData.append('files', files[i].files[0]);
+            console.log(fileList)
+        }
+        formData.append("key", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+        axios.put('/api/popupstore/update', formData, {
+            headers: {'Content-type': 'multipart/form-data'},
+        }).then(function (response){
+            alert("팝업스토어 수정완료")
+        }).catch(function (err){
+            console.log(err)
+        })
+    }
+
+    function brsc() {
+        $('.brand_list').empty();
+        let name = $("#brname").val();
+        axios.get("/api/brand/list?name=" + name, {}).then(function (response) {
+            for (let i in response.data.data) {
+                let $id = response.data.data[i].idx;
+                let $name = response.data.data[i].name;
+
+                let row = $('<li value="' + $id + '" class="brlist">').append(
+                    $name + '</li>'
+                )
+                $('.brand_list').append(row)
+            }
+            $('.brand_list > li').click(function (e) {
+                alert("소민이바보")
+                $(this).add(".brand_list > li").addClass("on")
+                $(".brand_list > li").not($(this)).removeClass("on")
+
+                $('#br_name_hidden').val($(this).text());
+                $('#br_id_hidden').val($(this).val());
+            })
+        })
+    }
+
+    function modal_submit() {
+        document.getElementById('mw_temp').style.display = 'none'
+        $('#br_name').val($('#br_name_hidden').val());
+    }
+
+
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title">
+    <p>헬로네이처 추천 관리 <span>팝업스토어</span></p>
+</div>
+<input type="hidden" id="br_name_hidden">
+<input type="hidden" id="br_id_hidden">
+<!--content_title 끝-->
+<!--Pstore 시작-->
+<div class="Pstore">
+    <!--PS_c1 시작-->
+    <div class="PS_c1">
+        <!--form 시작-->
+        <form name="pop_enter" enctype="multipart/form-data">
+            <p id="PS_c1_title" class="product_title"><label>팝업스토어 등록/수정</label></p>
+            <table>
+                <tr>
+                    <th>이미지</th>
+                    <td colspan="3">
+                        <img src=" " id="PS_c1_img">
+                        <div class="file_input_div_p">
+                            <input type="button" value="파일 등록" class="file_input_button_p">
+                            <input type="file" class="file_input_hidden_p" id="PS_c1_imgbtn" name="file">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>제목</th>
+                    <td colspan="3"><input type="text" name="text" placeholder="100자 내외로 입력하세요" maxlength="100" id="title"></td>
+                </tr>
+                <tr>
+                    <th>설명</th>
+                    <td colspan="3"><input type="text" name="text" placeholder="100자 내외로 입력하세요" maxlength="100" id="des"></td>
+                </tr>
+                <tr>
+                    <th>브랜드명</th>
+                    <td>
+                        <!--팝업창 부분 시작 -->
+                        <input type="text" name="brand" id="br_name"><button class="pop_btn" type="button" onclick="modal_open()"><img src="/admin/img/search_icon.png" alt="" style="width: 30px; border: 1px solid #266266;"></button>
+                        <div id="mw_temp" class="mw">
+                            <div class="bg"><!--이란에는 내용을 넣지 마십시오.--></div>
+                            <div class="fg">
+                                <div id="modal_title" class="modal_greentitle">
+                                    <p>브랜드 찾기<span><img src='/admin/img/close2.png' onclick="modal_close()" class="modal_closeBtn"></span></p>
+                                </div>
+                                <div class="Modal">
+                                    <div class="modal_cateBox" method="" action="#" id="modal_form">
+                                        <div class="modal_search"><span>브랜드명</span><input type="text"><input type="button" value="검색" onclick="brsc()"></div>
+                                        <div class="modal_list">
+                                            <span>목록</span>
+                                            <ul class="brand_list">
+                                            </ul>
+                                        </div>
+                                        <div class="modal_btn">
+                                            <input th:type="button" onclick="modal_submit()" value="확인">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--팝업창 부분 끝 -->
+                    </td>
+                    <th>전시기간</th>
+                    <td><input type="date" name="date" placeholder="yyyy/mm/dd" id="date_start"> - <input type="date" name="date" placeholder="yyyy/mm/dd" id="date_end"></td>
+                </tr>
+            </table>
+            <!--PS_c2_title 시작-->
+            <div id="PS_c2_title" class="green_title">
+                <p>HTML</p>
+            </div>
+            <!--PS_c2_title 끝-->
+            <!-- CKEditor 시작-->
+            <textarea name="productText" id="PS_editor" cols="30" rows="10"></textarea>
+            <script type="text/javascript">
+                CKEDITOR.replace('PS_editor'
+                    , {height: 300,
+                        filebrowserUploadUrl: "/image/upload/popupstore"
+                    });
+            </script>
+            <!-- CKEditor 끝-->
+            <!--PS_c2_btnBox 시작-->
+            <div id="PS_c1_btnBox" class="bottom_btn">
+                <span><input type="button" name="submit" value="등록" onclick="sendit()"></span>
+                <span><input type="button" name="submit" value="수정" onclick="edit()"></span>
+            </div>
+            <!--PS_c1_btnBox 끝-->
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--PS_c1 끝-->
+</div>
+<!--Pstore 끝-->
+</body>
+</html>

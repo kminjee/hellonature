@@ -1,0 +1,298 @@
+<html xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로네이처 - 오늘이 맛있는 탐험</title>
+    <link rel="stylesheet" href="/user/css/index_style.css">
+    <link rel="stylesheet" th:href="@{/user/css/layout.css}">
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+
+
+    $(function (){
+
+
+        const currUrl = new URL(location.href);           // 현재 url
+        const searchParams = currUrl.searchParams;        // 파라미터값 객체로 변환
+        let page = searchParams.get("page");              // 0이 담겨있음
+        let order = searchParams.get("order");            // 1
+
+        let memIdx = $("#hidden_user").val();
+
+        axios.get('/api/product/user/list?regdate=2021-10-01&page='+ page + '&order='+order, {
+
+        }).then(function (res){
+            // console.log(res.data.data); 데이터 확인
+
+            let ul = $("#list_mold");
+
+            for(let i in res.data.data){
+                let idx = res.data.data[i].idx;
+                let img = res.data.data[i].img;
+                let name = res.data.data[i].name;
+                let netPrice = res.data.data[i].netPrice;
+                let price = res.data.data[i].price;
+                let salePrice = res.data.data[i].salePrice;
+                    let saleStyle = ""; // string 선언
+                    if(salePrice == 0 || salePrice == null){
+                        saleStyle = "none";
+                    }else {
+                        saleStyle = "inline-block";
+                    }
+
+                let star = res.data.data[i].star;
+                    star = Math.floor(star);        // 소수점 버림
+                let stars = "";
+                if ( star == 0 ) { stars = "☆☆☆☆☆"; star = "0"; }
+                else if ( star == 1 ) { stars = "★☆☆☆☆"; }
+                else if ( star == 2 ) { stars = "★★☆☆☆"; }
+                else if ( star == 3 ) { stars = "★★★☆☆"; }
+                else if ( star == 4 ) { stars = "★★★★☆"; }
+                else if ( star >= 5 ) { stars = "★★★★★"; star = "5"; }
+
+                let temp = res.data.data[i].temp;
+                    let text = "";
+                    switch (temp){
+                        case 1 :
+                            text = "냉장";
+                            break;
+                        case 2 :
+                            text = "냉동";
+                            break;
+                        case 3 :
+                            text = "상온";
+                            break;
+                    }
+
+                let bestFlag = res.data.data[i].bestFlag;
+                    if(bestFlag == "FALSE"){
+                        bestFlag = "none";
+                    }else{
+                        bestFlag = "inline-block";
+                    }
+
+
+                netPrice = netPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                price = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                let li = $('<li class="life_item_wrap">').append(
+                    '<div class="item_info">' +
+                    '<span class="item_sale" style="display: ' + saleStyle + ';">' + salePrice + '% </span>' +
+                    '<span class="item_best" style="display: ' + bestFlag + ';">Best</span>' +
+                    '</div>' +
+                    `<a href="/user/product?prodIdx=${idx}" class="item_img" style="background-image: url('${img}');"></a>` +
+
+                    '<a href="/user/product?prodIdx= ' + idx + '" class="item_name">'+ name + '</a>' +
+                    '<div class="item_price"><span>'+ price + '</span>원</div>' +
+                    '<span style="display: '+ saleStyle + '; text-decoration: line-through; margin-left: 5px; color: #767676; font-size: 13px;">' + netPrice + '원</span>' +
+                    '<div class="item_storage"><span>'+ text +'</span></div>' +
+                    '<div class="like_area">' +
+                    '<span class="item_star">'+ star +'점</span>' +
+                    '<div class="rating">'+ stars +'</div>' +
+                    '<a href="#">' +
+                    '<input type="hidden" value="' + idx + '">'+
+                    '<button class="price_cart">카트에 담기</button>' +
+                    '</a>' +
+                    '</div>' +
+                    '</li>'
+                )
+                ul.append(li);
+            }
+
+
+            <!-- 페이지네이션 -->
+            for(let i=res.data.pagination.totalPages; i>0; i--){
+                let pages = $('<div class="page_num">').append(
+                    i+'</div>'
+                )
+                $('.page_prev').after(pages);   // 다음으로 들어가야하는 위치
+
+            }
+
+            let pageNum = document.querySelectorAll(".page_num");
+            for(let i=0; i<pageNum.length; i++){
+                pageNum[i].addEventListener('click',function (){
+                    let num = pageNum[i].innerText;
+                    let k = parseInt(num);
+                    searchParams.set('page', String(k-1));
+                    let newParam = searchParams.toString();
+                    location.href = location.pathname+'?'+newParam,'_self';
+                    // console.log(String(k-1));
+                    // console.log(typeof String(k-1));
+                });
+            }
+
+            let filterSearch = document.querySelectorAll(".filter_search");
+            let searchBtn = document.getElementById("search_btn");
+
+            searchBtn.addEventListener('click',function () {            // 검색 클릭헀을떄
+                for (let i = 0; i < filterSearch.length; i++) {         // 조건들 돌려서
+                    if (filterSearch[i].checked == true) {              // 조건중에 체크된 애가 있으면
+                        let filterItemValue = filterSearch[i].value;    // 체크된 애 벨류값 넣기
+                        let num;
+                        switch (filterItemValue) {                      // 그 벨류가
+                            case "new":
+                                num = 1;
+                                break;
+                            case "rec":
+                                num = 2;
+                                break;
+                            case "hot":
+                                num = 3;
+                                break;
+                            case "low":     // 낮은가격순이면
+                                num = 4;    // 4로 주고
+                                break;
+                            case "high":    // 높은 가격순이면
+                                num = 5;    // 5
+                                break;
+                        }
+                        searchParams.set('order', String(num));
+                        let newParam = searchParams.toString();
+                        location.href = location.pathname+'?'+newParam,'_self';
+                    }
+                }
+            });
+
+            let cartBtn = document.querySelectorAll(".price_cart");
+            for (let i=0; i<cartBtn.length; i++) {
+                cartBtn[i].addEventListener('click', function() {
+                    let el = cartBtn[i].previousSibling;
+                    let value = el.value; // 상품 idx값
+
+                    if (memIdx !== "") {
+                        axios.post('/api/basket/create', {
+                            data: {
+                                memIdx: memIdx,
+                                proIdx: value,
+                                proCount: 1,
+                            }
+                        }).then(function() {
+                            alert('장바구니에 등록되었습니다.');
+                            location.reload();
+                        }).catch(function(err) {
+                            console.log(err);
+                        });
+                    } else {
+                        alert("비회원입니다.")
+                        let proidx_list = [];
+
+                        sessionStorage.setItem("noMem", prodIdx);
+                    }
+                });
+            }
+
+
+        }).catch(function (err){
+            console.log(err);
+        });
+    });
+</script>
+
+<body>
+    <div id="container">
+
+        <!--header thymeleaf-->
+        <div th:replace="/user/fragment/header::header"></div>
+
+        <!-- main 시작 -->
+        <main>
+            <!-- 아이템 리스트 -->
+            <section id="item_list_brand">
+                <!-- 아이템 4단 배열 리스트 -->
+                <div class="list_bg">
+                    <div class="list_mold">
+                        <div class="category_bg">
+                            <div class="category_mold">
+                                <div class="ico_cate">
+                                    <span class="txt">신상품</span></div>
+                                <div class="mold">
+                                    <ul class="list">
+                                        <li class="prod_cate" style="font-weight: bold; color: #0db081;">전체</li>
+                                    </ul>
+                                </div>
+                                <div class="list_ability">
+                                    <div class="sort_menu">
+                                        <div class="select_type user_sort" >
+                                            <button id="filter_btn" onclick="filterBtn()" >
+                                                <div class="filter_info" >필터</div>
+                                                <span class="filter_btn_img"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 세부 카테고리 시작 -->
+                                <div id="filter_box" class="filter_box_wrap" style="display: none;">
+                                    <div class="list_filters">
+                                            <div class="ckeck_filter">
+                                                <input class="filter_search" type="checkbox" id="new" name="filter" value="new" onclick="checkOnlyOne(this)" checked>
+                                                <span class="box">box</span>
+                                                <label class="filter_cursor" for="new">신상품순</label>
+
+                                                <input class="filter_search" type="checkbox" id="rec" name="filter" value="rec" onclick="checkOnlyOne(this)">
+                                                <span class="box">box</span>
+                                                <label class="filter_cursor" for="rec">추천순</label>
+
+                                                <input class="filter_search" type="checkbox" id="hot" name="filter" value="hot" onclick="checkOnlyOne(this)">
+                                                <span class="box">box</span>
+                                                <label class="filter_cursor" for="hot">인기순</label>
+
+                                                <input class="filter_search" type="checkbox" id="low" name="filter" value="low" onclick="checkOnlyOne(this)">
+                                                <span class="box">box</span>
+                                                <label class="filter_cursor" for="low">낮은 가격순</label>
+
+                                                <input class="filter_search" type="checkbox" id="high" name="filter" value="high" onclick="checkOnlyOne(this)">
+                                                <span class="box">box</span>
+                                                <label class="filter_cursor" for="high">높은 가격순</label>
+                                            </div>
+                                            <input id="search_btn" class="filter_btn" type="button" value="검색" style="cursor: pointer;">
+                                    </div>
+                                </div>
+                                <!-- 세부 카테고리 끝 -->
+                            </div>
+                        </div>
+
+
+                        <ul id="list_mold" class="list_mold">
+
+
+                        </ul>
+                    </div>
+                </div>
+                <!-- 페이징 시작 -->
+
+                <div class="pagination">
+                    <div class="page_first"><img src="/user/images/icon/pagination_first.png"></div>
+                    <div class="page_prev"><img src="/user/images/icon/pagination_prev.png"></div>
+
+                    <div class="page_next"><img src="/user/images/icon/pagination_next.png"></div>
+                    <div class="page_last"><img src="/user/images/icon/pagination_last.png"></div>
+                </div>
+
+                <script src="./script/category.js"></script>
+                <!-- 페이징 끝 -->
+            </section>
+
+        </main>
+        <!-- main 끝 -->
+
+    </div>
+
+    <!--footer thymeleaf-->
+    <!--    <div th:replace="/user/fragment/footer::footer"></div>-->
+    <div th:replace="/user/fragment/footer::footer"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+
+</body>
+
+</html>

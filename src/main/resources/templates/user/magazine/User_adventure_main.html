@@ -1,0 +1,125 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- head -->
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelloNature-Magazine-Adventure-Main</title>
+    <link rel="stylesheet" th:href="@{/user/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/user/css/magazine.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- axios -->
+    <script>
+        $(function() {
+            const currUrl = new URL(location.href);
+            const searchParams = currUrl.searchParams;
+            const page = searchParams.get("page");
+
+            axios.get('/api/magazine/user/list?type=NOTE&page='+page, {
+
+            }).then(function(res) {
+
+                let ul = $(".board_box");
+
+                for (let i in res.data.data) {
+                    let idx = res.data.data[i].idx;
+                    let img = res.data.data[i].img;
+                    let title = res.data.data[i].title;
+                    let des = res.data.data[i].des;
+
+                    let li = $('<li class="adv_brd_list board_list">').append(
+                        '<label>'+
+                        '<div class="adv_image board_image" onclick="location.href=\'/user/magazine/adventure_content?idx='+idx+'\'"><img src="'+img+'"></div>'+
+                        '<div class="adv_brd_info board_info">'+
+                        '<div class="adv_brd_name board_name">'+title+'</div>'+
+                        '<div class="adv_brd_txt board_text clearfix">'+des+'</div></div></label></li>'
+                    )
+                    ul.append(li);
+                };
+
+                for (let i=res.data.pagination.totalPages; i>0; i--) {
+                    let pageNumbering = $('<div class="page_num" value="'+i+'">').append(
+                        i+'</div>'
+                    )
+                    $(".page_prev").after(pageNumbering);
+                }
+
+                let pageNum = document.querySelectorAll(".page_num");
+                for(let i=0; i<pageNum.length; i++) {
+                    pageNum[i].addEventListener('click', function() {
+                        let num = pageNum[i].innerText;
+                        let k = parseInt(num);
+                        searchParams.set('page', String(k-1));
+                        let newParam = searchParams.toString();
+                        location.href = location.pathname+'?'+newParam, '_self';
+                        console.log(String(k-1));
+                    });
+                }
+            }).catch(function(err) {
+                console.log(err);
+            });
+        });
+    </script>
+    <!-- axios -->
+</head>
+<!-- head 끝 -->
+
+<body>
+    <!-- container -->
+    <div id="container">
+        <!-- header -->
+        <div th:replace="/user/fragment/header::header"></div>
+        <!-- header 끝 -->
+
+        <!-- main -->
+        <main>
+            <!-- magazine_content -->
+            <section id="magazine_content" class="clearfix">
+                <!-- 세부 카테고리 -->
+                <div id="prod_category_wrap">
+                    <div class="prod_category_box">
+                        <div class="prod_cate_tit">매거진</div>
+                        <ul class="prod_cate_list">
+                            <li class="prod_cate" onclick="location.href='/user/magazine'">전체</li><!--
+                             --><li class="prod_cate" onclick="location.href='/user/magazine/recipe?page=0'">레시피</li><!--
+                             --><li class="prod_cate" onclick="location.href='/user/magazine/adventure?page=0'" style="color: #0db081; font-weight: bold; border-bottom: 1px solid #0db081">탐험노트</li><!--
+                             --><li class="prod_cate" onclick="location.href='/user/magazine/lifestyle?page=0'">라이프스타일</li><!--
+                             --><li class="prod_cate" onclick="location.href='/user/magazine/kitchen?page=0'">키친가이드</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 세부 카테고리 끝 -->
+
+                <!-- 탐험노트 게시판 (2 column layout) -->
+                <div class="board_wrap clearfix width">
+                    <ul class="adv_brd_box board_box">
+                    </ul>
+                </div>
+                <!-- 탐험노트 게시판 (2 column layout) 끝 -->
+
+                <!-- pagination -->
+                <div class="pagination">
+                    <div class="page_first"><img src="/user/images/magazine/main/pagination_first.png"></div>
+                    <div class="page_prev"><img src="/user/images/magazine/main/pagination_prev.png"></div>
+                    <div class="page_next"><img src="/user/images/magazine/main/pagination_next.png"></div>
+                    <div class="page_last"><img src="/user/images/magazine/main/pagination_last.png"></div>
+                </div>
+                <!-- pagination 끝 -->
+            </section>
+            <!-- magazine_content 끝 -->
+        </main>
+        <!-- main 끝 -->
+
+        <div th:replace="/user/fragment/footer::footer"></div>
+
+    </div>
+    <!-- container 끝 -->
+    <script type="text/javascript" th:src="@{/user/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

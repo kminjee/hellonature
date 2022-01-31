@@ -1,0 +1,141 @@
+<html
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 상품 관리 | 상품문의</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function(){
+        let id = sessionStorage.getItem("idx2");
+        console.log(id)
+
+        axios.get('/api/productquestion/read/'+ id, {
+
+        }).then(function(response){
+            let name = response.data.data.memName;
+            let regdate = response.data.data.regdate;
+            regdate = regdate.toString().substring(0, 10);
+            let proName = response.data.data.proName;
+            let proIdx = response.data.data.proIdx;
+            let content = response.data.data.content;
+            let ansContent = response.data.data.ansContent;
+            let img = response.data.data.img;
+            console.log(name)
+            console.log(regdate)
+            console.log(proIdx)
+
+            $('#PQ_writer').text(name);
+            $('#PQ_regdate').text(regdate);
+            $('#PQ_prodName').text(proName);
+            $('#PQ_proIdx').text(proIdx);
+            $('#PQ_content').text(content);
+            $('#PQ_editor').val(ansContent);
+            $("#img").attr("src", img);
+
+        }).catch(function(err){
+            console.log(err)
+        })
+    })
+
+    function sendit(){
+        let id = sessionStorage.getItem("idx2");
+        let ansContent = CKEDITOR.instances.PQ_editor.getData();
+        console.log(id)
+        axios.put('/api/productquestion/ansContent/update', {
+            data: {
+                idx: id,
+                ansContent: ansContent
+            }
+        }).then(function (){
+            alert('답변이 완료되었습니다');
+            $.ajax({
+                type:"GET",
+                url : "/admin/productquestionlist",
+                datatype : "html/text",
+                success: function(result){
+                    $("#content").html(result).trigger("create");
+                }
+            });
+        })
+    }
+
+
+
+
+</script>
+<body>
+    <!--content_title 시작-->
+    <div class="content_title">
+        <p>전체 상품 관리 <span>상품문의</span></p>
+    </div>
+    <!--content_title 끝-->
+    <!--Pro_question 시작-->
+    <div class="Pro_question">
+        <!--PQ_c1 시작-->
+        <div class="PQ_c1">
+            <!--form 시작-->
+            <form name="pro_question">
+                <p id="Pt_title1" class="product_title"><label>문의 상세</label></p>
+                <!--table 시작-->
+                <table id="pro_question">
+                    <tr>
+                        <th>작성자</th>
+                        <td id="PQ_writer"></td>
+                        <th>작성일시</th>
+                        <td id="PQ_regdate"></td>
+                    </tr>
+                    <tr>
+                        <th>문의상품</th>
+                        <td id="PQ_prodName"></td>
+                        <th>상품코드</th>
+                        <td id="PQ_proIdx"></td>
+                    </tr>
+                    <tr>
+                        <th>문의종류</th>
+                        <td id="PQ_type">배송관련</td>
+                        <th>첨부파일</th>
+                        <td id="file"><img src="" id="img"></td>
+                    </tr>
+                    <tr>
+                        <th>문의내용</th>
+                        <td colspan="3" id="PQ_content"></td>
+                    </tr>
+                </table>
+                <!--table 끝-->
+                <p id="Pt_title2" class="product_title"><label>문의 답변하기</label></p>
+                <!--table 시작-->
+                <table id="product_answer">
+                    <tr>
+                        <th width="120">답변 내용</th>
+                        <td width="1000px">
+                            <textarea name="productText" id="PQ_editor" cols="30" rows="10"></textarea>
+                            <!-- CKEditor 시작-->
+                            <script type="text/javascript">
+                                CKEDITOR.replace('PQ_editor'
+                                            , {height: 200
+                                        });
+                            </script>
+                            <!-- CKEditor 끝-->
+                        </td>
+                    </tr>
+                </table>
+                <!--table 끝-->
+                <!--PQ_c1_btnBox 시작-->
+                <div id="PA_c1_btnBox" class="bottom_btn">
+                    <input type="button" name="submit" value="답변하기" onclick="sendit()">
+                </div>
+            <!--PQ_c1_btnBox 끝-->
+            </form>
+            <!--form 끝-->
+        </div>
+        <!--PQ_c1 끝-->
+    </div>
+    <!--Pro_question 끝-->
+</body>
+</html>

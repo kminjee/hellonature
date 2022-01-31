@@ -1,0 +1,451 @@
+<html
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 | 회원 관리</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script src="/admin/js/checkbox.js"></script>
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    $(function () {
+        let page = $('.page').val();
+        axios.get('/api/membersAddresses/list?startPage=' + page, {}).then(function (response) {
+            let tb = $('<tbody class="tbody">');
+            for (let i in response.data.data) {
+                let id = response.data.data[i].idx
+                let addrName = response.data.data[i].addrName;
+                let baseFlag = response.data.data[i].baseFlag;
+                let zipcode = response.data.data[i].zipcode;
+                let addr1 = response.data.data[i].addr1;
+                let addr2 = response.data.data[i].addr2;
+                let memIdx = response.data.data[i].memIdx;
+                let requestMemo2 = response.data.data[i].memEmail;
+                let dawnFlag = response.data.data[i].dawnFlag;
+                let greenFlag = response.data.data[i].greenFlag;
+                let k = parseInt(i) + 1
+
+                if (baseFlag === "TRUE") {
+                    baseFlag = " (기본 배송지) "
+                } else {
+                    baseFlag = '';
+                }
+
+                if (dawnFlag === "TRUE") {
+                    dawnFlag = "Y";
+                } else {
+                    dawnFlag = 'N';
+                }
+
+
+                if (greenFlag === "TRUE") {
+                    greenFlag = "Y";
+                } else {
+                    greenFlag = 'N';
+                }
+
+
+                let row = $('<tr>').append(
+                    '<td height="80px"><input type="checkbox" id="AL_check_'+k+'" name="addr" onclick="AL_checkSelectAll()" value="' + id +'"><label for="AL_check_'+k+'"></td>' +
+                    '<td>' + addrName + baseFlag + '</td>' +
+                    '<td>' + zipcode + '</td>' +
+                    '<td>' + addr1 + '' + addr2 + '</td>' +
+                    '<td>' + requestMemo2 + '</td>' +
+                    '<td>' + dawnFlag + '</td>' +
+                    '<td>' + greenFlag + '</td>' +
+                    '<td><input type="button" class="detail" value="수정"><input type="hidden" value="' + id + '"><input type="hidden" value="' + memIdx + '"></td></tr>'
+                )
+                tb.append(row);
+            }
+            tb.append('</tbody>');
+            $('.thead').after(tb);
+
+            $(".detail").click(function (e) {
+                $("#ajax_hidden").val($(this).next().val());
+                let id = $("#ajax_hidden").val();
+                let addrmem_idx = $(this).next().next().val();
+
+                sessionStorage.setItem("address_idx", id);
+                sessionStorage.setItem("addrmem_idx", addrmem_idx);
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/AddressEdit',
+                    datatype: 'html/text',
+                    success: function (result) {
+                        $("#content").html(result).trigger("create");
+                    }
+                })
+            })
+
+            $("#Maxprev").siblings(".page_num").remove();
+            for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                let pages = $('<li class="page_num" value="' + (i - 1) + '">').append(
+                    i + '</li>'
+                )
+                $('#prev').after(pages);
+            }
+
+            $('.page_num').click(function (e) {
+                $('.tbody').empty();
+                $('.page').val($(this).val())
+                let page = $('.page').val()
+
+                axios.get('/api/membersAddresses/list?startPage=' + page, {}).then(function (response) {
+                    let tb = $('<tbody class="tbody">');
+                    for (let i in response.data.data) {
+                        let id = response.data.data[i].idx
+                        let addrName = response.data.data[i].addrName;
+                        let baseFlag = response.data.data[i].baseFlag;
+                        let zipcode = response.data.data[i].zipcode;
+                        let memIdx = response.data.data[i].memIdx;
+                        let addr1 = response.data.data[i].addr1;
+                        let addr2 = response.data.data[i].addr2;
+                        let requestMemo2 = response.data.data[i].memEmail;
+                        let dawnFlag = response.data.data[i].dawnFlag;
+                        let greenFlag = response.data.data[i].greenFlag;
+                        let k = parseInt(i) + 2
+
+                        if (baseFlag === "TRUE") {
+                            baseFlag = " (기본 배송지) "
+                        } else {
+                            baseFlag = '';
+                        }
+
+                        if (dawnFlag === "TRUE") {
+                            dawnFlag = "Y";
+                        } else {
+                            dawnFlag = 'N';
+                        }
+
+
+                        if (greenFlag === "TRUE") {
+                            greenFlag = "Y";
+                        } else {
+                            greenFlag = 'N';
+                        }
+
+                        let row = $('<tr>').append(
+                            '<td height="80px"><input type="checkbox" id="AL_check_'+k+'" name="addr" onclick="AL_checkSelectAll()" value="' + id +'"><label for="AL_check_'+k+'"></td>' +
+                            '<td>' + addrName + baseFlag + '</td>' +
+                            '<td>' + zipcode + '</td>' +
+                            '<td>' + addr1 + '' + addr2 + '</td>' +
+                            '<td>' + requestMemo2 + '</td>' +
+                            '<td>' + dawnFlag + '</td>' +
+                            '<td>' + greenFlag + '</td>' +
+                            '<td><input type="button" class="detail" value="수정"><input type="hidden" value="' + id + '"><input type="hidden" value="' + memIdx + '"></td></tr>'
+                        )
+                        tb.append(row);
+                    }
+                    tb.append('</tbody>');
+                    $('.thead').after(tb);
+
+                    $(".detail").click(function (e) {
+                        $("#ajax_hidden").val($(this).next().val());
+                        let id = $("#ajax_hidden").val();
+                        let addrmem_idx = $(this).next().next().val();
+
+                        sessionStorage.setItem("address_idx", id);
+                        sessionStorage.setItem("addrmem_idx", addrmem_idx);
+                        $.ajax({
+                            type: 'GET',
+                            url: '/admin/AddressEdit',
+                            datatype: 'html/text',
+                            success: function (result) {
+                                $("#content").html(result).trigger("create");
+                            }
+                        })
+                    })
+
+                })
+            })
+        })
+    })
+
+    $('#schbtn').click(function () {
+        $('.tbody').empty();
+
+        let page = $('.page').val();
+        let memEmail = $('#memEmail').val();
+
+        let url = '/api/membersAddresses/list?startPage=' + page;
+
+        if (memEmail === "") {
+            url = url;
+        } else if (memEmail !== "") {
+            url = url + '&memEmail=' + memEmail;
+        }
+
+        console.log(url);
+
+        axios.get(url, {}).then(function (response) {
+            let tb = $('<tbody class="tbody">');
+            for (let i in response.data.data) {
+                let id = response.data.data[i].idx
+                let addrName = response.data.data[i].addrName;
+                let memIdx = response.data.data[i].memIdx;
+                let baseFlag = response.data.data[i].baseFlag;
+                let zipcode = response.data.data[i].zipcode;
+                let addr1 = response.data.data[i].addr1;
+                let addr2 = response.data.data[i].addr2;
+                let requestMemo2 = response.data.data[i].memEmail;
+                let dawnFlag = response.data.data[i].dawnFlag;
+                let greenFlag = response.data.data[i].greenFlag;
+                let k = parseInt(i) + 1
+
+                if (baseFlag === "TRUE") {
+                    baseFlag = " (기본 배송지) "
+                } else {
+                    baseFlag = '';
+                }
+
+                if (dawnFlag === "TRUE") {
+                    dawnFlag = "Y";
+                } else {
+                    dawnFlag = 'N';
+                }
+
+
+                if (greenFlag === "TRUE") {
+                    greenFlag = "Y";
+                } else {
+                    greenFlag = 'N';
+                }
+
+                let row = $('<tr>').append(
+                    '<td height="80px"><input type="checkbox" id="AL_check_'+k+'" name="addr" onclick="AL_checkSelectAll()" value="' + id +'"><label for="AL_check_'+k+'"></td>' +
+                    '<td>' + addrName + baseFlag + '</td>' +
+                    '<td>' + zipcode + '</td>' +
+                    '<td>' + addr1 + '' + addr2 + '</td>' +
+                    '<td>' + requestMemo2 + '</td>' +
+                    '<td>' + dawnFlag + '</td>' +
+                    '<td>' + greenFlag + '</td>' +
+                    '<td><input type="button" class="detail" value="수정"><input type="hidden" value="' + id + '"><input type="hidden" value="' + memIdx + '"></td></tr>'
+                )
+                tb.append(row);
+            }
+            tb.append('</tbody>');
+            $('.thead').after(tb);
+
+            $(".detail").click(function (e) {
+                $("#ajax_hidden").val($(this).next().val());
+                let id = $("#ajax_hidden").val();
+                let addrmem_idx = $(this).next().next().val();
+
+                sessionStorage.setItem("address_idx", id);
+                sessionStorage.setItem("addrmem_idx", addrmem_idx);
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/AddressEdit',
+                    datatype: 'html/text',
+                    success: function (result) {
+                        $("#content").html(result).trigger("create");
+                    }
+                })
+            })
+
+            $("#Maxprev").siblings(".page_num").remove();
+            for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                let pages = $('<li class="page_num" id="page_num ' + i + '" value="' + (i - 1) + '">').append(
+                    i + '</li>'
+                )
+                $('#prev').after(pages);
+            }
+
+            $('.page_num').click(function (e) {
+                $('.tbody').empty();
+
+                $('.page').val($(this).val());
+                let page = $('.page').val();
+                let memEmail = $('#memEmail').val();
+
+                let url = '/api/membersAddresses/list?startPage=' + page;
+
+                if (memEmail === "") {
+                    url = url;
+                } else if (memEmail !== "") {
+                    url = url + '&memEmail=' + memEmail;
+                }
+
+                axios.get(url, {}).then(function (response) {
+                    let tb = $('<tbody class="tbody">');
+                    for (let i in response.data.data) {
+                        let id = response.data.data[i].idx
+                        let memIdx = response.data.data[i].memIdx;
+                        let addrName = response.data.data[i].addrName;
+                        let baseFlag = response.data.data[i].baseFlag;
+                        let zipcode = response.data.data[i].zipcode;
+                        let addr1 = response.data.data[i].addr1;
+                        let addr2 = response.data.data[i].addr2;
+                        let requestMemo2 = response.data.data[i].memEmail;
+                        let dawnFlag = response.data.data[i].dawnFlag;
+                        let greenFlag = response.data.data[i].greenFlag;
+                        let k = parseInt(i) + 1
+
+                        if (baseFlag === "TRUE") {
+                            baseFlag = " (기본 배송지) "
+                        } else {
+                            baseFlag = '';
+                        }
+
+                        if (dawnFlag === "TRUE") {
+                            dawnFlag = "Y";
+                        } else {
+                            dawnFlag = 'N';
+                        }
+
+
+                        if (greenFlag === "TRUE") {
+                            greenFlag = "Y";
+                        } else {
+                            greenFlag = 'N';
+                        }
+
+
+                        let row = $('<tr>').append(
+                            '<td height="80px"><input type="checkbox" id="AL_check_'+k+'" name="addr" onclick="AL_checkSelectAll()" value="' + id +'"><label for="AL_check_'+k+'"></td>' +
+                            '<td>' + addrName + baseFlag + '</td>' +
+                            '<td>' + zipcode + '</td>' +
+                            '<td>' + addr1 + '' + addr2 + '</td>' +
+                            '<td>' + requestMemo2 + '</td>' +
+                            '<td>' + dawnFlag + '</td>' +
+                            '<td>' + greenFlag + '</td>' +
+                            '<td><input type="button" class="detail" value="수정"><input type="hidden" value="' + id + '"><input type="hidden" value="' + memIdx + '"></td></tr>'
+                        )
+                        tb.append(row);
+                    }
+                    tb.append('</tbody>');
+                    $('.thead').after(tb);
+
+                    $(".detail").click(function (e) {
+                        $("#ajax_hidden").val($(this).next().val());
+                        let id = $("#ajax_hidden").val();
+                        let addrmem_idx = $(this).next().next().val();
+
+                        sessionStorage.setItem("address_idx", id);
+                        sessionStorage.setItem("addrmem_idx", addrmem_idx);
+                        $.ajax({
+                            type: 'GET',
+                            url: '/admin/AddressEdit',
+                            datatype: 'html/text',
+                            success: function (result) {
+                                $("#content").html(result).trigger("create");
+                            }
+                        })
+                    })
+
+                    $("#Maxprev").siblings(".page_num").remove();
+                    for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                        let pages = $('<li class="page_num" id="page_num ' + i + '" value="' + (i - 1) + '">').append(
+                            i + '</li>'
+                        )
+                        $('#prev').after(pages);
+                    }
+                })
+            })
+        })
+    })
+
+    $(function () {
+        //선택삭제
+        $('#delbtn').click(function (){
+            confirm("정말 삭제하시겠습니까?")
+            let id = [];
+            ($("input:checkbox[name='addr']:checked").each(function (e){
+                id.push($(this).val())
+            }));
+            id = String(id)
+            console.log(id)
+            if(confirm){
+                axios.delete("/api/membersAddresses/deleteList/" + id,  {
+                }).then(function (){
+                    alert("주소지가 삭제되었습니다")
+                    location.reload();
+                })
+            }
+        }).catch(function (err){
+            console.log(err)
+        })
+    })
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title"><p>고객센터<span>회원 관리</span></p></div>
+<!--content_title 끝-->
+<!--UList 시작-->
+<div class="Add_List">
+    <!--AL_c1 시작-->
+    <div class="AL_c1">
+        <!--form 시작-->
+        <form name="addr_search">
+            <p class="product_title" id="AL_c1_title"><label>회원 주소지 관리</label></p>
+            <!--table 시작-->
+            <table>
+                <tr>
+                    <th width="100">아이디</th>
+                    <td>
+                        <input type="text" name="text" placeholder="검색하실 회원의 아이디를 입력하세요" id="memEmail">
+                    </td>
+                </tr>
+            </table>
+            <!--table 끝-->
+            <div class="bottom_btn">
+                <input type="button" name="button" value="조회하기" id="schbtn">
+                <p>* 회원 주소지 유포시 법적 처벌을 받을 수 있습니다.</p>
+            </div>
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--AL_c1 끝-->
+    <!--AL_c2 시작-->
+    <div class="AL_c2">
+        <!--form 시작-->
+        <form name="addr_list">
+            <div id="AL_c2_top">
+                <span>* 김성용</span>님의 등록 주소지 - 총 <span>4</span>건
+            </div>
+            <div class="AL_c2_btnBox">
+                <input type="button" value="선택삭제" id="delbtn">
+            </div>
+            <!--AL_c2_btnBox 끝-->
+            <!--table 시작-->
+            <table width="100%" class="list_table">
+                <thead class="thead">
+                <tr>
+                    <th width="5%"><input type="checkbox" id="AL_check" name="selectall"
+                                          onclick="AL_selectAll(this)"><label for="AL_check"></th>
+                    <th width="16%">배송지명</th>
+                    <th width="9%">우편번호</th>
+                    <th width="25%">주소지</th>
+                    <th width="19%">회원아이디</th>
+                    <th width="8%">새벽배송</th>
+                    <th width="8%">더그린배송</th>
+                    <th width="10%">수정</th>
+                </tr>
+                </thead>
+            </table>
+            <!--table 끝-->
+            <!-- pageBox 시작-->
+            <div class="pageBox">
+                <ul>
+                    <li id="Maxprev"><a href="#"><<</a></li>
+                    <li id="prev"><</li>
+                    <li>></li>
+                    <li id="Maxnext"><a href="#">>></a></li>
+                </ul>
+                <input type="hidden" value="0" class="page">
+                <input type="hidden" value="0" class="page_hidden">
+                <input type="hidden" id="ajax_hidden">
+            </div>
+            <!-- pageBox 끝-->
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--AL_c2 끝-->
+</div>
+<!--Add_List 끝-->
+</body>
+</html>

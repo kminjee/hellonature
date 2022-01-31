@@ -1,0 +1,363 @@
+* { margin: 0; padding: 0;}
+.width { width: 1050px; margin: 0 auto; }
+.clearfix { clear: both; }
+
+/* =========== [공통] 세부 카테고리 =========== */
+#prod_category_wrap { box-sizing: border-box; width: 1050px; margin: 0 auto; justify-content: space-between; align-items: flex-end; color: #333; }
+.prod_category_box  .prod_cate_tit { box-sizing: border-box; padding: 20px 0 0 4px;font-size: 14px; font-weight: bold; }
+.prod_category_box ul { box-sizing: border-box; padding-top: 7px; }
+.prod_category_box ul > li { box-sizing: border-box; display: inline; padding: 1em; padding: 10px 13px 7px 12px; font-size: 12px; cursor: pointer; border-bottom: 1px solid #DDD; }
+.prod_category_box ul > li:hover { box-sizing: border-box; border-bottom: 1px solid #00B081; color: #00B081; transition: .35s; }
+.prod_filter { box-sizing: border-box; font-size: 12px; }
+.prod_filter li::after { box-sizing: border-box; content: ''; display: inline-block; width: 10px; height: 10px; margin-left: 6px; background: url('../images/category/ico_arrow_right_20x20.png') center no-repeat; background-size: cover; transform: rotate(90deg); cursor: pointer; }
+.prod_cate.prod_cate_clicked { box-sizing: border-box; border-bottom: 1px solid #00B081; font-weight: bold; color: #00B081; }
+/* =========== [공통] 세부 카테고리 =========== */
+
+
+/* =========== [공통] 매거진 게시판 =========== */
+.board_wrap { box-sizing: border-box; padding-top: 40px; }
+/* 레이아웃 */
+.board_list { box-sizing: border-box; position: relative; display: inline-block; width: 500px; height: 600px; margin-bottom: 50px; border-radius: 8px; background: #fcfbfb; }
+.board_list:not(:nth-child(2), :nth-child(4), :nth-child(6), :nth-child(8), :nth-child(10), :nth-child(12)) { box-sizing: border-box; margin-right: 46px; }
+.board_list > label { box-sizing: border-box; border-radius: 8px; }
+.board_list > label { box-sizing: border-box; box-shadow: 1px 4px 5px rgba(51, 15, 15, 0.2), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1); }
+.board_list > label:hover { box-sizing: border-box; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); }
+/* 이미지 */
+.board_image { box-sizing: border-box; cursor: pointer; }
+.board_image > img { box-sizing: border-box; width: 100%; height: 500px; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+/* 제목 */
+.board_info { box-sizing: border-box; padding: 15px 10px 15px 10px; }
+.board_name { box-sizing: border-box; float: left; padding-right: 15px; font-size: 25px; font-weight: bold; }
+.board_like { box-sizing: border-box; font-size: 25px; }
+.board_text { box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 좋아요버튼 */
+.board_like_img { box-sizing: border-box; display: inline-block; width: 30px; height: 30px; background: url('../images/magazine/main/no_like.png') center no-repeat; background-size: contain; vertical-align: -5px; cursor: pointer; }
+.board_like_cnt { box-sizing: border-box; display: inline-block; vertical-align: top; }
+.likeOn { box-sizing: border-box; display: inline-block; width: 30px; height: 30px; background: url('../images/magazine/main/like.png') center no-repeat; background-size: contain; vertical-align: -5px; cursor: pointer;  }
+/* =========== [공통] 매거진 게시판 =========== */
+
+
+/* =========== [공통] 페이지네이션 =========== */
+.pagination { box-sizing: border-box; display: flex; justify-content: center; font-size: 12px; font-weight: normal; cursor: pointer; margin: 60px 0; }
+.pagination > div:hover { box-sizing: border-box; background: #DDD; }
+/* 디폴트 */
+.page_num, .page_first, .page_prev, .page_next, .page_last { box-sizing: border-box; padding: 10px 17.5px; border-left: 1px solid #DDD; border-top: 1px solid #DDD; border-bottom: 1px solid #DDD; text-align: center; }
+.page_last { box-sizing: border-box; border-right: 1px solid #DDD; }
+.page_first img, .page_prev img, .page_next img, .page_last img { position: relative; top: 50%; transform: translateY(-50%); }
+/* 클릭시 효과 */
+.clicked { box-sizing: border-box; font-size: 12px; color: #0db081; font-weight: bolder; background: #DDD; cursor: pointer; }
+/* =========== [공통] 페이지네이션 =========== */
+
+
+/* =========== [공통] 매거진 상세페이지 =========== */
+/* 타이틀 */
+.mg_cont_tit { box-sizing: border-box; padding: 55px 0 66px 0; text-align: center; font-size: 30px; font-weight: bold; }
+/* 매거진 카테고리별 상세페이지 2번째 문단 이미지&글 레이아웃 공통 */
+.inner_layout01, .inner_layout02 { box-sizing: border-box; float: left; width: 500px; }
+.inner_layout01 { box-sizing: border-box; margin-right: 50px; }
+/* 목록버튼 */
+.board_page_btn { box-sizing: border-box; display: flex; justify-content: flex-end; margin-top: 100px; padding: 30px 0 50px 0; }
+.board_page_btn > input[type="button"] { box-sizing: border-box; width: 150px; height: 41px; font-size: 13px; background: #155c65; color: #FFF; border: none; cursor: pointer; }
+/*글 좋아요 스타일  */
+.cont_like_img { box-sizing: border-box; width: 43px; height: 43px; margin: 0 auto; background: url('../images/magazine/main/no_like.png') center no-repeat; background-size: contain; cursor: pointer; }
+/* 버튼 누른 뒤 스타일 */
+.cont_likeOn { box-sizing: border-box; width: 43px; height: 43px; margin: 0 auto; background: url('../images/magazine/main/like.png') center no-repeat; background-size: contain; cursor: pointer; transition: .1s; animation: animate .25s steps(28); }
+/* 좋아요 버튼 (애니메이션) */
+@keyframes animate {
+    5% { transform: scale(0.2); }
+    100% { transform: scale(1.3); }
+}
+.cont_like { box-sizing: border-box; margin-top: 65px; padding: 80px 0; border-top: 2px solid #DEDEDE; border-bottom: 1px solid #DEDEDE; }
+.cont_like > p { box-sizing: border-box; text-align: center; }
+.cont_like > p { box-sizing: border-box; font-size: 20px; font-weight: bold; }
+.cont_like > p:nth-child(3) { box-sizing: border-box; padding: 10px 0; font-size: 25px; }
+.cont_like > p:nth-child(4) { box-sizing: border-box; font-weight: normal; }
+/* 관련상품 */
+.content_item > p { box-sizing: border-box; padding: 80px 0 20px 0; font-size: 20px; }
+.cont_item_wrap { box-sizing: border-box; position: relative; width: 1050px; margin: 0 auto; height: 400px; overflow: hidden; }
+.cont_item_box { box-sizing: border-box; position: absolute; top: 0; left: 0; transition: left 0.5s ease-out; }
+.cont_item img { box-sizing: border-box; width: 250px; height: 250px; border-radius: 8px; }
+.cont_item { box-sizing: border-box; display: inline-block; }
+.cont_item:not(:last-child) { box-sizing: border-box; float: left; margin-right: 16.7px; }
+.cont_item_controls { box-sizing: border-box; position: relative; z-index: 1; }
+.cont_item_btn_prev { box-sizing: border-box; position: absolute; top: 100px; right: calc(97%); cursor: pointer; }
+.cont_item_btn_next { box-sizing: border-box; position: absolute; top: 100px; left: calc(97%); cursor: pointer; }
+/* 관련상품 - 아이콘 */
+.cont_item_ico { box-sizing: border-box; display: inline; position: absolute; margin: 5px;}
+.cont_item_ico > span { box-sizing: border-box; border-radius: 5px; font-size: 14.5px; font-weight: bold; letter-spacing: -0.5px; padding: 0 5px; }
+.cont_item_dc { box-sizing: border-box; background-color: #f05c4f; color: #fff; }
+.cont_item_new, .cont_item_best { box-sizing: border-box; background-color: #fbe380; color: #155c65; }
+/* 관련상품 - 아이템 인포 */
+.cont_item_info { box-sizing: border-box; margin-top: 17px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+/* 할인 없는 상품 할인표시 감추기 */
+.cont_item:first-child .cont_item_dc { box-sizing: border-box; display: none; }
+.cont_item:first-child .cont_item_sale { box-sizing: border-box; display: none; }
+/* 관련상품 - 상품 인포 */
+.cont_item_title { box-sizing: border-box; display: flex; justify-content: start; width: 250px; }
+.cont_item_title > a { box-sizing: border-box; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cont_item_title > a:hover { box-sizing: border-box; text-decoration: underline; }
+.cont_item_title span { box-sizing: border-box; font-size: 16px; white-space: nowrap; }
+.cont_item_brand { box-sizing: border-box; padding-right: 5px; }
+.cont_item_name { box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; }
+.cont_item_price { box-sizing: border-box; font-size: 22px; font-weight: bold; }
+.cont_item_sale { box-sizing: border-box; padding-left: 5px; font-size: 10px; text-decoration: line-through; color: #AAA; }
+/* 장바구니 버튼 위치조정 및 스타일 */
+.cont_item_basket { box-sizing: border-box; display: flex; justify-content: space-between; width: 250px; }
+.cont_item_cart > button { box-sizing: border-box; width: 36px; height: 28px; border-radius: 12px; background: #e8f6f3; color: transparent; outline: none; overflow: hidden; border: none; margin-top: 7px; }
+.cont_item_cart > button > img { box-sizing: border-box; width: 20px; height: 20px; }
+/* =========== [공통] 매거진 상세페이지 =========== */
+
+
+/* =========== User_magazine.html =========== */
+/* 매거진 세부 카테고리 & 매거진 컨텐츠 박스 사이 간격 (모든 페이지 적용) */
+#magazine_content { box-sizing: border-box; padding-top: 40px; color: #333;}
+/* 배너 */
+.banner02 > img { box-sizing: border-box; padding-top: 80px; }
+/* 미리보기 타이틀 */
+.recipe_preview { padding-top: 40px; }
+.recipe_preview > p { box-sizing: border-box; padding: 0 0 10px 0; font-size: 20px; letter-spacing: -.5px; color: #145d65; }
+.adventure_preview > p { box-sizing: border-box; padding: 80px 0 10px 0; font-size: 20px; letter-spacing: -.5px; color: #145d65; }
+.lifestyle_preview > p { box-sizing: border-box; padding: 80px 0 10px 0; font-size: 20px; letter-spacing: -.5px; color: #145d65; }
+.kitchenguide_preview > p { box-sizing: border-box; padding: 80px 0 10px 0; font-size: 20px; letter-spacing: -.5px; color: #145d65; }
+/* 미리보기 슬라이드 스타일 */
+.preview_wrap { box-sizing: border-box; position: relative; width: 1050px; margin: 0 auto; height: 420px; overflow: hidden; }
+.preview_box { box-sizing: border-box; position: absolute; top: 0; left: 0; transition: left 0.5s ease-out; }
+.preview img { box-sizing: border-box; width: 330px; height: 330px; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+.preview { box-sizing: border-box; display: inline-block; border-radius: 8px; box-shadow: 0 5px 15px -6px #aaa; }
+.preview:not(:last-child) { box-sizing: border-box; float: left; margin-right: 30px; }
+.preview > a { cursor: pointer; }
+/* 미리보기 슬라이드 버튼 */
+.preview_controls { box-sizing: border-box; position: relative; z-index: 1; }
+.preview_btn_prev { box-sizing: border-box; position: absolute; top: 140px; right: calc(97%); cursor: pointer; }
+.preview_btn_next { box-sizing: border-box; position: absolute; top: 140px; left: calc(97%); cursor: pointer; }
+/* 미리보기 아이템 인포 */
+.preview_info { box-sizing: border-box; width: 330px; padding: 15px 10px; }
+.preview_title { box-sizing: border-box; font-size: 20px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.preview_text { box-sizing: border-box; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* =========== User_magazine.html =========== */
+
+
+/* =========== User_recipe_main.html =========== */
+/* 난이도, 요리시간 */
+.rec_mod { box-sizing: border-box; position: absolute; left: 82%; }
+.rec_time, .rec_grade { box-sizing: border-box; width: 80px; height: 80px; margin-top: 10px; border-radius: 50%; text-align: center; background: rgba(255, 255, 255, 0.85); }
+.rec_time > span, .rec_grade > span { box-sizing: border-box; display: block; }
+.rec_time_img > img, .rec_grade_img > img { box-sizing: border-box; width: 31px; padding-top: 12px; }
+/* =========== User_recipe_main.html =========== */
+
+
+/* =========== User_recipe_content.html =========== */
+/* 만드는법, 재료담기, 관련담기 타이틀 */
+.recipe_product > p, .recipe_cooking > p, .recipe_item > p, .recipe_another > p { box-sizing: border-box; font-size: 25px; font-weight: bold; text-align: center; padding: 60px 0 30px 0; }
+.rec_cont_info > table { box-sizing: border-box; border-top: 1px solid #0db081; font-size: 12px; }
+.rec_cont_info > table td  { box-sizing: border-box; border-bottom: 1px solid #d8d8d8; padding: 20px; }
+.rec_cont_info > table td:first-child { box-sizing: border-box; width: 150px; font-weight: 500; background: #f0f0f0; }
+/* 레시피 이름 */
+.rec_cont_title { box-sizing: border-box; padding: 150px 0 70px 0; text-align: center; }
+.rec_cont_title > p:first-child { box-sizing: border-box; padding-bottom: 20px; font-family: 'netmarbleM'; font-size: 50px; font-weight: bolder; color: #155c65; }
+.rec_cont_title > p:last-child { box-sizing: border-box; color: #666; font-size: 34px; }
+/* 레시피 재료 */
+.rec_cont_img { box-sizing: border-box; float: left; width: 500px; height: 500px; margin-right: 50px; }
+.rec_cont_img > img { box-sizing: border-box; width: 500px; height: 500px; }
+.rec_inner_require { box-sizing: border-box; width: 500px; font-size: 12px; }
+.rec_inner_require tr:first-child { box-sizing: border-box; font-size: 20px; font-weight: bolder; }
+.rec_inner_require td { box-sizing: border-box; padding-bottom: 15px; }
+.rec_inner_require td:first-child { box-sizing: border-box; text-align: start; }
+.rec_inner_require td:first-child > span { box-sizing: border-box; font-size: 12px; color: #AAA; }
+.rec_inner_require td:last-child { box-sizing: border-box; text-align: end; }
+/* 시간, 난이도, 칼로리, 좋아요 */
+.rec_cont_spec { box-sizing: border-box; display: flex; justify-content: space-around; padding-top: 55px; text-align: center; font-size: 15px; }
+.rec_spec_item { box-sizing: border-box; width: 120px; height: 120px; padding-top: 25px; border-radius: 50%; background: #f0f0f0; }
+.rec_spec_item:last-child { box-sizing: border-box; background: #fbe380; }
+.rec_spec_item > span { box-sizing: border-box; display: block; }
+.rec_spec_txt, .rec_cont_like_cnt { box-sizing: border-box; font-size: 18px; padding-top: 7px; }
+/* 시간, 난이도, 칼로리, 좋아요 이미지 */
+.spec_time_img { box-sizing: border-box; width: 36px; height: 36px; margin: 0 auto; background: url('../images/magazine/main/time.png') center no-repeat; background-size: contain; }
+.spec_grade_img { box-sizing: border-box; width: 36px; height: 36px; margin: 0 auto; background: url('../images/magazine/main/grade.png') center no-repeat; background-size: contain; }
+.spec_kcal_img { box-sizing: border-box; width: 36px; height: 36px; margin: 0 auto; background: url('../images/magazine/main/kcal.png') center no-repeat; background-size: contain; }
+.spec_like_img { box-sizing: border-box; width: 36px; height: 36px; margin: 0 auto; background: url('../images/magazine/main/no_like.png') center no-repeat; background-size: contain; cursor: pointer; }
+.spec_like_clicked { box-sizing: border-box; width: 36px; height: 36px; margin: 0 auto; background: url('../images/magazine/main/like.png') center no-repeat; background-size: contain; cursor: pointer; transition: .1s; animation: animate .25s steps(28); }
+/* 좋아요 버튼 (애니메이션) */
+@keyframes animate {
+    5% {
+        transform: scale(0.2);
+    }
+    100% {
+        transform: scale(1.3);
+    }
+}
+/* 만드는법 슬라이드 */
+.recipe_cooking { box-sizing: border-box; margin: 100px 0 60px 0; background: #f2f2f2; }
+.rec_cook_wrap { box-sizing: border-box; position: relative; width: 1050px; margin: 0 auto; height: 550px; overflow: hidden; }
+.rec_cook_box { box-sizing: border-box; position: absolute; top: 0; left: 0; transition: left 0.5s ease-out; }
+/* 만드는법 이미지 */
+.rec_cook img { box-sizing: border-box; width: 510px; height: 390px; border-radius: 8px; border: 2px dotted #FFF; }
+.rec_cook { box-sizing: border-box; display: inline-block; }
+.rec_cook { box-sizing: border-box; float: left; margin-right: 30px; border-radius: 8px; }
+/* 만드는법 버튼 */
+.rec_cook_controls { box-sizing: border-box; position: relative; z-index: 1; }
+.rec_cook_btn_prev { box-sizing: border-box; position: absolute; top: 165px; right: calc(97%); cursor: pointer; }
+.rec_cook_btn_next { box-sizing: border-box; position: absolute; top: 165px; left: calc(97%); cursor: pointer; }
+/* 만드는법 버튼 숨김처리 */
+.disabled { box-sizing: border-box; display: none; }
+/* 만드는법 설명 */
+.rec_cook_step { box-sizing: border-box; position: absolute; margin: 10px; }
+.rec_cook_step:first-child { box-sizing: border-box; width: 65px; height: 65px; padding-top: 11px; border-radius: 8px; text-align: center; background: #EE5857; }
+.rec_cook_step:first-child > span { box-sizing: border-box; display: block; font-family: 'NanumSquareRound'; font-size: 12px; letter-spacing: 1px; color: #FFF; }
+.rec_cook_step:first-child > span:last-child { box-sizing: border-box; font-size: 30px; font-weight: bolder; letter-spacing: -1.2px; position: relative; }
+
+.rec_cook_txt { box-sizing: border-box; width: 510px; padding: 10px 30px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; text-align: center; font-weight: normal; }
+/* 재료담기 */
+.rec_prod_wrap { box-sizing: border-box; position: relative; width: 1050px; margin: 0 auto; height: 400px; overflow: hidden; }
+.rec_prod_box { box-sizing: border-box; position: absolute; top: 0; left: 0; transition: left 0.5s ease-out; }
+.rec_prod img { box-sizing: border-box; width: 250px; height: 250px; border-radius: 8px; }
+.rec_prod { box-sizing: border-box; display: inline-block; }
+.rec_prod:not(:last-child) { box-sizing: border-box; float: left; margin-right: 16.7px; }
+.rec_prod_controls { box-sizing: border-box; position: relative; z-index: 1; }
+.rec_prod_btn_prev { box-sizing: border-box; position: absolute; top: 100px; right: calc(97%); cursor: pointer; }
+.rec_prod_btn_next { box-sizing: border-box; position: absolute; top: 100px; left: calc(97%); cursor: pointer; }
+/* 재료담기 - 아이콘 */
+.rec_prod_ico { box-sizing: border-box; display: inline; position: absolute; margin: 5px;}
+.rec_prod_ico > span { box-sizing: border-box; border-radius: 5px; font-size: 14.5px; font-weight: bold; letter-spacing: -0.5px; padding: 0 5px; }
+.rec_prod_dc { box-sizing: border-box; background-color: #f05c4f; color: #fff; }
+.rec_prod_new, .rec_prod_best { box-sizing: border-box; background-color: #fbe380; color: #155c65; }
+/* 재료담기 - 아이템 인포 */
+.rec_prod_info { box-sizing: border-box; margin-top: 17px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;  }
+/* 브랜드 없는 상품 브랜드명 감추기 */
+.rec_prod:first-child .rec_prod_brand { box-sizing: border-box; display: none; }
+.rec_prod:nth-child(3) .rec_prod_brand { box-sizing: border-box; display: none; }
+.rec_prod:nth-child(5) .rec_prod_brand { box-sizing: border-box; display: none; }
+/* 상품 인포 */
+.rec_prod_title { box-sizing: border-box; display: flex; justify-content: start; width: 250px; }
+.rec_prod_title > a { box-sizing: border-box; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rec_prod_title > a:hover { box-sizing: border-box; text-decoration: underline; }
+.rec_prod_title span { box-sizing: border-box; font-size: 16px; white-space: nowrap; }
+.rec_prod_brand { box-sizing: border-box; padding-right: 5px; }
+.rec_prod_name { box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; }
+.rec_prod_price { box-sizing: border-box; font-size: 22px; font-weight: bold; }
+/* 장바구니 버튼 위치조정 및 스타일 */
+.rec_prod_basket { box-sizing: border-box; display: flex; justify-content: space-between; width: 250px; }
+.rec_prod_cart > button { width: 36px; height: 28px; border-radius: 12px; background: #e8f6f3; color: transparent; outline: none; overflow: hidden; border: none; margin-top: 7px; }
+.rec_prod_cart > button > img { box-sizing: border-box; width: 20px; height: 20px; }
+/* 관련상품 */
+.rec_item_wrap { box-sizing: border-box; position: relative; width: 1050px; margin: 0 auto; height: 400px; overflow: hidden; }
+.rec_item_box { box-sizing: border-box; position: absolute; top: 0; left: 0; transition: left 0.5s ease-out; }
+.rec_item img { box-sizing: border-box; width: 250px; height: 250px; border-radius: 8px; }
+.rec_item { box-sizing: border-box; display: inline-block; }
+.rec_item:not(:last-child) { box-sizing: border-box; float: left; margin-right: 16.7px; }
+.rec_item_controls { box-sizing: border-box; position: relative; z-index: 1; }
+.rec_item_btn_prev { box-sizing: border-box; position: absolute; top: 100px; right: calc(97%); cursor: pointer; }
+.rec_item_btn_next { box-sizing: border-box; position: absolute; top: 100px; left: calc(97%); cursor: pointer; }
+/* 관련상품 - 아이콘 */
+.rec_item_ico { box-sizing: border-box; display: inline; position: absolute; margin: 5px;}
+.rec_item_ico > span { box-sizing: border-box; border-radius: 5px; font-size: 14.5px; font-weight: bold; letter-spacing: -0.5px; padding: 0 5px; }
+.rec_item_dc { box-sizing: border-box; background-color: #f05c4f; color: #fff; }
+.rec_item_new, .rec_item_best { box-sizing: border-box; background-color: #fbe380; color: #155c65; }
+/* 관련상품 - 아이템 인포 */
+.rec_item_info { box-sizing: border-box; margin-top: 17px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+/* 할인 없는 상품 할인표시 감추기 */
+.rec_item:first-child .rec_item_dc { box-sizing: border-box; display: none; }
+.rec_item:first-child .rec_item_sale { box-sizing: border-box; display: none; }
+/* 관련상품 - 상품 인포 */
+.rec_item_title { box-sizing: border-box; display: flex; justify-content: start; width: 250px; }
+.rec_item_title > a { box-sizing: border-box; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rec_item_title > a:hover { box-sizing: border-box; text-decoration: underline; }
+.rec_item_title span { box-sizing: border-box; font-size: 16px; white-space: nowrap; }
+.rec_item_brand { box-sizing: border-box; padding-right: 5px; }
+.rec_item_name { box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; }
+.rec_item_price { box-sizing: border-box; font-size: 22px; font-weight: bold; }
+.rec_item_sale { box-sizing: border-box; padding-left: 5px; font-size: 10px; text-decoration: line-through; color: #AAA; }
+/* 장바구니 버튼 위치조정 및 스타일 */
+.rec_item_basket { box-sizing: border-box; display: flex; justify-content: space-between; width: 250px; }
+.rec_item_cart > button { width: 36px; height: 28px; border-radius: 12px; background: #e8f6f3; color: transparent; outline: none; overflow: hidden; border: none; margin-top: 7px; }
+.rec_item_cart > button > img { box-sizing: border-box; width: 20px; height: 20px; }
+/* 비슷한 레시피 슬라이드 스타일 */
+.rec_ano_wrap { box-sizing: border-box; position: relative; width: 1050px; margin: 0 auto; height: 340px; overflow: hidden; }
+.rec_ano_box { box-sizing: border-box; position: absolute; top: 0; left: 0; transition: left 0.5s ease-out; }
+.rec_ano img { box-sizing: border-box; width: 340px; height: 340px; border-radius: 8px; }
+.rec_ano { box-sizing: border-box; display: inline-block; border-radius: 8px; }
+.rec_ano:not(:last-child) { box-sizing: border-box; float: left; margin-right: 15px; }
+/* 비슷한 레시피 슬라이드 버튼 */
+.rec_ano_controls { box-sizing: border-box; osition: relative; z-index: 1; }
+.rec_ano_btn_prev { box-sizing: border-box; position: absolute; top: 140px; right: calc(97%); cursor: pointer; }
+.rec_ano_btn_next { box-sizing: border-box; position: absolute; top: 140px; left: calc(97%); cursor: pointer; }
+/* 비슷한 레시피 인포 */
+.rec_ano_info {  box-sizing: border-box; position: absolute; bottom: 0; width: 340px; padding: 15px; background: rgba(0, 0, 0, 0.4); }
+.rec_ano_title { box-sizing: border-box; font-size: 20px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rec_ano_text { box-sizing: border-box; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rec_ano_info { box-sizing: border-box; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px; }
+.rec_ano_info > p { box-sizing: border-box; color: #FFF; }
+.rec_ano_info > p > span { box-sizing: border-box; color: #FFF; }
+.rec_ano_grade::after { box-sizing: border-box; content: "|"; margin-left: 5px;}
+.rec_ano_grade > img { box-sizing: border-box; width: 16px; height: 16px; }
+.rec_ano_time { box-sizing: border-box; padding-right: 5px; }
+/* =========== User_recipe_content.html =========== */
+
+
+/* =========== User_adventure_content.html =========== */
+/* html BOX */
+.adv_cont_html { box-sizing: border-box; margin-bottom: 80px; }
+.adv_cont_html > img { box-sizing: border-box; width :100%; height: 500px; }
+.adv_cont_html p { box-sizing: border-box; width: 100%; padding: 15px 10px; }
+/* 첫번째 문단 이미지&글 */
+.adv_cont_html01 { box-sizing: border-box; width: 100%; }
+.adv_cont_html01 > img { box-sizing: border-box; height: 550px; }
+.adv_cont_html01 > p > span { box-sizing: border-box; font-size: 25px; font-weight: bolder;}
+.adv_cont_html01 > p > span > span { box-sizing: border-box; color: #0db081; }
+/* 세번째 문단 이미지&글 */
+.adv_cont_html06 { box-sizing: border-box; clear: both; }
+.adv_cont_html06 > img { box-sizing: border-box; height: 550px; }
+/* 4번째 문단 이미지&글 */
+.adv_two_column_layout { box-sizing: border-box; display: flex; justify-content: space-between; }
+.adv_cont_html07 { box-sizing: border-box; margin-right: 50px; }
+.adv_cont_html07 > p > span { box-sizing: border-box; font-size: 25px; font-weight: bold; }
+.adv_cont_html07, .adv_cont_html08 { box-sizing: border-box; margin-bottom: 0; }
+/* html BOX 와 관련상품 사이 간격 */
+#adv_cont_wrap { padding-top: 100px; }
+/* =========== User_adventure_content.html =========== */
+
+
+/* =========== User_lifestyle_content.html =========== */
+/* html BOX */
+.life_cont_html { box-sizing: border-box; margin-bottom: 80px; }
+.life_cont_html > img { box-sizing: border-box; width :100%; height: 500px; }
+.life_cont_html p { box-sizing: border-box; width: 100%; padding: 15px 10px; }
+/* 첫번째 문단 이미지&글 */
+.life_cont_html01 { box-sizing: border-box; width: 100%; }
+.life_cont_html01 > img { box-sizing: border-box; height: 550px; }
+.life_cont_html01 > p > span { box-sizing: border-box; font-size: 25px; font-weight: bolder;}
+.life_cont_html01 > p > span > span { box-sizing: border-box; color: #0db081; }
+/* 세번째 문단 이미지&글 */
+.life_cont_html06 { box-sizing: border-box; clear: both; }
+.life_cont_html06 > img { box-sizing: border-box; height: 550px; }
+/* 4번째 문단 이미지&글 */
+.life_two_column_layout { box-sizing: border-box; display: flex; justify-content: space-between; }
+.life_cont_html07 { box-sizing: border-box; margin-right: 50px; }
+.life_cont_html07 > p > span { box-sizing: border-box; font-size: 25px; font-weight: bold; }
+.life_cont_html07, .life_cont_html08 { box-sizing: border-box; margin-bottom: 0; }
+/* html BOX 와 관련상품 사이 간격 */
+#life_cont_wrap { padding-top: 100px; }
+/* =========== User_lifestyle_content.html =========== */
+
+
+/* =========== User_kitchen_content.html =========== */
+/* html BOX */
+.kit_cont_html { box-sizing: border-box; margin-bottom: 80px; }
+.kit_cont_html > img { box-sizing: border-box; width :100%; height: 500px; }
+.kit_cont_html p { box-sizing: border-box; width: 100%; padding: 15px 10px; }
+/* 첫번째 문단 이미지&글 */
+.kit_cont_html01 { box-sizing: border-box; width: 100%; }
+.kit_cont_html01 > img { box-sizing: border-box; height: 550px; }
+.kit_cont_html01 > p > span { box-sizing: border-box; font-size: 25px; font-weight: bolder;}
+.kit_cont_html01 > p > span > span { box-sizing: border-box; color: #0db081; }
+/* 세번째 문단 이미지&글 */
+.kit_cont_html06 { box-sizing: border-box; clear: both; }
+.kit_cont_html06 > img { box-sizing: border-box; height: 550px; }
+/* 4번째 문단 이미지&글 */
+.kit_two_column_layout { box-sizing: border-box; display: flex; justify-content: space-between; }
+.kit_cont_html07 { box-sizing: border-box; margin-right: 50px; }
+.kit_cont_html07 > p > span { box-sizing: border-box; font-size: 25px; font-weight: bold; }
+.kit_cont_html07, .kit_cont_html08 { box-sizing: border-box; margin-bottom: 0; }
+/* html BOX 와 관련상품 사이 간격 */
+#kit_cont_wrap { padding-top: 100px; }
+/* =========== User_kitchen_content.html =========== */

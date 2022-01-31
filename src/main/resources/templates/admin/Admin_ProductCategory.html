@@ -1,0 +1,383 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>전체 상품 관리 | 상품 카테고리 관리</title>
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous">
+    </script>
+    <script src="/admin/js/popup.js"></script>
+    <script src="/admin/js/Admin.imeage.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(function (){
+            axios.get("/api/category/list/first?lifeFlag=FALSE", {}).then(function (response) {
+                        for(let i in response.data.data){
+                            let $id = response.data.data[i].idx;
+                            let $name = response.data.data[i].name;
+                            let row = $('<li class="cate" value='+$id+'>').append(
+                                $name + '</li>'
+                            )
+                            console.log(row)
+                            $('.Pcate_ulbox').append(row)
+                        }
+                         $('.Pcate_ulbox > li').click(function (e){
+                             $(this).addClass("strong")
+                             $(".Pcate_ulbox > li").not($(this)).removeClass("strong")
+                             $(".Pcate_ulbox_2").empty();
+                             $("#select_cate_1").val($(this).text());
+                             $("#select_cate").val($(this).text());
+                             $("#Pcate_cateval_1").val($(this).val());
+
+                             console.log($(this).val())
+                             axios.get("/api/category/list/second/?idx=" + $(this).val() +"&lifeFlag=FALSE", {}).then(function (response){
+                                 for(let i in response.data.data){
+                                     console.log(response)
+                                     let $id = response.data.data[i].idx;
+                                     let $name = response.data.data[i].name;
+                                     let $rootIdx = response.data.data[i].rootIdx;
+
+                                     let row = $('<li class="cate" value='+$id+'>').append(
+                                        '<input type="hidden" value='+$rootIdx+'>'+ $name + '</li>'
+                                     )
+                                     console.log(row)
+                                     $('.Pcate_ulbox_2').append(row)
+                                 }
+                                 $(".Pcate_ulbox_2 > li").click(function (e){
+                                     $("#select_cate_2").val($(this).text());
+                                     $(this).addClass("strong")
+                                     $(".Pcate_ulbox_2 > li").not($(this)).removeClass("strong")
+                                     $("#Pcate_cateval_2").val($(this).val());
+                                     $("#Pcate_rootidx_val").val($(this).children("input").val());
+                                 })
+                             })
+                         })
+            }).catch(function (err){
+                console.log(err)
+            })
+        })
+
+        function sendit() {
+            let id = $("#Pcate_cateval_2").val();
+            axios.get('/api/categry/banner/' + id), {
+                data:{
+                    img: "모르겠어요"
+                }
+            }
+        }
+
+
+        function modal_regist_prod_1(){
+            let name = $("#PC_cateregist").val()
+            if(name !="") {
+                axios.post("/api/category/create", {
+                    data: {
+                        name: name,
+                        lifeFlag: 0
+                    }
+                }).then(function () {
+                    alert("1차 카테고리 등록이 완료되었습니다")
+                    $.ajax({
+                        type:"GET",
+                        url : "/admin/productcate",
+                        datatype : "html/text",
+                        success: function(result){
+                            $("#content").html(result).trigger("create");
+                        }
+                    });
+                })
+            }else{
+                alert("카테고리명을 입력해주세요")
+            }
+        }
+
+        function modal_edit_prod_1(){
+            let id = $("#Pcate_cateval_1").val()
+            let name = $("#edit_text").val()
+
+            axios.put("/api/category/update", {
+                data:{
+                    idx: id,
+                    name:name,
+                    lifeFlag:0
+                }
+            }).then(function (){
+                alert("1차 카테고리가 수정됐습니다")
+                $.ajax({
+                    type:"GET",
+                    url : "/admin/productcate",
+                    datatype : "html/text",
+                    success: function(result){
+                        $("#content").html(result).trigger("create");
+                    }
+                });
+            })
+        }
+
+        function modal_regist_prod_2(){
+            let rootIdx = $("#Pcate_cateval_1").val()
+            let name = $("#PC_cateregist_2").val()
+            console.log(rootIdx)
+            if(rootIdx != "") {
+                if(name !="") {
+                    axios.post("/api/category/create", {
+                        data: {
+                            rootIdx: rootIdx,
+                            name: name,
+                            lifeFlag: 0
+                        }
+                    }).then(function () {
+                        alert("2차 카테고리 등록이 완료되었습니다")
+                        $.ajax({
+                            type:"GET",
+                            url : "/admin/productcate",
+                            datatype : "html/text",
+                            success: function(result){
+                                $("#content").html(result).trigger("create");
+                            }
+                        });
+                    })
+                }else{
+                    alert("카테고리명을 입력해주세요")
+                }
+            }else{
+                alert("추가 할 1차 카테고리를 선택해주세요")
+            }
+        }
+
+        function modal_edit_prod_2(){
+            let id =$("#Pcate_cateval_2").val()
+            let name = $("#edit_text_2").val()
+            let rootIdx = $("#Pcate_rootidx_val").val()
+            console.log(rootIdx)
+
+            if(id!=""){
+                axios.put("/api/category/update", {
+                    data:{
+                        idx: id,
+                        name: name,
+                        lifeFlag: 0,
+                        rootIdx: rootIdx
+                    }
+                }).then(function (){
+                    alert("2차카테고리가 수정되었습니다")
+                    $.ajax({
+                        type:"GET",
+                        url : "/admin/productcate",
+                        datatype : "html/text",
+                        success: function(result){
+                            $("#content").html(result).trigger("create");
+                        }
+                    });
+                })
+            }else{
+                alert("2차 카테고리를 선택해주세요")
+            }
+        }
+
+        $(function (){
+            $("#Prod_cate_delbtn").click(function (){
+                let id = $("#Pcate_cateval_1").val()
+                axios.delete("/api/category/delete/"+id,{}).then(function (){
+                alert("1차 카테고리 삭제에 성공했습니다")})
+                $.ajax({
+                    type:"GET",
+                    url : "/admin/productcate",
+                    datatype : "html/text",
+                    success: function(result){
+                        $("#content").html(result).trigger("create");
+                    }
+                });
+            })
+        })
+
+        $(function (){
+            $("#Prod_cate_delbtn_2").click(function (){
+                let id = $("#Pcate_cateval_2").val()
+                axios.delete("/api/category/delete/"+id,{}).then(function (){
+                    alert("2차 카테고리 삭제에 성공했습니다")})
+                $.ajax({
+                    type:"GET",
+                    url : "/admin/productcate",
+                    datatype : "html/text",
+                    success: function(result){
+                        $("#content").html(result).trigger("create");
+                    }
+                });
+            })
+        })
+    </script>
+</head>
+<body>
+<!--content_title 시작-->
+<div class="content_title"><p>전체 상품 관리<span>상품 카테고리 관리</span></p></div>
+<!--content_title 끝-->
+<!--PCategory 시작-->
+<div class="PCategory">
+    <!--PCategory 끝-->
+    <!--Pcate_c1 시작-->
+    <div class="Pcate_c1">
+        <div class="Pcate_c1_box">
+            <div class="Pcate_c1_title"><p>카테고리</p></div>
+            <form class="Pcate_c1_cateBox_1">
+                <ul class="Pcate_ulbox">
+                </ul>
+                <div class="Pcate_c1_btnBox">
+                    <input type="button" value="등록" name="submit" onclick="modal_open()">
+                    <input type="button" value="수정" name="edit" onclick="modal_open_2()">
+                    <input type="button" value="삭제" onclick="" name="delete" id="Prod_cate_delbtn">
+                </div>
+            </form>
+            <!-- 등록 팝업창 부분 시작 -->
+            <div id="mw_temp" class="mw_s">
+                <div class="bg_s"><!--이란에는 내용을 넣지 마십시오.--></div>
+                <div class="fg_s">
+                    <div id="modal_title" class="modal_greentitle">
+                        <p>1차 카테고리 추가<span><img src='./img/close2.png' onclick="modal_close()" class="modal_closeBtn"></span></p>
+                    </div>
+                    <div class="Modal">
+                        <div class="modal_cateBox_s" method="" action="#" id="modal_form">
+                            <div class="modal_search_s">
+                                <p><span>카테고리 명</span>
+                                    <input type="text" style="width: 200px; margin-left: 21px;" id="PC_cateregist"></p>
+                            </div>
+                            <div class="modal_btn">
+                                <input type="button" value="닫기" onclick="modal_close()">
+                                <input type="button" value="등록" onclick="modal_regist_prod_1()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--등록 팝업창 부분 끝 -->
+            <!--수정 팝업창 부분 시작 -->
+            <div id="mw_temp_t" class="mw_t">
+                <div class="bg_t"><!--이란에는 내용을 넣지 마십시오.--></div>
+                <div class="fg_t">
+                    <div id="modal_title1" class="modal_greentitle">
+                        <p>1차 카테고리 수정<span><img src='./img/close2.png' onclick="modal_close_2()" class="modal_closeBtn"></span></p>
+                    </div>
+                    <div class="Modal">
+                        <form class="modal_cateBox_t" method="" action="#" id="modal_form1">
+                            <div class="modal_search_t">
+                                <p class="sel_catename"><span>선택 카테고리명 :</span>
+                                    <input type="text" style="width: 200px; margin-left: 21px;" id="select_cate" readonly></p>
+                                <p><span>수정 카테고리명 :</span>
+                                    <input type="text" style="width: 200px; margin-left: 21px;" id="edit_text"></p>
+                            </div>
+                            <div class="modal_btn">
+                                <input type="button" value="닫기" onclick="modal_close_2()">
+                                <input type="button" value="수정" onclick="modal_edit_prod_1()">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--수정 팝업창 부분 끝 -->
+            <form class="Pcate_c1_cateBox_1">
+                <ul class="Pcate_ulbox_2">
+                </ul>
+                <div class="Pcate_c1_btnBox">
+                    <input type="button" value="등록" name="submit" onclick="modal_open_3()">
+                    <input type="button" value="수정" name="edit" onclick="modal_open_4()">
+                    <input type="button" value="삭제" onclick="" name="delete" id="Prod_cate_delbtn_2">
+                </div>
+            </form>
+            <!--등록 팝업창 부분 시작 -->
+            <div id="mw_temp_k" class="mw_s">
+                <div class="bg_s"><!--이란에는 내용을 넣지 마십시오.--></div>
+                <div class="fg_s">
+                    <div id="modal_title_k" class="modal_greentitle">
+                        <p>2차 카테고리 추가<span><img src='./img/close2.png' onclick="modal_close_3()" class="modal_closeBtn"></span></p>
+                    </div>
+                    <div class="Modal">
+                        <div class="modal_cateBox_s" method="" action="#" id="modal_form_k">
+                            <div class="modal_search_s">
+                                <p class="sel_catename"><span>선택 카테고리명 :</span>
+                                    <input type="text" style="width: 200px; margin-left: 21px;" id="select_cate_1" readonly></p>
+                                <p><span>등록 카테고리명 :</span>
+                                    <input type="text" style="width: 200px; margin-left: 21px;" id="PC_cateregist_2"></p>
+                            </div>
+                            <div class="modal_btn">
+                                <input type="button" value="닫기" onclick="modal_close_3()">
+                                <input type="button" value="등록" onclick="modal_regist_prod_2()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--등록 팝업창 부분 끝 -->
+            <!--수정 팝업창 부분 시작 -->
+            <div id="mw_temp_o" class="mw_t">
+                <div class="bg_t"><!--이란에는 내용을 넣지 마십시오.--></div>
+                <div class="fg_t">
+                    <div id="modal_title_o" class="modal_greentitle">
+                        <p>2차 카테고리 수정<span><img src='./img/close2.png' onclick="modal_close_4()" class="modal_closeBtn"></span></p>
+                    </div>
+                    <div class="Modal">
+                        <form class="modal_cateBox_t" method="" action="#" id="modal_form_o">
+                            <div class="modal_search_t">
+                                <p class="sel_catename"><span>선택 카테고리명 :</span>
+                                    <input type="text" style="width: 200px; margin-left: 21px;" id="select_cate_2" readonly></p>
+                                <p><span>수정 카테고리명 :</span>
+                                    <input type="text" style="width: 200px; margin-left: 21px;" id="edit_text_2"></p>
+                            </div>
+                            <div class="modal_btn">
+                                <input type="button" value="닫기" onclick="modal_close_4()">
+                                <input type="button" value="2차 수정" onclick="modal_edit_prod_2()">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--수정 팝업창 부분 끝 -->
+        </div>
+    </div>
+    <!--Pcate_c1 끝-->
+    <!--Pcate_c2 시작-->
+    <div class="Pcate_c2">
+        <div class="Pcate_c2_title"><span>상단 배너 설정</span></div>
+        <form action="#" method="" class="Pcate_c2_bannerBox">
+            <input type="hidden" id="Pcate_cateval_1" >
+            <input type="hidden" id="Pcate_cateval_2" >
+            <input type="hidden" id="Pcate_rootidx_val" >
+            <table>
+                <tr class="Pcate_c2_btnBox">
+                    <td>
+                        <div class="file_input_div">
+                            <input type="button" value="파일 등록" class="file_input_button" style=" background-color: #266266; color:white;">
+                            <input type="file" class="file_input_hidden" id="Pcate_input">
+                        </div>
+                    </td>
+                    <td><input type="submit" value="등록" class="Pcate_c2_submit"></td>
+                </tr>
+                <tr>
+                    <td class="Pcate_c2_imgBox" colspan="2">
+                        <div class="Pcate_c2_img">
+                            <img src="" id="Pcate_banner">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="Pcate_c2_descrBox" colspan="2">
+                        <div class="Pcate_c2_description">
+                            권장크기 : 800 x 250 쇼핑검색에 노출되지 않는 경우 <u>가이드를 확인해주세요.</u>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--Pcate_c2 끝-->
+</div>
+<script src="/admin/js/Admin.cate.js"></script>
+<!--PCategory 끝-->
+</body>
+</html>

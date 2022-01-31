@@ -1,0 +1,137 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품문의</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(5) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(5) > a { color: #5dab99;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    window.onload = function (){
+        let idx = sessionStorage.getItem("go_edit")
+        let content = document.getElementById("productInqContents")
+        axios.get('/api/productquestion/read/'+ idx, {}).then(function (res){
+            let $contesnt = res.data.data.content;
+            content.innerText = $contesnt
+        }).catch(function (err){
+            console.log(err);
+        })
+    }
+    function sendit(){
+        let content = $('#productInqContents').val();
+        let idx = sessionStorage.getItem("go_edit");
+        let memIdx = $("#hidden_user").val();
+        let proIdx = sessionStorage.getItem("go_edit_prod")
+
+        console.log(idx)
+        console.log(memIdx)
+        console.log(proIdx)
+
+        axios.put('/api/productquestion/update', {
+            data: {
+                idx: idx,
+                memIdx: memIdx,
+                proIdx: proIdx,
+                content: content,
+                ansFlag: "FALSE"
+            }
+        }).then(function (response){
+            alert("상품문의가 수정되었습니다.")
+            location.href = "/user/mypage_productinq";
+        }).catch(function (err){
+            console.log(err)
+        })
+    }
+</script>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <!-- main_contents 시작 -->
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <div class="back_button">
+                        <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                    </div>
+                    <h2 class="contents_name">문의 수정</h2>
+                </div>
+                <!-- product_inq_bigbox 시작-->
+                <div class="product_inq_bigbox">
+                    <!-- product_form_list 시작 -->
+                    <ul class="product_form_list">
+                        <li>
+                            <textarea name="" id="productInqContents" class="product_textarea" maxlength="2000" placeholder="궁금한 사항을 작성해 주세요." style="resize: none;"></textarea>
+                        </li>
+                        <!-- product_form_list 끝 -->
+                    </ul>
+                    <div class="product_guide_box">
+                        <ul>
+                            <li>
+                                상품문의 이외 문의사항은 <a href="/!!!mypage_mantoman.html" class="mantoman_connect_tomantoman">1:1문의</a>를 이용해주세요.
+                            </li>
+                            <li>
+                                해당 상품과 무관하거나 부적절한 내용의 문의는 통보 없이 삭제될 수 있습니다.
+                            </li>
+                        </ul>
+                        <button type="submit" class="button_submit_productInq" onclick="sendit()">수정</button>
+                        <div class="post_guide_box">
+                            <div class="post_guide_box_inner">
+                                <div class="post_guide_help">
+                                    <p>상품문의 운영안내</p>
+                                </div>
+                            </div>
+                            <div class="overview"></div>
+                        </div>
+                        <div class="post_guide_overview">
+                            <ul>
+                                <li>
+                                    상품문의 게시판은 상품 상세페이지에서 제공하는 정보 외 추가로 궁금하신 내용을 질문하고 답변 받는 공간입니다. 본 게시판에 남겨주신 상품문의는 관련 부서 확인을 거쳐 최대한 빠르게 답변해드립니다.
+                                </li>
+                                <li>
+                                    상품에 대한 문의는 [상품 상세페이지>상품문의] 탭에 남겨주세요. 고객님이 남긴 문의와 헬로네이처의 답변은 [마이페이지>나의 상품문의] 페이지 또는 해당 [상품 상세페이지>상품문의] 탭에서 확인하실 수 있습니다.
+                                </li>
+                                <li>
+                                    상품문의 게시판은 상품 구매에 도움이 되는 정보를 고객님 간 공유하는 공간이기도 합니다. 상품에 대한 정보성 문의가 아닌 교환/환불 등 기타 문의는 [마이페이지>1:1게시판]을 통해 접수해주세요. 확인 후 빠르게 도와드리겠습니다.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- product_inq_bigbox 끝-->
+                </div>
+                <!-- main_contents 끝 -->
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>

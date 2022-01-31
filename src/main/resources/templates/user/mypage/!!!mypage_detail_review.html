@@ -1,0 +1,127 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구매후기 등록</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(3) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(3) > a {
+            color: #5dab99;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(function (){
+            let idx = sessionStorage.getItem("review_detail")
+
+            axios.get("/api/productReview/read/" + idx, {}).then(function (response){
+                let like = response.data.data.like;
+                like = parseInt(like) + 1;
+                let content = response.data.data.content;
+                let ansFlag = response.data.data.ansFlag;
+                let ansContent = response.data.data.ansContent;
+                let ansDate = response.data.data.ansDate;
+                let files = response.data.data.files;
+                if(files === null ) {
+                    $("#rev_detail_img").hide();
+                }
+                if(ansDate !== null) {
+                    ansDate = ansDate.toString().substring(0, 10);
+                }
+
+                let ansSHOW;
+                if(ansFlag === "FALSE"){
+                    ansSHOW = 'none'
+                }else {
+                    ansSHOW = 'block'
+                }
+
+                $("#review_deail_img").attr("src", files)
+                $("#rev_detail_like").text("만족도 : "+like+"점")
+                $("#post_review").text(content)
+                $("#rev_answer").css("display", ansSHOW);
+                $("#rev_date").text(ansDate);
+                $("#rev_answer_content").html(ansContent);
+            }).catch(function (err){
+                console.log(err)
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <!-- main_contents 시작 -->
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <div class="back_button">
+                        <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                    </div>
+                    <h2 class="contents_name" style="margin-top: 5px;">후기 상세 보기</h2>
+                </div>
+                <!-- enroll_post_bigbox 시작 -->
+                <div class="enroll_post_bigbox" style="width: 820px;">
+                    <!-- enroll_post_box2 시작 -->
+                    <div class="enroll_post_box2" style="width: 820px; margin: 0 auto;">
+                        <div>
+                            <div id="rev_detail_like" style="font-weight: 500; font-size: 17.5px;">만족도 : 3점</div>
+                            <div id="post_review" style="position: relative; width: 775px; height: 400px; background-color: #eee; margin-top: 20px; border-radius: 8px; padding: 10px; z-index: -5;">
+                            </div>
+                            <div id="rev_detail_img">
+                                <!-- <h5>사진</h5> -->
+                                <img src="" style="width: 150px; height: 150px; margin-top: -170px; margin-left: 10px;" id="review_deail_img">
+                            </div>
+                            <div id="rev_answer">
+                                <p id="rev_answer_title" style="margin: 50px 0 30px; font-weight: 500; font-size: 17.5px;">답변</p>
+                                <div id="rev_answer_content" style="width: 775px; height: 300px; background-color: #eee; border-radius: 8px; padding: 35px 10px 10px 10px; margin-top: -30px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- enroll_post_bigbox 끝 -->
+                </div>
+                <!-- main_contents 끝 -->
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>
+

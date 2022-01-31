@@ -1,0 +1,149 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품문의</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(5) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(5) > a { color: #5dab99;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function (){
+        let memIdx = $("#hidden_user").val()
+        axios.get('/api/productquestion/user/list/' + memIdx, {
+
+        }).then(function (response){
+            for(let i in response.data.data){
+                let $idx = response.data.data[i].idx;
+                let $dateTime = response.data.data[i].regdate;
+                let $ansFlag = response.data.data[i].ansFlag;
+                let $content = response.data.data[i].content;
+                let $proImg = response.data.data[i].proImg;
+                let $proName = response.data.data[i].proName;
+                let $proIdx = response.data.data[i].proIdx;
+                let $ansContent = response.data.data[i].ansContent;
+                let edit_display;
+                let ans_display;
+
+                $dateTime = $dateTime.toString().substring(0 , 10);
+                if($ansFlag === "FALSE"){
+                    $ansFlag = "답변대기"
+                    edit_display = "block"
+                    ans_display = "none"
+
+                }else{
+                    $ansFlag = "답변완료"
+                    edit_display = "none"
+                    ans_display ='block';
+
+                }
+
+                let row = $('<div class="product_inq_listbox">').append(
+                    '<div class="product_box"><div class="product_image" style="background: url('+$proImg+') no-repeat center / cover;"></div>' +
+                    '<div class="product_info"><p>'+$proName+'</p></div></div>' +
+                    '<span class="date">'+ $dateTime + '</span>' +
+                    '<span class="answer_flag">'+ $ansFlag + '</span>' +
+                    '<div class="product_inq_question"><p class="inq_title">'+ $content +'</p></div>' +
+                    '<div class="product_inq_question" style="display:'+ans_display+'"><p class="date">답변 내용</p><p class="inq_title">'+ $ansContent +'</p></div>' +
+                    '<ul class="inq_button_box"><li style="display:'+edit_display+'"><a href="#" class="prodQ_edit"><input type="hidden" value="'+$idx+'" id="Que_id"><input type="hidden" value="'+$proIdx+'" id="prod_id">수정</a></li>' +
+                    '<li class="prodQ_del"><input type="hidden" value="'+$idx+'"><a href="#" style="color:#8db8d9;">삭제</a></li></ul></div>'
+                )
+                $(".product_inq_title").after(row);
+            }
+
+            $(".prodQ_del").click(function (e){
+                let idx = $(this).children("input").val();
+                confirm("삭제하시겠습니까?")
+                if(confirm) {
+                    axios.delete('/api/productquestion/delete/' + idx, {}).then(function () {
+                        alert("삭제되었습니다");
+                    })
+                } else{
+                    return false;
+                }
+            })
+
+            $(".prodQ_edit").click(function (e) {
+                sessionStorage.setItem("go_edit", $(this).children("#Que_id").val())
+                sessionStorage.setItem("go_edit_prod", $(this).children("#prod_id").val())
+                location.href = "/user/mypage_enrollProductinq";
+            })
+        }).catch(function (err){
+            console.log(err);
+        })
+    })
+</script>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <!-- main_contents 시작 -->
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">상품문의</h2>
+                </div>
+                <!-- product_inq_home 시작 -->
+                <div class="product_inq_home">
+                    <h3 class="product_inq_title">전체&nbsp;<span></span></h3>
+                    <!-- product_inq_listbox 시작 -->
+                    <!--                        <div class="product_inq_listbox">-->
+                    <!--                            <div class="product_box">-->
+                    <!--                                <div class="product_image"></div>-->
+                    <!--                                <div class="product_info">-->
+                    <!--                                    <p>[행복담원] 서귀포 하우스 감귤 500g</p>  -->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                            <span class="date">2021.08.30 16:01</span>-->
+                    <!--                            <span class="answer_flag">답변대기</span>-->
+                    <!--                            <div class="product_inq_question">-->
+                    <!--                                <p class="inq_title">상품 보관온도는 어느정도가 인가요??</p>-->
+                    <!--                            </div>-->
+                    <!--                            <ul class="inq_button_box">-->
+                    <!--                                <li>-->
+                    <!--                                    <a href="/mypage_enrollProductinq">수정</a>-->
+                    <!--                                </li>-->
+                    <!--                                <li>-->
+                    <!--                                    <a href="#">삭제</a>-->
+                    <!--                                </li>-->
+                    <!--                            </ul>-->
+                    <!--                        &lt;!&ndash; product_inq_listbox 끝 &ndash;&gt;-->
+                    <!--                        </div>-->
+                    <!-- product_inq_home 끝 -->
+                </div>
+                <!-- main_contents 끝 -->
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

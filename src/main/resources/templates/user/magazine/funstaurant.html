@@ -1,0 +1,101 @@
+<html xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>편스토랑</title>
+    <!-- <link rel="stylesheet" href="/resource/css/bootstrap.css"> -->
+    <link rel="stylesheet" href="/user/css/index_style.css">
+    <link rel="stylesheet" th:href="@{/user/css/layout.css}">
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+
+<body>
+<div id="container">
+
+    <!--header thymeleaf-->
+    <div th:replace="/user/fragment/header::header"></div>
+
+    <!-- main 시작 -->
+    <main>
+        <section id="fun_main">
+            <div class="fun_main_bg">
+                <div class="fun_main_mold">
+                    <div class="fun_main_img">
+                        <img src="/user/images/funstr_1.jpg" alt="편스토랑1">
+                    </div>
+                    <p class="txt">부드러운 코코넛커리에 탱글탱글 새우가 쏙쏙! 커리향 은은하게 머금은 새우의 톡톡 터지는 식감이 예술이라죠. 밥에 비벼 먹어도, 빵에 찍어 먹어도 다 맛있습니다. 태국의 이국적 풍미가 물씬 느껴지는 한 그릇. 똑 닮은 ‘거푸집 부자’가 가을 미각여행으로 당신을 초대합니다.</p>
+
+                    <div class="fun_sub_bg">
+                        <div class="fun_sub_mold">
+                            <div class="fun_sub_img"></div>
+                            <p>알로하 쿵팟퐁커리 밀키트</p>
+                            <p>거푸집 부자 스타의 레시피 그대로<br>재료 손질 없이 더 풍성하게 맛보세요.</p>
+                        </div>
+                        <div class="fun_wrap">
+                            <div class="fun_item_info">
+                                <span class="fun_item_sale" style="display: block;">20%</span>
+                            </div>
+                            <a href="/user/product?prodIdx=337" class="fun_item_img"></a>
+                            <a href="/user/product?prodIdx=337" class="fun_item_name">[편스토랑] 알로하 쿵팟퐁커리</a>
+                            <div class="fun_item_price"><span>12,720</span>원</div><del><span>15,900</span>원</del>
+                            <div class="fun_item_storage"><span>냉장</span></div>
+                            <div class="fun_like_area">
+                                <span class="item_star review">4.2점</span>
+                                <div class="rating" data-rate="4.2">
+                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>
+                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>
+                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>
+                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>
+                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>
+                                </div>
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+    </main>
+    <!-- main 끝 -->
+
+
+    <!--footer thymeleaf-->
+    <!--    <div th:replace="/user/fragment/footer::footer"></div>-->
+    <div th:replace="/user/fragment/footer::footer"></div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+
+
+</body>
+
+</html>

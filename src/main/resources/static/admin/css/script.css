@@ -1,0 +1,88 @@
+/* all */
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+.notosanskr * {font-family: 'Noto Sans KR', sans-serif;}
+
+/* 공통 부분 */
+*{margin: 0; padding: 0; font-family: 'Noto Sans KR'; box-sizing: border-box;}
+ol, ul, li {list-style: none;}
+.indexbody{ overflow-x: hidden; height: 100%; min-height: 100%;}
+
+/* header */
+header {width: 100%; left:0; top:0; height: 55px; background: #04363a; z-index: 100; padding-top: 5px;
+position: fixed; display: inline-block;}
+
+/* header - header_area*/
+header > .header_area > a {float: left; padding-left: 10px;} 
+
+/* header - header_area - logo*/
+.logo { padding-top: 9px; font-size: 21px; font-weight: bold; margin-left: 30px; text-decoration: none; color: #fffbe8;}
+.logo > span { padding-top: 5px; font-size: 18px; padding-left: 10px; font-weight: bold;}
+
+/* header - info */
+
+header > .info { float: right; padding: 12px 10px 5px 0; font-size: 12px; font-weight: bold;}
+header > .info ul li { display: inline-block; }
+header > .info ul li::after { content: "|"; color: #fffbe8; display: inline-block; padding: 0 18px; }
+header > .info ul li:last-child::after { content: ""; }
+.info  li > a { text-decoration: none; color: #fffbe8;}
+
+/* conatiner */
+
+/* conatiner - category */
+.category { background-color: #054449; width: 210px; box-sizing: border-box; height: 100%; position:fixed; overflow-y: auto;
+padding-top: 55px; padding-bottom: 100px; margin-left: -10px;} 
+.category::-webkit-scrollbar { display: none;}
+
+/* conatiner - category - profile */
+.profile {height: 147px; text-align: center; font-size: 15px; color: #fffbe8;}
+.profile_img { padding-top:30px; width: 80px; height: 110px; }
+.profile p {margin: 7px 0 0; font-size: 15px; font-weight: bold;}
+
+/* conatiner - category - main */
+.main_page { height: 50px; padding: 10px 15px 15px 5px; margin-top: 10px;} 
+.main_page a {font-size: 14px; font-weight: bold; }
+.main_page a { text-decoration: none; color: #fffbe8; padding-left: 10px;}
+
+/* conatiner - category - list_detail */
+.list_detail{justify-content: center; }
+
+/* conatiner - category - list_detail - sub_title */
+.sub_title { height: 50px; width: 210px; box-sizing: border-box; padding:10px 0 0 10px;}
+.sub_title > a { width: 210px; font-size: 14px; color: #fffbe8; text-decoration: none; font-weight: bold; padding: 16px 16px 16px 5px;}
+.sub_title ul { box-sizing: border-box;}
+.sub_title > a > img { float: right; margin-right: 10px; margin-top: 6px;}
+
+/* conatiner - category - list_detail - sub_menu */
+
+.list_detail #sub_menu_1, #sub_menu_2, #sub_menu_3,#sub_menu_4, #sub_menu_5
+{ font-size: 13px; display: none; padding: 10px 0; background-color: #124e52;}
+#sub_menu_1 li a, #sub_menu_2 li a, #sub_menu_3 li a, #sub_menu_4 li a, #sub_menu_5 li a{
+    color: white;
+    text-decoration: none;
+}
+#sub_menu_1 li, #sub_menu_2 li, #sub_menu_3 li, #sub_menu_4 li, #sub_menu_5 li{
+    padding: 4px 15px 9px;
+}
+
+#sub_menu_1_1.strong, #sub_menu_1_2.strong, #sub_menu_1_3.strong, #sub_menu_1_4.strong,
+#sub_menu_1_5.strong, #sub_menu_2_1.strong, #sub_menu_2_2.strong, #sub_menu_2_3.strong,
+#sub_menu_2_4.strong, #sub_menu_3_1.strong, #sub_menu_3_2.strong,
+#sub_menu_4_1.strong, #sub_menu_4_2.strong, #sub_menu_4_3.strong, #sub_menu_4_4.strong,
+#sub_menu_5_1.strong, #sub_menu_5_2.strong, #sub_menu_5_3.strong, #sub_menu_5_4.strong,
+#sub_menu_5_5.strong, #sub_menu_5_6.strong, #sub_menu_5_7.strong{color:#fae27f;}
+
+.list_detail > #sub_menu_1.on{display: none;}
+.list_detail > #sub_menu_2.on{display: none;}
+.list_detail > #sub_menu_3.on{display: none;}
+.list_detail > #sub_menu_4.on{display: none;}
+.list_detail > #sub_menu_5.on{display: none;}
+
+/* conatiner - content */
+#content{width: 1600px; height: auto; overflow-y: hidden; padding-top: 55px; padding-left: 210px;}
+#sub_title_up_1{position:absolute; display: flex;}
+
+@media screen and (min-width: 800px){
+    #content{
+        width: 99.5%;
+    }
+}

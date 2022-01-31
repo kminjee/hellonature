@@ -1,0 +1,213 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>더그린배송</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(4) { background: #e2e2e2 url("/img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(4) > a { color: #5dab99;}
+        .main_contents { padding: 50px; margin: 0 auto;}
+    </style>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.    
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수    
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }    
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }                                        
+                    }    
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById("sample6_address").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("sample6_detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
+</head>
+<body>
+    <div id="mypage-box">
+        <div class="container">       
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <!-- main_contents 시작 -->
+                <div class="main_contents">  
+                    <div class="contents_box1">
+                        <div class="back_button">
+                            <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                        </div>
+                        <h2 class="contents_name">배송지 수정</h2>
+                    </div>
+                    <div class="shipping_store_box">
+                        <div class="shipping_store_box_inner">
+                            <input type="checkbox" class="shipping_store_checkbox" id="shipping_store">
+                        </div>
+                        <label for="shipping_store">기본 배송지로 저장</label>
+                    </div>
+                    <!-- edit_shipping_form 시작 -->
+                    <div class="edit_shipping_form">
+                        <form action="addressRegisterForm">
+                            <ul class="shipping_form_list">
+                                <li>
+                                    <h5 class="essbox">배송지명<span class="essential">필수</span></h5>
+                                    <input type="text" name="" id="addressName" class="input_text" placeholder="집, 회사 등 배송지 별칭 입력해주세요." maxlength="="10" required>
+                                    <div class="caution_not_input">
+                                        배송지 명을 입력해주세요.
+                                    </div>
+                                </li>
+                                <li>
+                                    <h5 class="essbox">받는 사람<span class="essential">필수</span></h5>
+                                    <input type="text" name="" id="userName" class="input_text" placeholder="받는 사람의 이름을 입력해주세요." maxlength="="15" required>
+                                    <div class="caution_not_input">
+                                        받는 사람을 입력해주세요.
+                                    </div>
+                                </li>
+                                <li>
+                                    <h5 class="essbox">휴대전화<span class="essential">필수</span></h5>
+                                    <input type="tel" name="" id="userHp" class="input_text" placeholder="‘-’제외한 숫자만 입력해주세요." maxlength="="11" required>
+                                    <div class="caution_not_input">
+                                        전화번호를 입력해주세요.
+                                    </div>
+                                </li>
+                                <li>
+                                    <h5 class="essbox">주소<span class="essential">필수</span></h5>
+                                    <input type="text" name="" id="sample6_address" class="input_text" placeholder="배송받을 주소를 검색해주세요." maxlength="="11" readonly="readonly" required>
+                                    <span class="search_address" onclick="sample6_execDaumPostcode()"></span>
+                                    <div class="caution_not_input">주소를 입력해주세요.</div>
+                                    <input type="text" name="" id="sample6_detailAddress" class="input_text" placeholder="나머지 주소를 입력해주세요." required>
+                                    <div class="caution_not_input">상세주소를 입력해주세요.</div>
+                                </li>
+                                <!-- 배송 요청사항 -->
+                                <li>
+                                    <h5 class="essbox">배송 요청사항<span class="essential">필수</span></h5>
+                                    <div class="radio_list_box">
+                                         <!-- 배송 요청 사항 선택, 입력 -->
+                                        <ul class="ask_addr_detail">
+                                            <li>                           
+                                                <p><input type="radio" class="ask_detail_radio_1" name="detail_addr" value="문앞" checked><label for="문앞">문앞</label></p>
+                                                <div class="select_detail_radio_1">    
+                                                    <p><input type="radio" class="chk_door" name="chk_door" value="공동현관 출입 비밀번호" id="entrance_pwd" checked><label for="공동현관 출입 비밀번호">공동현관 출입 비밀번호</label></p>
+                                                    <p><input type="text" placeholder="정확한 비밀번호를 입력해주세요" class="insert_door_pwd"></p>
+                                                    <div class="caution_not_input">공동현관 출입 비밀번호를 입력해주세요.</div>
+                                                    <p><input type="radio" class="chk_door" name="chk_door" value="비밀번호 없이 출입 가능" id="no_pwd_enter"><label for="비밀번호 없이 출입 가능">비밀번호 없이 출입 가능</label></p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p><input type="radio" class="ask_detail_radio_2" name="detail_addr" value="경비실"><label for="경비실">경비실</label></p>
+                                                <p class="ask_detail_radio_2_msg">※ 경비실 호출 / 보관이 불가한 경우 공동 현관 앞에 배송될 수 있습니다.</p>
+                                            </li>
+                                            
+                                            <li>
+                                                <p>
+                                                    <input type="radio" class="ask_detail_radio_3"  name="detail_addr" value="택배함"><label for="택배함">택배함</label>
+                                                </p>
+                                                <div class="post_box_background">
+                                                    <input type="text" placeholder="택배함 비밀번호를 입력해주세요" class="post_box">
+                                                    <div class="caution_not_input">택배함 비밀번호를 입력해주세요.</div>
+                                                    <p class="ask_detail_radio_3_msg">※ 택배함 보관이 불가한 경우 공동 현관 앞에 배송될 수 있습니다.</p>
+                                                </div>                                                                                            
+                                            </li>                                            
+                                            <li>
+                                                <p><input type="radio" class="ask_detail_radio_4" name="detail_addr" value="기타장소"><label for="기타장소">기타장소</label></p>
+                                                <p><input type="text" placeholder="원하는 장소를 입력해주세요" class="insert_location"></p>
+                                                <div class="caution_not_input">수령하실 장소를 입력해주세요.</div>
+                                            </li>                            
+                                        </ul>
+                                    </div>
+                                </li>
+                                <!-- 배송 요청사항 -->
+                                <li>
+                                    <h5 class="normalbox">배송기사님께</h5>
+                                    <input type="text" name="" id="remark_sir" class="input_text" value placeholder="배송기사님께 전달할 메시지를 입력해주세요." maxlength="="30">                                
+                                </li>
+                            </ul>
+                            <div class="edit_shipping_guide_box">
+                                <ul>
+                                    <li>
+                                        새벽배송 시 공동현관 출입이 어려운 경우 부득이하게 <em>1층 또는 지하주차장 공동현관 앞 경비실 앞</em>으로 배송될 수 있는 점 참고 부탁드립니다.
+                                    </li>
+                                    <li>
+                                        비밀번호 미 입력 또는 불일치, 경비원 부재, 패드 오작동 등 세대별 출입 방법을 정확하게 입력 바랍니다.
+                                        <br>
+                                        예) 별 1234 샵 / 호출 1234 종 / 경비 2104 확인 등
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    <!-- edit_shipping_form 끝 -->
+                    </div>
+                    <!-- 개인 정보 동의 체크박스 시작 -->
+                    <div class="edit_shipping_allow">
+                        <div class="enrollhellopay_box_check_inner">
+                            <input type="checkbox" class="check_business_credit_card check_privacy">                                                                                    
+                        </div>
+                        <label for="check_business_credit_card">개인 정보 수집 및 이용 동의</label>                        
+                        <div class="allow_button">
+                            <a href="#" alt="개인 정보 수집 및 이용 동의 오버뷰"></a>
+                        </div>
+                    </div>
+                    <!-- 개인 정보 수집 체크박스 끝 -->
+                    <!-- 개인 정보 수집 및 이용 동의 시작 -->
+                    <div class="enrollpay_allow_list">
+                        <h5>개인 정보 수집 및 이용 동의</h5>
+                        <div class="allow_contents1">
+                            <p>헬로네이처는 고객님께서 구매하신 서비스 및 상품의 원활한 제공을 위해 최소한의 범위 내에서 아래와 같이 개인 정보를 수집 • 이용합니다. 고객님께서는 정보 제공에 동의하지 않으실 수 있으며 동의하지 않으실 경우, 일부 구매가 제한될 수 있습니다.</p>                            
+                        </div>
+                        <div class="allow_table">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>수집목적</th>
+                                        <td>상품 배송 및 서비스 제공을 위한 사용자 정보 확인</td>
+                                    </tr>
+                                    <tr>
+                                        <th>수집항목</th>
+                                        <td>주문자 정보(주문자명, 주문자 연락처 등) 배송정보(수취인명/수취인 주소, 수취인 연락처 등), 결제정보(현금영수증 발행여부 등)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>보유기간</th>
+                                        <td>5년 (계약 및 청약철회, 대금결제 및 재화 등의 공급) 또는 회원탈퇴 후 90일 까지</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 개인 정보 수집 및 이용 동의 끝 -->
+                    <button type="submit" class="button_submit">저장</button>
+                <!-- main_contents 끝 -->        
+                </div>           
+            <!-- main 끝 -->
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+</body>
+</html>
+

@@ -1,0 +1,293 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구매후기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(3) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(3) > a {
+            color: #5dab99;
+        }
+    </style>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <script>
+        $(function () {
+            let flag;
+            let memIdx = $("#hidden_user").val()
+            const offset = new Date().getTimezoneOffset() * 60000;
+            const now = new Date(Date.now() - offset);
+            const now_result = now.toISOString().substring(0, 10);
+
+            let three_month = new Date(Date.now() - offset);
+            three_month.setMonth(three_month.getMonth() - 3);
+            let three_month_result = three_month.toISOString().substring(0, 10);
+            console.log(three_month_result)
+
+            $(".contents_post_box > span").click(function (e) {
+
+                $("#review_contents_box_1").empty();
+                $("#filter_period_box").css("display", "none")
+
+                if ($(this).text() === "작성 가능한 후기") {
+                    $("#review_contents_box_1").empty();
+                    flag = 'FALSE';
+                    axios.get("/api/productReview/list/myPage?flag=" + flag + "&memIdx=" + memIdx + "&dateStart=" + three_month_result + "&dateEnd=" + now_result, {}).then(function (response) {
+                        console.log(response.data.data)
+                        for (let i in response.data.data) {
+                            let proIdx = response.data.data[i].proIdx;
+                            let proImg = response.data.data[i].proImg;
+                            let proName = response.data.data[i].proName;
+                            let regdate = response.data.data[i].regdate;
+                            let rvIdx = response.data.data[i].rvIdx
+
+                            regdate = regdate.toString().substring(0, 10);
+
+                            let row = $('<div class="contents_box6">').append(
+                                `<div class="product_image" style="background: url('${proImg}') no-repeat; background-size: cover;"><input type="hidden" value="${proImg}"></div>` +
+                                '<div class="product_info_post"><div class="product_post_firstline"><p>' + proName + '</p></div>' +
+                                '<div class="contents_box6_inner"><p>구매일자' + regdate + '</p></div>' +
+                                '<div class="post_button_box"><input type="button" value="후기작성" class="post_button"><input type="hidden" value="' + proIdx + '">' +
+                                '<input type="hidden" value="' + rvIdx + '" id="hidden_rvIdx"></div></div>'
+                            )
+
+                            $("#review_contents_box_1").append(row)
+                        }
+
+                        $(".post_button").click(function (e) {
+                            let proImg = $(this).parents().children(".product_image").children("input").val()
+                            let prodName = $(this).parents().children(".product_info_post").children(".product_post_firstline").children("p").text();
+                            let prodDate = $(this).parents().children(".contents_box6_inner").children("p").text();
+                            let prodIdx = $(this).next("input").val()
+                            let rvIdx = $(this).siblings("#hidden_rvIdx").val()
+
+                            sessionStorage.setItem("review_prodName", prodName)
+                            sessionStorage.setItem("review_prodDate", prodDate)
+                            sessionStorage.setItem("review_prodDroIdx", prodIdx)
+                            sessionStorage.setItem("review_prodImg", proImg)
+                            sessionStorage.setItem("review_rvIdx", rvIdx)
+
+                            location.href = "/user/mypage_enrollReview/"
+                        })
+
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+
+                } else if ($(this).text() === "작성한 후기") {
+                    $("#review_contents_box_1").empty();
+                    $("#filter_period_box").css("display", "block")
+                    $("#filter_period_box").css("display", "flex")
+                }
+
+                $(".filter_outline > div").unbind("click");
+                $(".filter_outline > div").bind("click", function (e) {
+                    flag = "TRUE";
+                    let date_start = '';
+                    let date_end = '';
+                    $("#review_contents_box_1").empty();
+                    const offset = new Date().getTimezoneOffset() * 60000;
+                    const now = new Date(Date.now() - offset);
+                    const now_result = now.toISOString().substring(0, 10);
+
+                    if ($(this).children("a").text() === "최근 1개월") {
+                        let month = new Date();
+                        month.setMonth(month.getMonth() - 1);
+                        let month_result = month.toISOString().substring(0, 10);
+                        date_end = now_result;
+                        date_start = month_result;
+                    } else if ($(this).children("a").text() === "3개월") {
+                        let three_month = new Date();
+                        three_month.setMonth(three_month.getMonth() - 3);
+                        let three_month_result = three_month.toISOString().substring(0, 10);
+                        date_end = now_result;
+                        date_start = three_month_result;
+                    } else if ($(this).children("a").text() === "6개월") {
+                        let six_month = new Date();
+                        six_month.setMonth(six_month.getMonth() - 6);
+                        let sis_month_result = six_month.toISOString().substring(0, 10);
+                        date_end = now_result;
+                        date_start = sis_month_result;
+                    } else if ($(this).children("a").text() === "기간 조회") {
+                        if (document.getElementById("mg_period").style.display === 'block') {
+                            document.getElementById("mg_period").style.display = 'none';
+                        } else document.getElementById("mg_period").style.display = 'block';
+                        return false;
+                    }
+
+                    axios.get("/api/productReview/list/myPage?flag=" + flag + "&memIdx=" + memIdx + "&dateStart=" + date_start + "&dateEnd=" + date_end, {}).then(function (response) {
+                        console.log(response.data.data)
+                        for (let i in response.data.data) {
+                            let rvIdx = response.data.data[i].rvIdx;
+                            let proImg = response.data.data[i].proImg;
+                            let proName = response.data.data[i].proName;
+                            let regdate = response.data.data[i].regdate;
+                            let ansFlag = response.data.data[i].ansFlag;
+
+                            if(ansFlag === "TRUE"){
+                                ansFlag = "답변완료";
+                            }else{
+                                ansFlag = "답변대기";
+                            }
+
+                            regdate = regdate.toString().substring(0, 10);
+
+                            let row = $('<div class="contents_box6">').append(
+                                `<div class="product_image" style="background: url('${proImg}') no-repeat; background-size: cover;"></div>` +
+                                '<div class="product_info_post"><div class="product_post_firstline"><p>' + proName + '</p>' +
+                                '<div class="contents_box6_inner"><p>구매일자' + regdate + '</p></div>' +
+                                '<div class="product_post_lastline"><p>' + ansFlag + '</p><p class="reviw_detail" style="cursor: pointer">상세보기</p></div></div>' +
+                                '<div class="post_button_box" id="rv_delbtn" style="cursor: pointer"><a class="post_delete_button"><input type="hidden" value="' + rvIdx + '"></a>' +
+                                '</div></div>'
+                            )
+
+                            $("#review_contents_box_1").append(row);
+                        }
+                        $(".post_delete_button").click(function (e) {
+                            let idx = $(this).children("input").val();
+                            console.log(idx)
+                            axios.delete("/api/productReview/delete/" + idx, {}).then(function () {
+                                alert("삭제에 성공하셨습니다")
+                            }).catch(function (err) {
+                                console.log(err)
+                            })
+                        })
+
+                        $(".reviw_detail").click(function (e){
+                            let review_detail = $(this).parents(".product_post_firstline").siblings(".post_button_box").children("a").children("input").val()
+                            sessionStorage.setItem("review_detail", review_detail)
+                            location.href = '/user/mypage_detaillReview/'
+                        })
+
+
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                })
+
+
+                $("#mg_ol_sc").click(function () {
+                    $("#review_contents_box_1").empty();
+                    flag = "TRUE"
+                    let date_start = $("#date_start").val();
+                    let date_end = $("#date_end").val()
+
+                    axios.get("/api/productReview/list/myPage?flag=" + flag + "&memIdx=" + memIdx + "&dateStart=" + date_start + "&dateEnd=" + date_end, {}).then(function (response) {
+                        console.log(response)
+
+                        for (let i in response.data.data) {
+                            let rvIdx = response.data.data[i].rvIdx;
+                            let proImg = response.data.data[i].proImg;
+                            let proName = response.data.data[i].proName;
+                            let regdate = response.data.data[i].regdate;
+                            let ansFlag = response.data.data[i].ansFlag;
+
+                            if(ansFlag === "TRUE"){
+                                ansFlag = "답변완료";
+                            }else{
+                                ansFlag = "답변대기";
+                            }
+
+                            regdate = regdate.toString().substring(0, 10);
+
+                            let row = $('<div class="contents_box6">').append(
+                                `<div class="product_image" style="background: url('${proImg}')"></div>` +
+                                '<div class="product_info_post"><div class="product_post_firstline"><p>' + proName + '</p>' +
+                                '<div class="contents_box6_inner"><p>구매일자' + regdate + '</p></div>' +
+                                '<div class="product_post_lastline"><p>' + ansFlag + '</p><p></p></div></div>' +
+                                '<div class="post_button_box"  id="rv_delbtn"  style="cursor: pointer"><a class="post_delete_button"><input type="hidden" value="' + rvIdx + '"></a>' +
+                                '</div></div>'
+                            )
+
+                            $("#review_contents_box_1").append(row);
+                        }
+                        $(".post_delete_button").click(function (e) {
+                            let idx = $(this).next("input").val();
+                            console.log(idx)
+                            axios.delete("/api/productReview/delete/" + idx, {}).then(function () {
+                                alert("삭제에 성공하셨습니다")
+                            })
+                        })
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                })
+            })
+        })
+    </script>
+    <!-- axios -->
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <input type="hidden" id="memIdx" name="memIdx" th:value="${idx}">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">구매후기</h2>
+                </div>
+                <div class="contents_post_box">
+                    <span id="post_filter_available">작성 가능한 후기<span></span></span>
+                    <span id="post_filter_used">작성한 후기<span></span></span>
+                </div>
+                <div class="review_contents_box">
+                    <div class="filter_outline" id="filter_period_box" style="display: none">
+                        <div id="month_btn"><a href="#">최근 1개월</a></div>
+                        <div id="threemonth_btn"><a href="#">3개월</a></div>
+                        <div id="sixmonth_btn"><a href="#">6개월</a></div>
+                        <div id="period_select"><a href="#">기간 조회</a></div>
+                    </div>
+                    <div id="mg_period" style="float:right; display: none;">
+                        <input type="date" id="date_start"> - <input type="date" id="date_end"><input type="button"
+                                                                                                      value="조회하기"
+                                                                                                      id="mg_ol_sc">
+                    </div>
+                    <div class="review_contents_box" id="review_contents_box_1">
+                    </div>
+                </div>
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>
+

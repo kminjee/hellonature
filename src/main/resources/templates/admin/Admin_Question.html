@@ -1,0 +1,190 @@
+<html
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 상품 관리 | 1:1 문의내역</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function(){
+        let id = sessionStorage.getItem("idx3");
+        console.log(id)
+
+        axios.get('/api/Question/read/'+ id, {
+
+        }).then(function(response){
+            let name = response.data.data.name;
+            let email = response.data.data.email;
+            let hp = response.data.data.hp;
+            let type = response.data.data.type;
+            let ansFlag = response.data.data.ansFlag;
+            let regdate = response.data.data.regdate;
+            regdate = regdate.toString().substring(0, 10);
+            let content = response.data.data.content;
+            let ansDate = response.data.data.ansDate;
+            let ansContent = response.data.data.ansContent;
+            let img = response.data.data.files;
+
+            if(type == 1){
+                type = '취소/환불'
+            }else if(type == 2){
+                type = '반품/교환'
+            }else if(type == 3){
+                type = '배송관련'
+            }else if(type == 4){
+                type = '상품문의'
+            }else if(type == 5){
+                type = '쿠폰/이벤트'
+            }else if(type == 6){
+                type = '헬로패스'
+            }else if(type == 7){
+                type = '더그린배송'
+            }else if(type == 8){
+                type = '회원정보'
+            }else if(type == 9){
+                type = '사이트/앱 오류'
+            }else if(type == 10){
+                type = '상품제안'
+            }else if(type == 11){
+                type = '기타'
+            }
+            if(ansFlag == 'TRUE'){
+                ansFlag = '답변완료'
+            }else if(ansFlag == 'FALSE'){
+                ansFlag = '답변대기'
+            }
+
+            console.log(name)
+            console.log(regdate)
+            console.log(hp)
+            console.log(type)
+            console.log(ansDate)
+            console.log(ansFlag)
+
+
+            $('#name').text(name);
+            $('#regdate').text(regdate);
+            $('#email').text(email);
+            $('#hp').text(hp);
+            $('#type').text(type);
+            $('#ansFlag').text(ansFlag)
+            $('#ansDate').text(ansDate);
+            $('#q_content').text(content);
+            $('#Q_editor').val(ansContent);
+            $("#img").attr("src", img);
+
+        }).catch(function(err){
+            console.log(err)
+        })
+    })
+
+    function sendit(){
+        let id = sessionStorage.getItem("idx3");
+        let ansContent = CKEDITOR.instances.Q_editor.getData();
+        console.log(id)
+        axios.put('/api/Question/ansContent/update', {
+            data: {
+                idx: id,
+                ansContent: ansContent
+            }
+        }).then(function (){
+            alert('답변이 완료되었습니다');
+            $.ajax({
+                type:"GET",
+                url : "/admin/questionlist",
+                datatype : "html/text",
+                success: function(result){
+                    $("#content").html(result).trigger("create");
+                }
+            });
+        })
+    }
+
+</script>
+<body>
+    <!--content_title 시작-->
+    <div class="content_title">
+        <p>전체 상품 관리 <span>1:1 문의내역</span></p>
+    </div>
+    <!--content_title 끝-->
+    <!--Question_list 시작-->
+    <div class="Question">
+        <!--PQ_c1 시작-->
+        <div class="Qt_c1">
+            <!--form 시작-->
+            <form name="Lquestion">
+                <p id="QL_title1" class="product_title"><label>문의 상세</label></p>
+                <!--table 시작-->
+                <table id="Lquestion">
+                    <tr>
+                        <th width="140">작성자</th>
+                        <td width="300" id="name"></td>
+                        <th width="140">이메일</th>
+                        <td width="300" id="email"></td>
+                    </tr>
+                    <tr>
+                        <th>연락처</th>
+                        <td id="hp"></td>
+                        <th>문의유형</th>
+                        <td id="type"></td>
+                    </tr>
+                    <tr>
+                        <th>등록날짜</th>
+                        <td id="regdate"></td>
+                        <th>처리날짜</th>
+                        <td style="color: blue;" id="ansDate"></td>
+                    </tr>
+                    <tr>
+                        <th>답변여부</th>
+                        <td id="ansFlag"></td>
+                        <th>첨부파일</th>
+                        <td id="file"><img src="" id="img"></td>
+                    </tr>
+                    <tr>
+                        <th>문의내용</th>
+                        <td colspan="3" id="q_content"></td>
+                    </tr>
+                </table>
+                <!--table 끝-->
+            </form>
+            <p id="Qt_title2" class="product_title"><label>문의 답변하기</label></p>
+            <form>
+                <!--table 시작-->
+                <table id="Qanswer">
+                    <tr>
+                        <th>답변 내용</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td width="1000px" id="ansContent">
+                            <textarea name="productText" id="Q_editor" cols="30" rows="10"></textarea>
+                            <!-- CKEditor 시작-->
+                            <script type="text/javascript">
+                                CKEDITOR.replace('Q_editor'
+                                    , {height: 200
+                                    });
+                            </script>
+                            <!-- CKEditor 끝-->
+                        </td>
+                    </tr>
+                </table>
+                <!--table 끝-->
+                <!--QL_c1_btnBox 시작-->
+                <div id="QL_c1_btnBox" class="bottom_btn">
+                    <input type="button" name="submit" value="답변하기" onclick="sendit()">
+                </div>
+            <!--QL_c1_btnBox 끝-->
+            </form>
+            <!--form 끝-->
+        </div>
+        <!--QL_c1 끝-->
+    </div>
+    <!--Question_list 끝-->
+</body>
+</html>

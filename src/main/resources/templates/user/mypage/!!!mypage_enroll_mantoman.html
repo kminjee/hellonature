@@ -1,0 +1,224 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1:1문의</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(6) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(6) > a {
+            color: #5dab99;
+        }
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    function sendit() {
+        console.log($("#hidden_user").val())
+        console.log($('#str_email01').val())
+        console.log($('#mantomanHp').val())
+        console.log($('#mantomanCase').val())
+        console.log($('#mantomanContents').val())
+
+        let data = {
+            memIdx : $("#hidden_user").val(),
+            email: $('#str_email01').val(),
+            hp: $('#mantomanHp').val(),
+            type: $('#mantomanCase').val(),
+            content: $('#mantomanContents').val(),
+            ansFlag : 0
+        }
+
+        let files = ($('input[name="file"]'));
+        let fileList = [];
+        let formData = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            fileList.push(files[i].files[0]);
+            formData.append('files', files[i].files[0]);
+        }
+
+        formData.append("key", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+        axios.post('/api/Question/create', formData,
+            { headers: {'Content-Type': 'multipart/form-data'}
+            }).then(function() {
+                alert("문의하신 내용이 등록되었습니다.");
+                location.href = "/user/mypage_mantoman";
+        }).catch(function (err){
+            console.log(err)
+            return false;
+        });
+    }
+</script>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <div class="back_button">
+                        <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                    </div>
+                    <h2 class="contents_name">1:1 문의 작성</h2>
+                </div>
+                <!-- enroll_mantoman_form 시작 -->
+                    <div class="enroll_mantoman_form">
+                        <!-- mantoman_form_list 시작 -->
+                        <div class="mantoman_form_list">
+                            <ul>
+                                <li>
+                                    <h5>아이디(이메일)</h5>
+                                    <input type="text" name="" id="mantomanId" class="input_text"
+                                           th:value="${session['email']}" disabled>
+                                </li>
+                                <!-- 아이디(이메일) -->
+                                <!-- 이메일 -->
+                                <li>
+                                    <h5 class="essbox">이메일<span class="essential">필수</span></h5>
+                                    <div class="email_box">
+                                        <input type="text" name="str_email01" id="str_email01">
+                                        <div class="at_sign"></div>
+                                        <select name="selectEmail" id="selectEmail">
+                                            <option value="@naver.com" selected>@naver.com</option>
+                                            <option value="@hanmail.net">@hanmail.net</option>
+                                            <option value="@nate.com">@nate.com</option>
+                                            <option value="@gmail.com">@gmail.com</option>
+                                            <option value="@outlook.com">@outlook.com</option>
+                                        </select>
+                                    </div>
+                                    <div class="caution_not_input email_caution">이메일을 입력해주세요.</div>
+                                </li>
+                                <!-- 이메일 -->
+                                <!-- 휴대전화 -->
+                                <li>
+                                    <h5 class="essbox">휴대전화<span class="essential">필수</span></h5>
+                                    <input type="tel" name="" id="mantomanHp" class="input_text" value=""
+                                           placeholder="핸드폰 번호를 입력해주세요 (-포함)" maxlength="13" required>
+                                    <div class="caution_not_input hp_caution">
+                                        전화번호를 입력해주세요.
+                                    </div>
+                                </li>
+                                <!-- 휴대전화 -->
+                                <!-- 문의유형 -->
+                                <li>
+                                    <h5 class="essbox">문의유형<span class="essential">필수</span></h5>
+                                    <select name="" class="input_text" id="mantomanCase">
+                                        <option class="nullPoint">문의 유형을 선택해주세요.</option>
+                                        <option value="1">취소/환불</option>
+                                        <option value="2">반품/교환</option>
+                                        <option value="3">배송관련</option>
+                                        <option value="4">상품문의</option>
+                                        <option value="5">쿠폰/이벤트</option>
+                                        <option value="6">헬로패스</option>
+                                        <option value="7">더그린배송</option>
+                                        <option value="8">회원정보</option>
+                                        <option value="9">사이트/앱 오류</option>
+                                        <option value="10">상품제안</option>
+                                        <option value="11">기타</option>
+                                    </select>
+                                    <!-- <a href="#" class="mantoman_case_choose"></a> -->
+                                    <div class="caution_not_input case_caution">
+                                        문의에 해당되는 유형을 선택해 주세요.
+                                    </div>
+                                </li>
+                                <!-- 문의유형 -->
+                                <!-- 문의내용 -->
+                                <li>
+                                    <h5>문의내용</h5>
+                                    <textarea class="mantoman_textarea" id="mantomanContents" maxlength="2000"
+                                              placeholder="문의 내용을 입력해 주세요."></textarea>
+                                    <div class="caution_not_input contents_caution" style="display: none;">
+                                        문의 내용을 입력해 주세요.
+                                    </div>
+                                </li>
+                                <!-- 문의내용 -->
+                                <!-- 사진 -->
+                                <li>
+                                    <div class="enroll_post_upload">
+                                        <h5>사진</h5>
+                                        <ul id="post_upload_file">
+                                            <div>
+                                                <input type="file" id="file" name="file" onchange="setImage(event);"/>
+                                                <div id="img_container"></div>
+                                                <script>
+                                                    function setImage(event){
+                                                        var reader = new FileReader();
+
+                                                        reader.onload = function (event){
+                                                            var img = document.createElement("img");
+                                                            img.setAttribute("src", event.target.result);
+                                                            document.querySelector("div#img_container").appendChild(img);
+                                                            img.style.width = "300px";
+                                                            img.style.height = "300px";
+                                                        };
+
+                                                        reader.readAsDataURL(event.target.files[0]);
+
+                                                    }
+                                                </script>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                    <div class="post_upload_guide">
+                                        <ul>
+                                            <li>상품이상으로 교환 또는 환불이 필요하신 경우 사진과 함께 구체적인 내용을 남겨주세요.</li>
+                                            <li>이미지는 JPEG,JPG,PNG,GIF만 가능하며, 개수는 1개, 업로드 용량은 최대 50MB까지 등록 가능합니다.</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <!-- 사진ㆍ비디오 -->
+                            </ul>
+                            <!-- mantoman_form_list 끝 -->
+                        </div>
+                        <!-- enroll_mantoman_form 끝 -->
+                        <button type="button" class="button_submit_no_margin" onclick="sendit()">등록</button>
+                    </div>
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

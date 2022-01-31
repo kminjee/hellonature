@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org/">
+
+<!-- head -->
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelloNature-Recommend-fresh</title>
+    <link rel="stylesheet" th:href="@{/user/css/recommend.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- axios -->
+    <script>
+        $(function (){
+            axios.get('/api/popupstore/read/1',{
+
+            }).then(function (res){
+
+                let idx = res.data.data.idx;
+                let title = res.data.data.title;
+                let content = res.data.data.content;
+                let dateStart = res.data.data.dateStart;
+                let dateEnd = res.data.data.dateEnd;
+
+                dateStart = dateStart.substr(5, 10);
+                dateEnd = dateEnd.substr(5, 10);
+
+                document.getElementsByClassName("popup_idx")[0].innerText = "no. " + idx;
+                document.getElementsByClassName("popup_dday")[0].innerText = dateStart + "~" + dateEnd;
+                document.getElementsByClassName("popup_title")[0].innerText = title;
+                document.getElementsByClassName("popup_content")[0].innerHTML = content;
+
+
+            }).catch(function (err){
+                console.log(err);
+            })
+        });
+    </script>
+    <!-- axios  -->
+</head>
+<!-- head 끝 -->
+<body>
+    <!-- container -->
+    <div id="container">
+        <!-- header -->
+        <div th:replace="/user/fragment/header::header"></div>
+        <!-- header 끝 -->
+
+        <!-- main -->
+        <main>
+            <!-- fresh content -->
+            <div id="recommend_wrapper">
+                <div id="recommend_content">
+                    <div class="page_article">
+                        <!-- 헬로네이처 추천 메뉴 -->
+                        <div class="recommend_top_menu">
+                            <ul class="recommend_category">
+                                <li onclick="location.href='/user/recommend/fresh'">
+                                    <img src="/user/images/recommend/recommend1.webp" alt="">
+                                    <p>
+                                        <span>더신선</span>
+                                        <span>신선 그 이상의 신선</span>
+                                    </p>
+                                </li>
+                                <li onclick="location.href='/user/recommend/store'">
+                                    <img src="/user/images/recommend/recommend2.webp" alt="">
+                                    <p>
+                                        <span>팝업스토어</span>
+                                        <span>지금 가장 핫한 그 제품들</span>
+                                    </p>
+                                </li>
+                                <li onclick="location.href='/user/recommend/event'">
+                                    <img src="/user/images/recommend/recommend3.webp" alt="">
+                                    <p>
+                                        <span>기획전·이벤트</span>
+                                        <span>현재 진행중인 다양한 이벤트</span>
+                                    </p>
+                                </li>
+                                <li onclick="location.href='/user/innerbrand'">
+                                    <img src="/user/images/recommend/recommend4.webp" alt="">
+                                    <p>
+                                        <span>브랜드관</span>
+                                        <span>헬로네이처의 프리미엄 브랜드들</span>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 헬로네이처 추천 메뉴 끝 -->
+
+                        <!-- 팝업스토어 내용 -->
+                        <div class="popup_top">
+                            <div class="popup_date">
+                                <!--db에서 idx read -->
+                                <div class="popup_idx">no.186</div>
+                                <!-- db에서 date read-->
+                                <div class="popup_dday">9.13 ~ 9.19</div>
+                            </div>
+                            <div class="popup_title">꿀맛나는 납작만두집</div>
+                        </div>
+
+                        <!-- db에서 content read -->
+                        <div class="popup_content">
+
+                        </div>
+
+                        <!-- BEST 브랜드 -->
+                        <div class="popup_best_brand">
+                            <p>hellonature Popup Store</p>
+                            <div class="best_brand_controls">
+                                <div class="best_brand_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                                <div class="best_brand_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                            </div>
+                            <div class="best_brand_wrap">
+                                <ul class="best_brand_box">
+                                    <li class="best_brand">
+                                        <a href="/user/brand_goods_list?brIdx=33&order=1">
+                                            <img src="/user/images/brand/고메.png" alt="">
+                                        </a>
+                                    </li>
+                                    <li class="best_brand">
+                                        <a href="/user/brand_goods_list?brIdx=35&order=1">
+                                            <img src="/user/images/brand/하인즈.png" alt="">
+                                        </a>
+                                    </li>
+                                    <li class="best_brand">
+                                        <a href="/user/brand_goods_list?brIdx=37&order=1">
+                                            <img src="/user/images/brand/헤이루.png" alt="">
+                                        </a>
+                                    </li>
+                                    <li class="best_brand">
+                                        <a href="/user/brand_goods_list?brIdx=38&order=1">
+                                            <img src="/user/images/brand/저스트그린.png" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- BEST 브랜드 끝 -->
+                    </div>
+                </div>
+            </div>
+            <!-- fresh content 끝-->
+        </main>
+        <!-- main 끝 -->
+
+        <!-- footer -->
+
+        <!--footer thymeleaf-->
+        <!--    <div th:replace="/user/fragment/footer::footer"></div>-->
+        <div th:replace="/user/fragment/footer::footer"></div>
+
+        <!-- footer 끝 -->
+
+        <!-- aside -->
+        <!-- aside 끝 -->
+    </div>
+    <!-- container 끝 -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{/user/js/recommend.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/inner.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common2.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <style>
+        #mypage-box { overflow: hidden; height: 100%; overflow-y: auto;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%;}
+        .main { margin-bottom: 50px !important;}
+    </style>
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="main">
+            <section id="content">
+                <!-- 컨텐츠박스-->
+                <div id="login_cont_box">
+                    <div id="login_cont_title">
+                        <h1>로그인</h1>
+                        <!-- 로그인선택 -->
+                        <div class="member_choice">
+                        </div>
+                    </div>
+                    <!-- 로그인 폼 작성 -->
+                    <div class="write_login_form">
+                        <!-- 회원 로그인 폼 -->
+                        <div class="member_form">
+                            <div id="login_cont_area">
+                                <input type="hidden" id="error" th:value="${session['errorMessage']}">
+                                <!------------------------------------------------------------------------------------>
+                                <form th:action="@{/user/mypage_userLogin}" method="POST" class="loginForm">
+                                    <input type="text" class="login_email_check" name="userid" placeholder="이메일을 입력해주세요" th:value="${session['userid']}">
+                                    <input type="password" class="login_password_check" name="userpw" placeholder="비밀번호를 입력해주세요">
+                                    <p id="login_message" th:text="${session['errorMessage']}" style="color: red; margin-bottom: 10px;"></p>
+                                    <div id=login_option_line>
+                                        <div id="login_opt_chk_box">
+                                            <input type="checkbox" class="login_option_check" id="save_email"><label for="save_email">이메일 저장</label>
+                                            <input type="checkbox" class="login_option_check" id="auto_login" name="remember-me"><label for="auto_login">자동 로그인</label>
+                                        </div>
+                                        <div id="login_search">
+                                            <a href="/user/mypage_findEmail" th>이메일</a>
+                                            <span class="bar"></span>
+                                            <a href="/user/mypage_findPassword">비밀번호 찾기</a>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="login_btn" onclick="memCheck()">로그인</button>
+                                </form>
+                                <!------------------------------------------------------------------------------------>
+                                <button type="submit" id="join_btn" onclick="location.href='./mypage_userRegist'">회원가입</button>
+
+                            </div><!-- 본문 끝 -->
+                        </div>
+                        <!-- 비회원 로그인 폼 -->
+                        <div class="notmember_form">
+                            <div id="notmember_cont_area">
+                                <form action="#" method="POST" class="loginForm">
+                                    <p><input type="text" id="notmem_name" placeholder="주문자명을 입력해주세요"></p>
+                                    <p><input type="text" id="notmem_number" placeholder="주문번호를 입력해주세요"></p>
+                                    <p><button type="button" id="notmem_login_btn" onclick="notMemCheck()">주문확인</button></p>
+                                </form>
+                                <p class="join_txt">아직도 헬로네이처 회원이 아니신가요?<a href="./mypage_userRegist">회원가입</a></p>
+                            </div><!-- 본문 끝 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/login.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

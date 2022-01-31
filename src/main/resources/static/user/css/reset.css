@@ -1,0 +1,49 @@
+@charset "utf-8";
+
+/* noto sans */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+/*넷마블체*/
+@font-face {
+    font-family: 'netmarbleM';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleM.woff') format('woff');
+}
+
+/* css 초기화 (웹브라우저마다 적용이 다르기 때문) */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: inherit;
+    vertical-align: baseline;
+
+    /* png처럼 투명배경처리 */
+    background: transparent;
+}
+
+div, p, label, a, ul, ol, li { margin: 0; padding: 0; display: block; }
+
+/* 목록 표시 제거 */
+ul, li, ol { list-style: none; }
+
+/* a 태그 기본 설정 */
+a { text-decoration: none; }
+a:link { color: #333; }
+a:visited { color: #333; }
+a:hover { color: #333; }
+a:focus { color: #333; }
+
+button { cursor: pointer; }
+
+body { background-color: #fff; margin: 0; width: 100%; font-family: 'Noto Sans KR', sans-serif; }
+
+.width { width: 1050px; margin : 0 auto; }
+
+.clearfix { clear: both; }
+
+#container { margin: 0; }
+
+/* 구분선 스타일 */
+.divider01 { width: 80%; max-width: 1050px; margin: 40px auto; border: 0.5px solid #EEE; }
+.divider02 { width: 10%; max-width: 1050px; margin: 0 auto; border: 0.1px solid #AAA; }

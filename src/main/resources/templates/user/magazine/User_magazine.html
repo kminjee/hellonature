@@ -1,0 +1,336 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!-- head -->
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelloNature-Magazine-Main</title>
+    <link rel="stylesheet" th:href="@{/user/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/user/css/magazine.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- axios -->
+    <script>
+        $(function() {
+
+            axios.get('/api/magazine/user/list?type=RECIPE&page=0', {}).then(function(res) {
+
+                let ul = $("#rec_pre_box");
+
+                for (let i in res.data.data) {
+                    let idx = res.data.data[i].idx;
+                    let img = res.data.data[i].img;
+                    let title = res.data.data[i].title;
+                    let des = res.data.data[i].des;
+
+                    let li = $('<li class="preview" id="rec_pre">').append(
+                        '<a onclick="location.href=\'/user/magazine/recipe_content?idx='+idx+'\'"><img src="'+img+'">'+
+                        '<div class="preview_info">'+
+                        '<p class="preview_title" id="rec_pre_tit">'+title+'</p>'+
+                        '<p class="preview_text" id="rec_pre_des">'+des+'</p></div></a></li>'
+                    )
+                    ul.append(li);
+                }
+
+                let recPrePrev = document.querySelector('#rec_pre_btn_prev');
+                let recPreNext = document.querySelector('#rec_pre_btn_next');
+                let recPreBox = document.querySelector('#rec_pre_box');
+                let recPre = document.querySelectorAll('#rec_pre');
+                let recPreCnt = recPre.length;
+                let recPreIdx = 0;
+                let recPreWidth = 330;
+                let recPreMargin = 30;
+
+                recPreBox.style.width = (recPreWidth + recPreMargin) * recPreCnt - recPreMargin + 'px';
+
+                function moveRecPre(num) {
+                    recPreBox.style.left = -num * (recPreWidth + recPreMargin) + 'px';
+                    recPreIdx = num;
+                }
+                recPreNext.addEventListener('click', function() {
+                    if (recPreIdx < recPreCnt - 3) {
+                        moveRecPre(recPreIdx + 1);
+                    } else {
+                        moveRecPre(0);
+                    }
+                });
+                recPrePrev.addEventListener('click', function() {
+                    if (recPreIdx > 0) {
+                        moveRecPre(recPreIdx - 1);
+                    } else {
+                        moveRecPre(recPreCnt - 3);
+                    }
+                });
+
+            }).catch(function(err) {
+                console.log(err);
+            });
+
+            axios.get('/api/magazine/user/list?type=NOTE&page=0', {}).then(function(res) {
+
+                let ul = $("#adv_pre_box");
+
+                for (let i in res.data.data) {
+                    let idx = res.data.data[i].idx;
+                    let img = res.data.data[i].img;
+                    let title = res.data.data[i].title;
+                    let des = res.data.data[i].des;
+
+                    let li = $('<li class="preview" id="adv_pre">').append(
+                        '<a onclick="location.href=\'/user/magazine/adventure_content?idx=' + idx + '\'"><img src="' + img + '">' +
+                        '<div class="preview_info">' +
+                        '<p class="preview_title" id="adv_pre_tit">' + title + '</p>' +
+                        '<p class="preview_text" id="adv_pre_des">' + des + '</p></div></a></li>'
+                    )
+                    ul.append(li);
+                }
+
+                let advPrePrev = document.querySelector('#adv_pre_btn_prev');
+                let advPreNext = document.querySelector('#adv_pre_btn_next');
+                let advPreBox = document.querySelector('#adv_pre_box');
+                let advPre = document.querySelectorAll('#adv_pre');
+                let advPreCnt = advPre.length;
+                let advPreIdx = 0;
+                let advPreWidth = 330;
+                let advPreMargin = 30;
+
+                advPreBox.style.width = (advPreWidth + advPreMargin) * advPreCnt - advPreMargin + 'px';
+
+                function moveAdvPre(num) {
+                    advPreBox.style.left = -num * (advPreWidth + advPreMargin) + 'px';
+                    advPreIdx = num;
+                }
+
+                advPreNext.addEventListener('click', function () {
+                    if (advPreIdx < advPreCnt - 3) {
+                        moveAdvPre(advPreIdx + 1);
+                    } else {
+                        moveAdvPre(0);
+                    }
+                });
+                advPrePrev.addEventListener('click', function () {
+                    if (advPreIdx > 0) {
+                        moveAdvPre(advPreIdx - 1);
+                    } else {
+                        moveAdvPre(advPreCnt - 3);
+                    }
+                });
+            }).catch(function(err) {
+                console.log(err);
+            });
+
+            axios.get('/api/magazine/user/list?type=STYLE&page=0', {}).then(function(res) {
+
+                let ul = $("#life_pre_box");
+
+                for (let i in res.data.data) {
+                    let idx = res.data.data[i].idx;
+                    let img = res.data.data[i].img;
+                    let title = res.data.data[i].title;
+                    let des = res.data.data[i].des;
+
+                    let li = $('<li class="preview" id="life_pre">').append(
+                        '<a onclick="location.href=\'/user/magazine/lifestyle_content?idx=' + idx + '\'"><img src="' + img + '">' +
+                        '<div class="preview_info">' +
+                        '<p class="preview_title" id="life_pre_tit">' + title + '</p>' +
+                        '<p class="preview_text" id="life_pre_des">' + des + '</p></div></a></li>'
+                    )
+                    ul.append(li);
+                }
+
+                let lifePrePrev = document.querySelector('#life_pre_btn_prev');
+                let lifePreNext = document.querySelector('#life_pre_btn_next');
+                let lifePreBox = document.querySelector('#life_pre_box');
+                let lifePre = document.querySelectorAll('#life_pre');
+                let lifePreCnt = lifePre.length;
+                let lifePreIdx = 0;
+                let lifePreWidth = 330;
+                let lifePreMargin = 30;
+
+                lifePreBox.style.width = (lifePreWidth + lifePreMargin) * lifePreCnt - lifePreMargin + 'px';
+
+                function moveLifePre(num) {
+                    lifePreBox.style.left = -num * (lifePreWidth + lifePreMargin) + 'px';
+                    lifePreIdx = num;
+                }
+                lifePreNext.addEventListener('click', function() {
+                    if (lifePreIdx < lifePreCnt - 3) {
+                        moveLifePre(lifePreIdx + 1);
+                    } else {
+                        moveLifePre(0);
+                    }
+                });
+                lifePrePrev.addEventListener('click', function() {
+                    if (lifePreIdx > 0) {
+                        moveLifePre(lifePreIdx - 1);
+                    } else {
+                        moveLifePre(lifePreCnt - 3);
+                    }
+                });
+
+            }).catch(function(err) {
+                console.log(err);
+            });
+
+            axios.get('/api/magazine/user/list?type=GUIDE&page=0', {}).then(function(res) {
+
+                let ul = $("#kit_pre_box");
+
+                for (let i in res.data.data) {
+                    let idx = res.data.data[i].idx;
+                    let img = res.data.data[i].img;
+                    let title = res.data.data[i].title;
+                    let des = res.data.data[i].des;
+
+                    let li = $('<li class="preview" id="kit_pre">').append(
+                        '<a onclick="location.href=\'/user/magazine/kitchen_content?idx=' + idx + '\'"><img src="' + img + '">' +
+                        '<div class="preview_info">' +
+                        '<p class="preview_title" id="kit_pre_tit">' + title + '</p>' +
+                        '<p class="preview_text" id="kit_pre_des">' + des + '</p></div></a></li>'
+                    )
+                    ul.append(li);
+                }
+
+                let kitPrePrev = document.querySelector('#kit_pre_btn_prev');
+                let kitPreNext = document.querySelector('#kit_pre_btn_next');
+                let kitPreBox = document.querySelector('#kit_pre_box');
+                let kitPre = document.querySelectorAll('#kit_pre');
+                let kitPreCnt = kitPre.length;
+                let kitPreIdx = 0;
+                let kitPreWidth = 330;
+                let kitPreMargin = 30;
+
+                kitPreBox.style.width = (kitPreWidth + kitPreMargin) * kitPreCnt - kitPreMargin + 'px';
+
+                function moveKitPre(num) {
+                    kitPreBox.style.left = -num * (kitPreWidth + kitPreMargin) + 'px';
+                    kitPreIdx = num;
+                }
+                kitPreNext.addEventListener('click', function() {
+                    if (kitPreIdx < kitPreCnt - 3) {
+                        moveKitPre(kitPreIdx + 1);
+                        console.log(kitPreIdx);
+                    } else {
+                        moveKitPre(0);
+                    }
+                });
+                kitPrePrev.addEventListener('click', function() {
+                    if (kitPreIdx > 0) {
+                        moveKitPre(kitPreIdx - 1);
+                        console.log(kitPreIdx);
+                    } else {
+                        moveKitPre(kitPreCnt - 3);
+                    }
+                });
+
+            }).catch(function(err) {
+                console.log(err);
+            });
+        });
+    </script>
+    <!-- axios -->
+</head>
+<!-- head 끝 -->
+<body>
+    <!-- container -->
+    <div id="container">
+        <!-- header -->
+        <div th:replace="/user/fragment/header::header"></div>
+        <!-- header 끝 -->
+
+        <!-- main -->
+        <main>
+            <!-- magazine_content -->
+            <section id="magazine_content" class="clearfix">
+                <!-- 세부 카테고리 -->
+                <div id="prod_category_wrap">
+                    <div class="prod_category_box">
+                        <div class="prod_cate_tit">매거진</div>
+                        <ul class="prod_cate_list">
+                            <li class="prod_cate" onclick="location.href='/user/magazine'" style="color: #0db081; font-weight: bold; border-bottom: 1px solid #0db081">전체</li><!--
+                     --><li class="prod_cate" onclick="location.href='/user/magazine/recipe?page=0'">레시피</li><!--
+                     --><li class="prod_cate" onclick="location.href='/user/magazine/adventure?page=0'">탐험노트</li><!--
+                     --><li class="prod_cate" onclick="location.href='/user/magazine/lifestyle?page=0'">라이프스타일</li><!--
+                     --><li class="prod_cate" onclick="location.href='/user/magazine/kitchen?page=0'">키친가이드</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 세부 카테고리 끝 -->
+                <!-- 레시피 미리보기 (3 column slide) -->
+                <div class="recipe_preview width clearfix">
+                    <p>레시피</p>
+                    <div class="preview_controls">
+                        <div class="preview_btn_prev" id="rec_pre_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                        <div class="preview_btn_next" id="rec_pre_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                    </div>
+                    <div class="preview_wrap">
+                        <ul class="preview_box" id="rec_pre_box">
+                        </ul>
+                    </div>
+                </div>
+                <!-- 레시피 미리보기 (3 column slide) 끝 -->
+
+                <!-- 탐험노트 미리보기 (3 column slide) -->
+                <div class="adventure_preview width clearfix">
+                    <p>탐험노트</p>
+                    <div class="preview_controls">
+                        <div class="preview_btn_prev" id="adv_pre_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                        <div class="preview_btn_next" id="adv_pre_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                    </div>
+                    <div class="preview_wrap">
+                        <ul class="preview_box" id="adv_pre_box">
+                        </ul>
+                    </div>
+                </div>
+                <!-- 탐험노트 미리보기 (3 column slide) 끝 -->
+
+                <!-- 라이프스타일 미리보기 (3 column slide) -->
+                <div class="lifestyle_preview width clearfix">
+                    <p>라이프스타일</p>
+                    <div class="preview_controls">
+                        <div class="preview_btn_prev" id="life_pre_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                        <div class="preview_btn_next" id="life_pre_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                    </div>
+                    <div class="preview_wrap">
+                        <ul class="preview_box" id="life_pre_box">
+                        </ul>
+                    </div>
+                </div>
+                <!-- 라이프스타일 미리보기 (3 column slide) 끝 -->
+
+                <!-- 키친가이드 미리보기 (3 column slide) -->
+                <div class="kitchenguide_preview width clearfix">
+                    <p>키친가이드</p>
+                    <div class="preview_controls">
+                        <div class="preview_btn_prev" id="kit_pre_btn_prev"><img src="/user/images/magazine/main/btn_prev_default.png" alt=""></div>
+                        <div class="preview_btn_next" id="kit_pre_btn_next"><img src="/user/images/magazine/main/btn_next_default.png" alt=""></div>
+                    </div>
+                    <div class="preview_wrap">
+                        <ul class="preview_box" id="kit_pre_box">
+                        </ul>
+                    </div>
+                </div>
+                <!-- 키친가이드 미리보기 (3 column slide) 끝 -->
+
+                <!-- 배너 -->
+                <div class="banner02 width">
+                    <img src="/user/images/banner/main_mid_bnr_1.jpg" alt="" class="width">
+                </div>
+                <!-- 배너 끝 -->
+            </section>
+            <!-- magazine_content 끝 -->
+        </main>
+        <!-- main 끝 -->
+
+        <div th:replace="/user/fragment/footer::footer"></div>
+
+    </div>
+    <!-- container 끝 -->
+    <script type="text/javascript" th:src="@{/user/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

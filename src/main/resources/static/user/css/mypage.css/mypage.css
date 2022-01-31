@@ -1,0 +1,829 @@
+
+@charset "utf-8";
+/* noto sans */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+/*넷마블체*/
+@font-face { font-family: 'netmarbleM'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleM.woff') format('woff'); font-weight: normal; font-style: normal;}
+
+/* 공통 */
+* { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; font-style: normal;}
+ol, ul, li { list-style: none; }
+a { text-decoration: none; color: black;}
+html, body{ height: 100%; min-height: 100%; overflow-x: hidden; overflow-y: hidden;}
+div { display: block;}
+.main, .footer { width: 1050px;}
+.container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y:scroll;}
+input { text-rendering: auto; word-spacing: normal; text-transform: none; text-indent: 0px; text-shadow: none; display: inline-block;}
+
+/* main */
+.main { margin: 0 auto; margin-top: 50px; margin-bottom: 200px;}
+.main_leftaside1 { width: 200px;}       /* Ajax -> sidebar1 <주문내역, 배송지관리, 구매후기, 더그린배송, 상품문의, 1:1문의, 개인정보수정>*/
+.main_leftaside2 { width: 200px;}       /* Ajax -> sidebar2 <FAQ, NEWS>*/
+.main_leftaside3 { width: 200px;}       /* Ajax -> sidebar3 <헬로캐시, 쿠폰, 헬로페이, 헬로패스>*/
+.main_contents { width: 820px;}
+.main { display: flex; justify-content: space-between;}
+
+/* ---------------------------------------------------------------- list 시작 ---------------------------------------------------------------- */
+/* main_leftaside > list */
+/* 주문내역/배송지관리/구매 후기/더그린배송/상품 문의/1:1문의/개인 정보 수정 */
+.list a { border: 1px solid #cccccc; margin-bottom: -2px; cursor: pointer;}
+.list_name { font-family: 'netmarbleM'; font-size: 30px; color: #11b082; line-height: 34px; font-weight: 700; letter-spacing: -.5px; padding: 8px 0 33px 1px;}
+.list a { background: #fafafa url("/user/images/mypage.img/right.png") no-repeat 174px 52%; background-size: 6px 11px; font-size: 14px; line-height: 20px; letter-spacing: -.3px; padding: 15px 0 15px 20px;}
+.list a li { color: #155c65; font-weight: 600; display: block;}
+.list a > a:hover, .list li:hover { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+.list a { height: 50px; display: flex; align-items: center; box-sizing: border-box;}
+/* 헬로캐시/쿠폰/헬로페이/헬로패스 */
+.list_callcenter {height: 60px; overflow: hidden; display: block; margin-top: 20px; padding: 9px 0 0 21px;; border-radius: 0 100px 100px 0; background: #fafafa url("/user/images/mypage.img/right.png") no-repeat 174px 52%; background-size: 6px 11px; font-size: 14px; line-height: 20px; letter-spacing: -.3px; border: 1px solid #cccccc;}
+.list_callcenter > span:first-child { display: flex; font-size: 14px; font-weight: 600}
+.list_callcenter > span:last-child { font-size: 12px;}
+/* ---------------------------------------------------------------- list 끝 ---------------------------------------------------------------- */
+
+/* main_contents */
+.main_content div { box-sizing: border-box;}
+.contents_box1 { display: flex; font-size: 14px; letter-spacing: -.5px; font-weight: 700; padding-top: 45px; box-sizing: border-box; border-bottom: 2px solid #666;}
+.time { padding: 20px 0 20px 0;}
+.contents_category { display: flex; justify-content: space-between; margin-top: 20px; }
+.contents_category li { width: 200px; padding-top: 55px; border: 1px solid #cccccc; color: #11b082; cursor: pointer;}
+.contents_category li:nth-child(1) { background: #fafafa url("/user/images/mypage.img/orderlist_icon.png") no-repeat 75px 15%; background-size: 45px;}
+.contents_category li:nth-child(2) { background: #fafafa url("/user/images/mypage.img/ordercancel_icon.png") no-repeat 75px 15%; background-size: 45px;}
+.contents_category li:nth-child(3) { background: #fafafa url("/user/images/mypage.img/favorite_icon.png") no-repeat 75px 15%; background-size: 45px;}
+.contents_category li:nth-child(4) { background: #fafafa url("/user/images/mypage.img/like_icon.png") no-repeat 75px 15%; background-size: 45px;}
+.contents_category span { display: flex; justify-content: center; color: black; padding-bottom: 8px;}
+.contents_category li a:hover, .contents_category li:hover { background-color: #e2e2e2; font-weight: 700; color: #5dab99;}
+.orderlist_click, .orderlist_click li, .orderlist_click li span { background-color: #e2e2e2 !important; font-weight: 700; color: #5dab99;}
+.orderlist_click span { display: flex; justify-content: center; color: #5dab99 !important; padding-bottom: 8px;}
+/* mypage_center.html */
+.contents_box1_center { box-sizing: border-box; height: 75px; font-size: 14px; letter-spacing: -.5px; font-weight: 700; box-sizing: border-box; border-bottom: 3px solid black;}
+#center_visitor { font-size: 22px; color: #333; font-weight: 400; letter-spacing: -1.1px; line-height: 1.55;}
+.center_operation_line { display: inline-flex; border-right: 1px solid #ccc; height: 7px; align-items: center; margin-right: 5px; margin-left: 5px;}
+.contents_name > span { font-size: 13px !important; font-weight: 500 !important; letter-spacing: -.6px !important; color: #555 !important; margin-left: 10px !important;}
+
+/* contents_box3 */
+.contents_box3 div { box-sizing: border-box;}
+.category_name1 { line-height: 34px; font-size: 14px; letter-spacing: -.5px; font-weight: 700; padding: 8px 0 20px 1px;}
+.filter_outline { display: flex; justify-content: space-between; width: 816px;}
+.filter_outline div { width: 204px; border: 1px solid #cccccc; margin-right: -4px;}
+.filter_outline div > a { display: flex; justify-content: center; padding: 8px;}
+.filter_outline div > a:hover { background-color: #e2e2e2; }
+/* 첫번째요소와 마지막요소를 뺀 나머지에는 hover시 border-radius를 주지 않음 */
+.filter_outline div:not(:first-child:last-child) > a:hover { background-color: #e2e2e2; font-weight: 700; color: #5dab99;}
+
+/* contents_box4 */
+.contents_box4 { background-color: #f6f6f6; margin-top: 16px; padding: 20px 20px 14px; display: flex; justify-content: space-between;}
+.contents_box4 div { box-sizing: border-box;}
+.order_date > p { font-size: 15px; color: #333; font-weight: 600; line-height: 1.22; letter-spacing: -0.6px;}
+.order_detail_button { display: flex; justify-content: center; align-items: center; width: 40px; background: #f6f6f6 url("/user/images/mypage.img/hover_right.png") no-repeat 20px 52%; background-size: 6px 11px;}
+
+/* contents_box5 */
+.order_info { display: flex; justify-content: space-between; align-items: center;}
+.order_info_left { display: flex; align-items: center;}
+.order_info_line { border-right: 1px solid #000; height: 13px; margin: 10px;}
+.contents_box5 { padding: 20px 20px 14px;}
+.order_info_font1 { font-size: 15px; line-height: 1.6; font-weight: 700;}
+.order_info_font2 { font-size: 15px; line-height: 1.6;}
+.order_info_font3 { font-size: 15px; line-height: 1.6; color: #11b082;}
+
+/* contents_box6 */
+.contents_box6 div { box-sizing: border-box;}
+.contents_box6 { width: 780px; height: 90px; border: 1px solid #cccccc; margin: 0 auto; border-radius: 8px; padding: 12px 12px 14px; display: flex; align-items: center; justify-content: start; margin-bottom: 5px; position: relative; }
+.review_contents_box { width: 100%; margin: 0 auto; display: block; align-items: center;}
+.contents_box6_inner { display: flex; align-items: center;}
+.product_info_line { border-right: 1px solid #000; height: 13px; margin: 10px;}
+.product_info { padding-left: 10px;}
+.product_info > p { font-size: 14px; line-height: 1.6;}
+.product_image { width: 60px; height: 60px; background-size: contain; border-radius: 10px;}
+.contents_box6_inner > p, .product_post_lastline p { font-size: 12px; color: #888; font-weight: 400; letter-spacing: -.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+/* ---------------------------------------------------------------- mypage_orderlist1 ~ 4 시작 ----------------------------------------------------------------*/
+/* mypage_orderlist1.html > 1:1문의 버튼 */
+.mantoman_button_box { position: absolute; left: 690px; }
+.mantoman_button { width: 98px; height: 32px; background-color: #ccc; padding: 1px; border: none; border-radius: 10px; color: #fff; display: block; box-sizing: border-box; font-weight: 600; text-align: center; letter-spacing: -.5px; outline: none; cursor: pointer;}
+/* mypage_orderlist2.html >주문취소 버튼 */
+
+mantoman_button:hover{ background-color: #11b082;}
+
+.ordercancel_button_box { padding-left: 420px;}
+.ordercancel_button { width: 70px; height: 30px; border-radius:14px; font-size: 14px; font-weight: 700; background-color: #fafafa; border: 1px solid #cccccc;}
+/* mypage_orderlist3.html > 구매횟수 */
+.favorite_box { margin-left: auto; margin-right: 90px; height: 60px; float: right; align-items: start; position: relative; top: 20px; }
+.favorite_count { font-size: 14px; color: #11b082; letter-spacing: -.5px; float: right}
+/* mypage_orderlist3.html > 필터 아래 공간 확보용 */
+.margin_bottom { margin-bottom: 20px; visibility: hidden;}
+/* mypage_orderlist4.html > 좋아요 리스트 */
+.like_list { width: 804px; border: 1px solid #cccccc; border-radius: 8px; margin: 0 auto; margin-top: 20px;}
+.like_list > div { border: none;}
+.like_box { display: flex; align-items: center; margin-left:auto; margin-right: 60px; height: 60px;}
+.like_box > p { width: 50px;}
+.like_image { width: 20px; height: 15px; background: #fafafa url("/user/images/mypage.img/like_redicon.png") no-repeat; background-size: contain; margin-right: 5px; margin-bottom: 3px;}
+.like_count { color: red; position: relative; top: -2px; }
+/* ---------------------------------------------------------------- mypage_orderlist1 ~ 4 끝 ----------------------------------------------------------------*/
+
+/* ---------------------------------------------------------------- mypage_hellocash 시작 ----------------------------------------------------------------*/
+/* mypage_hellocash.html */
+.contents_box4_hellocash { background-color: #f6f6f6; display: flex; padding: 30px 20px; justify-content: space-between; width: 780px; margin-bottom: 26px;} 
+.hellocash { display: flex; align-items: center;}
+.hellocash_won { display: flex; align-items: center;}
+.hellocash > p { color:#11b082; font-weight: 700; font-size: 18px; line-height: 1.5; letter-spacing: -0.6px;}
+.hellocash_won > p { color:#11b082; font-weight: 700; font-size: 24px; line-height: 1.5; letter-spacing: -0.6px;}
+.hellocash_won > p > span { font-size: 14px;}
+/* mypage_hellocash.html > contents_hellocash_box1 */
+.contents_hellocash_box1 div { box-sizing: border-box;}
+.contents_hellocash_box1 { display: flex; justify-content: space-between; padding: 20px 20px; border-bottom: 1px solid #cccccc;}
+.hellocash_savingbox1_inner { display: flex; align-items: center;}
+.hellocash_saving_line { border-right: 1px solid #cccccc; padding-right: 8px; margin-right: 8px; height: 12px;}
+.hellocash_savingbox1 > p { font-size: 15px; line-height: 1.73; letter-spacing: -0.6px; margin-bottom: 5px;}
+.hellocash_savingbox1_inner > p { font-size: 12px; line-height: 1.58; letter-spacing: -0.5px; color:#888;}
+.hellocash_savingbox2 > p:first-child { display: flex; justify-content: flex-end; font-size: 18px; font-weight: 700; line-height: 1.44; letter-spacing: -0.8px; margin-right: 2px;}
+.hellocash_savingbox2 > p:first-child > span { display: flex; align-items: flex-end; font-size: 14px; font-weight: 700; line-height: 1; letter-spacing: -0.6px; padding-bottom: 4px; padding-left: 2px;}
+.hellocash_savingbox2 > p:last-child { font-size: 14px; line-height: 1.57; letter-spacing: -0.6px; color: #888;}
+/* mypage_hellocash.html > contents_hellocash_box2 */
+.contents_hellocash_box2 div { box-sizing: border-box;}
+.contents_hellocash_box2 { border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc; margin-top: 30px; padding: 20px; display: flex; justify-content: space-between; cursor: pointer;}
+.contents_hellocash_box2_inner { display: flex; align-items: center;}
+.hellocash_help_button, .overview { width: 40px; height: 40px; background: white url("/user/images/mypage.img/down.png") no-repeat 20px 50%; background-size: 11px 6px;}
+.hellocash_help_button:hover, .overview:hover { width: 40px; height: 40px; background: white url("/user/images/mypage.img/up.png") no-repeat 20px 50%; background-size: 11px 6px;}
+.hellocash_help_button2 { width: 40px; height: 40px; background: white url("/user/images/mypage.img/down.png") no-repeat 20px 50%; background-size: 11px 6px;}
+.hellocash_help_button2:hover { width: 40px; height: 40px; background: white url("/user/images/mypage.img/up.png") no-repeat 20px 50%; background-size: 11px 6px;}
+.hellocash_help > p { font-size: 15px; font-weight: 700;}
+/* mypage_hellocash.html > contents_hellocash_box3 */
+.contents_hellocash_box3 { border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; border-bottom: 1px solid #cccccc; padding: 24px 20px; background-color: #f1f6f9; display: none;}
+.help_list_title { font-size: 15px;  color: #555; line-height: 1.6; letter-spacing: -0.6px; font-weight: 700;}
+.help_list_content { font-size: 15px; color: #555; font-weight: 400; line-height: 1.6; letter-spacing: -0.6px; padding: 8px 0 20px 5px;}
+.help_list_content p:nth-child(n) { margin-bottom: 8px;}
+/* ---------------------------------------------------------------- mypage_hellocash 끝 ----------------------------------------------------------------*/
+
+/* ---------------------------------------------------------------- mypage_coupon 시작 ----------------------------------------------------------------*/
+/* mypage_coupon.html > coupon_box1 */
+.contents_coupon_box1 { display: flex; justify-content: space-between; padding: 20px;}
+#coupon_number { width: 100%; height: 50px; padding: 0 10px; border-radius: 10px; border: 2px solid #f6f6f6; box-sizing: border-box; background-color: #f6f6f6; letter-spacing: -0.3px; color: #555; caret-color: #1d988e; outline: none; margin-right: 4px;}
+.contents_coupon_submit { display: block; width: 100px; height: 50px; border-radius: 8px; background-color: #ccc !important; color: #e2e2e2 !important; text-align: center; box-sizing: border-box; font-weight: 700; line-height: 50px; letter-spacing: -0.6px; outline: none; cursor: pointer}
+.contents_coupon_submit:hover { display: block; width: 100px; height: 50px; border-radius: 8px; background-color: #155c65 !important; color: #e2e2e2 !important; text-align: center; box-sizing: border-box; font-weight: 700; line-height: 50px; letter-spacing: -0.6px; outline: none;}
+/* mypage_coupon.html > coupon_box2 */
+.contents_coupon_box2 { display: flex; padding: 20px; }
+#coupon_filter_used, #coupon_filter_available { color: #00B081; font-weight: bold; padding: 7px 0 11px; font-size: 14px; background-color: #fff; text-align: center; box-sizing: border-box; letter-spacing: -0.6px; line-height: 1.73; width: 410px; height: 46px; border-bottom: 1px solid #cccccc;}
+#coupon_filter_used:hover, #coupon_filter_available:hover { color: #00B081; font-weight: bold; padding: 7px 0 11px; font-size: 14px; background-color: #fff; text-align: center; box-sizing: border-box; letter-spacing: -0.6px; line-height: 1.73; width: 410px; height: 46px; border-bottom: 3px solid #155c65;}
+.clicked_coupon { color: #00B081 !important; font-weight: bold !important; padding: 7px 0 11px !important; font-size: 14px !important; background-color: #fff !important; text-align: center !important; box-sizing: border-box !important; letter-spacing: -0.6px !important; line-height: 1.73 !important; width: 410px !important; height: 46px !important; border-bottom: 3px solid #155c65 !important;}
+/* mypage_coupon.html > coupon_list */
+.coupon_list { display: flex; padding: 20px;}
+.coupon_used_image { width: 80px; height: 80px; background-color: #eee; display: inline-block; box-sizing: border-box; border-radius: 8px; text-align: center; color: #ccc; font-weight: 800; font-size: 18px; line-height: 80px; letter-spacing: -0.6px;}
+.coupon_available_image { width: 80px; height: 80px; background-color: #ff4a43; display: inline-block; box-sizing: border-box; border-radius: 8px; text-align: center; color: #fff; font-weight: 800; font-size: 18px; line-height: 80px; letter-spacing: -0.6px;}
+.coupon_info { align-items: center; padding: 6.5px 0 0 18px;}
+.coupon_info > p:nth-child(1) { font-size: 15px; font-weight: 700; line-height: 1.6; letter-spacing: -0.6px; color: #333;}
+.coupon_info > p:nth-child(2) { margin-top: 2px; font-size: 12px; font-weight: 400; line-height: 1.5; letter-spacing: -0.5px; color: #555;}
+.coupon_info > p:nth-child(3) { margin-top: 5px; font-size: 12px; font-weight: 400; line-height: 1.58; letter-spacing: -0.5px; color: #888;}
+/* ---------------------------------------------------------------- mypage_coupon 끝 ----------------------------------------------------------------*/
+
+/* ---------------------------------------------------------------- mypage_hellopay 시작 ---------------------------------------------------------------- */
+#contents_hellopay_h5 { display: block; margin-block-start: 1.67em; margin-block-end: 1.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-size: 16px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -0.8px; margin-bottom: 20px; padding-left: 20px;}
+.contents_hellopay_inputcard { padding: 20px 20px 20px; background-color: #f6f6f6; width: 100%; margin-right: 0; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px;}
+.contents_hellopay_inputcard_h  { padding: 20px 20px 20px; background-color: #f6f6f6; width: 100%; margin-right: 0; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px;}
+.contents_hellopay_inputcard_h:hover {background-color: #ebebeb}
+
+/* 라디오 버튼 기능 삭제 */
+.hellopay_radio_s { -webkit-appearance: none; -moz-appearance: none; appearance: none; outline: 0; box-shadow:none; border: none; with:30px;}
+/* (라디오 커스터마이징) 체크되기 전 */
+.hellopay_radio_s + label:before { width:30px; background: url("/user/images/mypage.img/hellopay_radio_unchecked.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 30px; height: 30px; border-radius: 100%; vertical-align: middle; cursor: pointer;}
+/* (라디오 커스터마이징) 체크된 후 */
+.hellopay_radio_s:checked + label:before { width:30px; background: url("/user/images/mypage.img/hellopay_radio_checked.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 30px; height: 30px; border-radius: 100%; vertical-align: middle; cursor: pointer;}
+.hellopay_radio_box_h { width: 650px; display: flex; justify-content:space-between; margin-bottom: 5px;}
+
+.hellopay_card_edit_del { display: flex; align-items: center; justify-self: center;}
+.hellopay_card_edit_del > p { cursor: pointer;}
+.hellopay_line { border-right: 1px solid #ccc; margin: 10px; width: 1px; height: 11px;}
+.hellopay_card_edit_del > p:not(:nth-child(2)) { font-size: 12px; color: #555; font-weight: 400; line-height: normal; letter-spacing: -0.55px;}
+#cardname { width: 100%; margin-bottom: 3px; padding-left: 5px; border: none; background-color: transparent; font-size: 18px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -0.67px; caret-color: #1d988e; outline: none;}
+#cardname:focus { border: 2px solid #5dab99; width: 150px; border-radius: 5px; background-color: #fff;}
+.hellopay_bankname { margin-right: 10px; font-size: 14px; color: #333; line-height: 1.57; letter-spacing: -0.6px; padding-left: 5px;}
+.hellopay_cardname { margin-right: 10px; font-size: 14px; color: #333; line-height: 1.57; letter-spacing: -0.6px; padding-left: 5px;}
+.hellopay_star { font-size: 13.2px; color: #888; line-height: 1.58; letter-spacing: 0.6px; vertical-align: middle;}
+.hellopay_star > i { display: inline-block; font-style: normal; font-size: 15px; vertical-align: middle; margin-bottom: -4px;}
+.hellopay_inputcard_submit { display: block; width: 100%; background-color: #5dab99; color: #fff; height: 60px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; line-height: 60px; letter-spacing: -0.8px; outline: none; border: 1px solid #5dab99; margin-top: 30px; cursor: pointer;}
+/* ---------------------------------------------------------------- mypage_hellopay 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_enroll_hellopay 시작 ---------------------------------------------------------------- */
+.enrollhellopay_box { padding: 26px 20px 0;}
+.enrollhellopay_box div { box-sizing: border-box;}
+.check_business_credit_card { -webkit-appearance: none; -moz-appearance: none; appearance: none; outline: 0; box-shadow:none; border: none;}
+.check_business_credit_card:before { background: url("/user/images/mypage.img/unchecked_radio.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer; margin-right: 10px;}
+.check_business_credit_card:checked:before { background: url("/user/images/mypage.img/checked_radio.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer;}
+.enrollhellopay_box_check_inner{ display: flex; justify-content: center; align-items: center;}
+.enrollpay_box_check { display: flex; align-items: center; padding: 26px 20px 0;}
+.form_title { font-size: 14px; color: #333; font-weight: 700; line-height: 1.57; letter-spacing: -.6px;}
+.enrollpay_input { width: 100%; height: 50px; padding: 0 10px; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; background-color: #f6f6f6; letter-spacing: -.3px; color: #555; caret-color: #1d988e; outline: none; margin-top: 6px;} 
+.form_area { display: table; width: 100%; table-layout: fixed; box-sizing: border-box;}
+.form_area > li { position: relative; display: table-cell; vertical-align: middle;}
+.form_area > li:not(:last-child) { padding-right: 5px;}
+.enrollhellopay_box > div:not(:last-child) { margin-bottom: 20px;}
+.enrollhellopay_box > div:last-child { margin-bottom: 40px;}
+#card_num1, #card_num2, #card_num3, #card_num4 { font-family: password-mask;}
+#card_nickname:focus, #card_num1:focus, #card_num2:focus, #card_num3:focus, #card_range:focus, #birth_sixnum:focus, #card_pw:focus { border: 3px solid black;}
+
+.enrollpay_allow { box-sizing: border-box; display: flex; align-items: center; padding: 20px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; width: 810px; margin: 0 auto; cursor: pointer;}
+.enrollpay_allow > label, .enrollpay_box_check > label { font-weight: 400; font-size: 16px; color: #333; line-height: 1.63; letter-spacing: -.6px;}
+.enrollpay_allow2 { box-sizing: border-box; display: flex; align-items: center; padding: 20px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; width: 900px; margin: 0 auto; cursor: pointer; margin-top: 20px;}
+.enrollpay_allow2 > label { font-weight: 400; font-size: 16px; color: #333; line-height: 1.63; letter-spacing: -.6px;}
+.allow_button { width: 40px; height: 40px; background: white url("/user/images/mypage.img/down.png") no-repeat 20px 50%; background-size: 11px 6px; margin-left: 500px;}
+.allow_button:hover { width: 40px; height: 40px; background: white url("/user/images/mypage.img/up.png") no-repeat 20px 50%; background-size: 11px 6px; margin-left: 500px;}
+.allow_button2 { width: 40px; height: 40px; background: white url("/user/images/mypage.img/down.png") no-repeat 20px 50%; background-size: 11px 6px; margin-left: 600px;}
+.allow_button2:hover { width: 40px; height: 40px; background: white url("/user/images/mypage.img/up.png") no-repeat 20px 50%; background-size: 11px 6px; margin-left: 600px;}
+.enrollpay_allow_list { box-sizing: border-box; width: 820px; border-left: 1px solid #ccc; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 24px 20px; margin: 0 auto; margin-bottom: 50px; background-color: #f1f6f9; display: none;}
+.enrollpay_allow_list > h5 { margin-bottom: 8px; font-size: 15px; color: #555; font-weight: 700; line-height: 1.6; letter-spacing: -.6px;}
+.enrollpay_allow_list2 { box-sizing: border-box; width: 810px;  padding: 24px 20px; margin: 0 auto; background-color: #EEE; display: none;}
+.enrollpay_allow_list2 > h5 { margin-bottom: 8px; font-size: 15px; color: #555; font-weight: 700; line-height: 1.6; letter-spacing: -.6px;}
+.enrollpay_allow_list3 { box-sizing: border-box; width: 900px;  padding: 24px 20px; margin: 0 auto; background-color: #EEE; display: none;}
+.enrollpay_allow_list3 > h5 { margin-bottom: 8px; font-size: 15px; color: #555; font-weight: 700; line-height: 1.6; letter-spacing: -.6px;}
+.allow_contents1 { padding: 16px 0 24px; border-top: 1px solid #888; font-size: 14px; color: #555; font-weight: 400; line-height: 1.57; letter-spacing: -.6px; box-sizing: border-box;}
+.allow_table { border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; width: 100%; table-layout: fixed; border-collapse: collapse; border-spacing: 0;}
+.allow_table tbody tr th { width: 110px; border-right: 1px solid #eee; font-size: 13px; color: #555; font-weight: 500; text-align: center; vertical-align: middle; line-height: 1.38; letter-spacing: -.6px;}
+.allow_table th, td { word-wrap: break-word; word-break: break-all; vertical-align: middle;}
+.allow_table tbody tr td { padding: 12px 0 12px 16px; font-size: 12px; color: #888; font-weight: 400; line-height: 1.58; letter-spacing: -.5px;}
+.back_button { background: white url("/user/images/mypage.img/back_icon.png") center 1px no-repeat; background-size: contain; width: 30px; height: 30px; cursor: pointer; display: none; }
+.back_button a { display: block; width: 100%; height: 100%;}
+/* ---------------------------------------------------------------- mypage_enroll_hellopay 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_hellopass 시작 ---------------------------------------------------------------- */
+.hellopass_box1 { border-radius: 8px; padding: 26px 25px 20px 20px; background-color: #f1f6f9; box-sizing: border-box;}
+.hellopass_box1 div p { display: block;}
+.hellopass_box1_inner { background: url("/user/images/mypage.img/helloNature.png") right top no-repeat; background-size: 68px 71px;}
+.hellopass_box1_1 { font-size: 30px; font-weight: 700; line-height: normal; letter-spacing: -1.2px; color: #333; margin-bottom: 10px;}
+.hellopass_box1_2 { font-size: 18px; font-weight: 500; line-height: normal; letter-spacing: -.6px; color: #00B081; margin-bottom: 10px;}
+#hellopass_flag { margin-left: 6px; background-color: #00B081; color: #fff; width: 60px; height: 22px; border-radius: 11px; font-size: 12px; font-weight: 500; line-height: 22px; letter-spacing: -.5px; text-align: center; display: inline-block;}
+.hellopass_box1_3 { font-size: 15px; font-weight: 400; line-height: 1.83; letter-spacing: -.51px; color: #555;}
+#hellopass_day { font-size: 15px; font-weight: 700; line-height: normal; letter-spacing: -.48px; color: #00B081; padding-left: 6px;}
+#hellopass_tin { font-size: 15px; padding-left: 20px; margin-top: 16px; margin-bottom: 25px; font-weight: 400; line-height: 1.83; letter-spacing: -.51px; color: #555;}
+.hellopass_link_move1, .hellopass_link_move2 { box-sizing: border-box; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; margin-right: -20px; padding: 10px 20px; width: 820px; cursor:pointer;}
+.hellopass_link_move2 { margin-top: 20px;}
+.hellopass_link_txt1, .hellopass_link_txt2 { display: flex; justify-content: space-between; padding-right: 20px; align-items: center;}
+.hellopass_link_txt1 > a { font-size: 15px; color: #555; letter-spacing: -.6px;}
+.hellopass_link_txt2 > a { width: 820px; display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: #555; letter-spacing: -.6px;}
+.hellopass_payment { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
+.hellopass_payment_time { display: block; font-size: 12px; font-weight: 400; line-height: 1.58; letter-spacing: -.5px; color: #888;}
+.hellopass_title { font-size: 15px; line-height: 1.73; letter-spacing: -.6px; color: #333; font-weight: 700;}
+.hellopass_price { font-size: 15px; line-height: 1.73; letter-spacing: 1px;}
+.hellopass_overview { margin-bottom: 50px; box-sizing: border-box; border-right: 1px solid #ccc; border-left: 1px solid #ccc; border-bottom: 1px solid #ccc; width: 820px; margin: 0 auto; padding: 24px 20px; background-color: #f1f6f9; display: none;}
+#hellopass_button_before { margin-bottom: 50px;}
+.link_move { width: 40px; height: 40px; background: white url("/user/images/mypage.img/right.png") no-repeat 20px 30%; background-size: 6px 11px; cursor: pointer;}
+.link_move:hover { width: 40px; height: 40px; background: white url("/user/images/mypage.img/hover_right.png") no-repeat 20px 30%; background-size: 6px 11px; cursor: pointer;}
+/* ---------------------------------------------------------------- mypage_hellopass 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_center 시작 ---------------------------------------------------------------- */
+.center_form_area { display: table; width: 100%; table-layout: fixed; box-sizing: border-box; margin-top: 20px;}
+.center_form_area > li { position: relative; display: table-cell; vertical-align: middle;}
+.center_form_area li:not(:last-child) > a { height: 50px; font-size: 16px; color: #333; font-weight: 500; line-height: 50px; letter-spacing: -.6px; border-radius: 6px; background-color: #f2f2f2; display: flex; justify-content: center; align-items: center;}
+.center_form_area li:last-child > a { height: 50px; font-size: 16px; color: #333; font-weight: 500; line-height: 50px; letter-spacing: -.6px; border-radius: 6px; background-color: #fae54d; display: flex; justify-content: center; align-items: center;}
+.center_form_area > li > a::before { content: ''; display: flex; width: 20px; height: 20px; margin-right: 5px; justify-content: center; align-items: center;}
+.center_form_area li:first-child > a::before { background: url("/user/images/mypage.img/center_call.png") center center no-repeat; background-size: 40px;}
+.center_form_area li:nth-child(2) > a::before { background: url("/user/images/mypage.img/center_mantoman.png") center center no-repeat; background-size: contain;}
+.center_form_area li:last-child > a::before { background: url("/user/images/mypage.img/center_kakao.png") center center no-repeat; background-size: contain;}
+/* ---------------------------------------------------------------- mypage_center 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_faq_center 시작 ---------------------------------------------------------------- */
+.faq_clicked_button { border: 2px solid black !important;}
+.faq_box1 { margin-top: 20px; margin-bottom: 20px; text-align: center; display: flex; flex-wrap: wrap; justify-content: space-between; width: 100%; table-layout: fixed; box-sizing: border-box; padding-right: 5px;}
+.faq_box1 li { display: inline-block; position: relative; margin: 10px 0 0 8px;}
+.faq_box1 li > span { display: block; position: relative; padding: 0px 12px; box-sizing: border-box;}
+.faq_category_box { width: 820px; box-sizing: border-box; display: flex; margin-top: 20px; align-items: center; justify-content: space-between; padding: 10px;}
+.faq_category_box { box-sizing: border-box; margin-bottom: 30px;}
+.faq_category_box input[type="button"] { width: 100%; height: 30px; padding-right: 10px; padding-left: 10px; vertical-align: middle; text-align: center; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; font-size: 13.5px; font-weight: 400; letter-spacing: .5px;}
+.faq_category_box input[type="button"]:hover { background-color: #5dab99; color: #fff; border: 1px solid #5dab99;}        
+.faq_box1 li label { position: relative; display: block; width: 100%; height: 100%; line-height: 32px; text-align: center; font-size: 13px; cursor: pointer; margin-right: 5px;}
+.radio_hide { vertical-align: top; opacity: 0;}
+/* 페이징 */
+.center_faq_paging > ul li { display: inline-block; min-width: 40px; height: 40px; font-size: 14px; color: #888; font-weight: 500; line-height: 40px;}
+.center_faq_paging { display: block; margin-top: 28px; text-align: center;}
+.prev_page a { background: url("/user/images/mypage.img/prev_page.png") center center no-repeat; background-size: 12px !important; cursor: pointer;}
+.next_page a { background: url("/user/images/mypage.img/next_page.png") center center no-repeat; background-size: 12px !important; cursor: pointer;}
+.center_faq_paging > ul li > a { display: block; color: transparent;}
+.now_page > span { color: #333; font-weight: 700;}
+.center_faq_move { box-sizing: border-box; margin-right: -20px; width: 820px; text-overflow: ellipsis; overflow: hidden; border-bottom: 1px solid #ccc; }
+.center_faq_box { padding: 24px 6px; display:none; }
+.center_faq_txt { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0px 10px; }
+.center_faq_txt > a { font-size: 15px; color: #555; letter-spacing: -.6px;}
+.faq_list_title { font-size: 15px;  color: #555; line-height: 1.6; letter-spacing: -0.6px; font-weight: 700;}
+.faq_list_content { font-size: 15px; color: #555; font-weight: 400; line-height: 1.6; letter-spacing: -0.6px; padding: 8px 0 20px 5px;}
+.faq_list_title > p { line-height: 1.8; font-weight: 700; font-size: 18pt; color: rgb(0, 176, 129)}
+.faq_list_linebox { width: 30px; height: 30px; box-sizing: border-box; padding-top: 15px;}
+.faq_list_line { border-bottom: 1px solid #cccccc;}
+.faq_list_answer { line-height: 1.5; font-weight: 700; font-size: 18pt; color: #000; }
+.faq_list_content > p { line-height: 1.8; }
+.faq_list_content > p > span { margin-bottom: 10px; font-size: 9pt; margin-top: -30px;}
+/* ---------------------------------------------------------------- mypage_faq_center 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_news_center 시작 ---------------------------------------------------------------- */
+.center_link_move_box div { box-sizing: border-box;}
+.center_link_move_box { box-sizing: border-box; border-bottom: 1px solid #ccc; margin-right: -20px; width: 820px; display: flex; justify-content: space-between; padding: 20px;}
+.center_link_txt > p { display: block; }
+.center_link_txt > a { display: flex; justify-content: space-between; font-size: 17px; color: #333; letter-spacing: -.6px; line-height: 1.73; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.link_move { width: 40px; height: 40px; background: white url("/user/images/mypage.img/right.png") center center no-repeat; background-size: 6px 11px; cursor: pointer;}
+.link_move:hover { width: 40px; height: 40px; background: white url("/user/images/mypage.img/hover_right.png") center center no-repeat; background-size: 6px 11px; cursor: pointer;}
+.news_upload_date > p { font-size: 13px; color: #888; font-weight: 400; line-height: 1.58; letter-spacing: -.5px;}
+/* 상단 강조 공지사항 글자 font-weight: 700 */
+.news_highlight { font-size: 17px; color: #333; letter-spacing: -.6px; line-height: 1.73; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700;}
+/* ---------------------------------------------------------------- mypage_news_center 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_innews_center 시작 ---------------------------------------------------------------- */
+.news_contents_box { box-sizing: border-box; width: 100%; border-right: 1px solid #ccc; border-left: 1px solid #ccc; border-bottom: 1px solid #ccc; background-color: #fafafa; padding: 20px;}
+.news_contents_box img { margin-top: 20px; max-width: 100%; width: 800px; height: auto;}
+.news_contents_box p { margin-bottom: 16px; line-height: 1.8; color: rgb(32, 32, 32); }
+.news_contents_box span { color: rgb(0, 176, 129); font-weight: 700;}
+/* ---------------------------------------------------------------- mypage_innews_center 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_pay_hellopass 시작 ---------------------------------------------------------------- */
+.enroll_hellopass_box1 div { box-sizing: border-box;}
+.enroll_hellopass_box1 { display: flex; justify-content: space-between; align-items: center; margin: 0 auto; overflow: hidden; margin-top: 20px;}
+#hellopass_4500 { width: 200px; height: 120px; background: url("/user/images/mypage.img/hellopass_4500.png") center center no-repeat; background-size: cover; border-radius: 8px; border:none; margin-right: 10px;}
+#hellopass_4500:hover { width: 200px; height: 120px; background: url("/user/images/mypage.img/hellopass_4500.png") center center no-repeat; background-size: cover; border-radius: 8px; border: 2px solid #fafafa;}
+#hellopass_4500:checked { width: 200px; height: 120px; background: url("/user/images/mypage.img/hellopass_4500.png") center center no-repeat; background-size: cover; border-radius: 8px; border: 2px solid #5dab99;}
+#hellopass_5500 { width: 200px; height: 120px; background: url("/user/images/mypage.img/hellopass_5500.png") center center no-repeat; background-size: cover; border-radius: 8px; border:none;}
+#hellopass_5500:hover { width: 200px; height: 120px; background: url("/user/images/mypage.img/hellopass_5500.png") center center no-repeat; background-size: cover; border-radius: 8px; border: 2px solid #fafafa;}
+.enroll_hellopass_guide { padding-bottom: 50px; font-weight: 800; color: #333; line-height: 1.33; letter-spacing: -1.2px;}
+.enroll_hellopass_guide > h3 { font-size: 30px;}
+.enroll_hellopass_box2 { padding: 20px 20px 40px 20px; border-bottom: 1px solid #ccc;}
+.enroll_hellopass_instant { padding: 40px 20px; border-bottom: 1px solid #ccc;}
+.enroll_hellopass_box2 > h5 { margin-bottom: 24px; font-size: 18px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -.8px;}
+.enroll_hellopass_box3 { padding: 20px 20px 40px 20px;}
+.enroll_hellopass_box3 > h5 { margin-bottom: 24px; font-size: 18px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -.8px;}
+.hellopass_link_payment { position: relative; display: block; height: 50px; padding: 0 10px; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; background: #f6f6f6; color: #888; caret-color: #1d988e; outline: none; line-height: 46px;}
+.hellopass_link_payment::after { content: ''; position: absolute; top: 50%; right: 8px; transform: translate(0, -50%); display: block; width: 12px; height: 12px; background: url("/user/images/mypage.img/hover_right.png") no-repeat center center / auto 24px;}
+.hellopass_charge_price { display: flex; justify-content: space-between;}
+.hellopass_charge_price p:first-child { font-size: 16px; color: #333; font-weight: 700; line-height: 1.63; letter-spacing: -.6px;}
+.hellopass_charge_price p:last-child { font-size: 22px; color: #ff4a43; font-weight: 700; line-height: 1.32; letter-spacing: -.6px;}
+.hellopass_charge_price p:last-child > span { font-size: 14px;}
+.hellopass_charge_guide { background-color: #f6f6f6; box-sizing: border-box; border-radius: 4px; height: 46px; display: flex; align-items: center; padding-left: 10px; margin-top: 24px;}
+.hellopass_charge_guide > p { padding-left: 5px; font-size: 14px; color: #979798; font-weight: 400; line-height: 1.6; letter-spacing: -.6px;}
+.enroll_hellopass_area { display: flex; text-align: center; flex-wrap: nowrap; justify-content: space-between; width: 100%; table-layout: fixed; box-sizing: border-box; margin-top: 50px;}
+.enroll_hellopass_area > button:nth-child(1) { margin-right: 10px;}
+.enroll_hellopass_area2 { display: flex; text-align: center; flex-wrap: nowrap; justify-content: space-between; width: 100%; table-layout: fixed; box-sizing: border-box; margin-top: 50px;}
+.enroll_hellopass_area2 > button:nth-child(1) { display: block; width: 100%; background-color: #5dab99; color: #fff; height: 60px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; line-height: 60px; letter-spacing: -0.8px; outline: none; cursor: pointer; border: none; margin-right: 10px;}
+.enroll_hellopass_area2 > button:nth-child(2) { display: block; width: 100%; background-color: #f6f6f6; color: #ddd; height: 60px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; line-height: 60px; letter-spacing: -0.8px; outline: none; cursor: pointer; border: none;}
+.hellopass_button_reset { display: block; width: 100%; background-color: #f6f6f6; color: #000; height: 60px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; line-height: 60px; letter-spacing: -0.8px; outline: none; cursor: pointer; border: none;}
+.hellopass_button_submit { display: block; width: 100%; background-color: #5dab99; color: #fff; height: 60px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; line-height: 60px; letter-spacing: -0.8px; outline: none; cursor: pointer; border: none;}
+/* ---------------------------------------------------------------- mypage_pay_hellopass 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_enroll_thegreen2 시작 ---------------------------------------------------------------- */
+#thegreen_image { width: 200px; height: 200px; background: url("/user/images/mypage.img/green_shippment_icon.png") center center no-repeat; background-size: cover; border-radius: 8px; border:none;}
+.enroll_thegreen_box1 div { box-sizing: border-box;}
+.enroll_thegreen_box1 { display: flex; justify-content: space-between; align-items: center; margin: 0 auto; overflow: hidden; margin-top: 20px; height: 200px;}
+.enroll_thegreen_guide { padding-bottom: 125px; font-weight: 800; color: #333; line-height: 1.33; letter-spacing: -1.2px;}
+.enroll_thegreen_guide > h3 { font-size: 30px;}
+/* ---------------------------------------------------------------- mypage_enroll_thegreen2 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- 결제 수단 선택 팝업창 시작 ---------------------------------------------------------------- */
+/* mypage_pay_hellopass.html, mypage_enroll_thegreen2.html */
+.popup_payment_box div { box-sizing: border-box;}
+.popup_payment_box { padding: 20px 20px 40px 20px; border: 1px solid #ccc; margin-top: 20px; display: none;}
+.popup_payment_form > h5 { margin-top: 24px; margin-bottom: 24px; font-size: 18px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -.8px;}
+.popup_topline > h2 { width: 100%; font-size: 18px; font-weight: 700; line-height: 1.22; letter-spacing: -.6px; color: #333; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.popup_topline { display: flex; justify-content: space-between; align-items: center;}
+.popup_close { width: 32px;}
+.popup_close > a { background: url("/user/images/mypage.img/popup_close.png") center center no-repeat; background-size: contain; display: block; height: 26px; padding: 4px; color: transparent; overflow: hidden;}
+/* 라디오 버튼 숨기기 */
+.popup_radio_hide { opacity: 0;}
+/* 결제수단 > 로고 크기 */
+.popup_hellopay { width: 99px; height: 48px;}
+.popup_chaipay, .popup_naverpay, .popup_payco, .popup_samsungpay, .popup_skpay, .popup_normal { width: 48px; height: 48px;}
+/* 결제수단 > 텍스트 */
+.payment_text { color: #555; font-size: 14px; vertical-align: middle;}
+/* 결제수단 > 텍스트 박스 크기 */
+.payment_box > label > .payment_text_box_3words { box-sizing: border-box; margin: 0 auto; width: 40px; display: block;}
+.payment_box > label > .payment_text_box_4words { box-sizing: border-box; margin: 0 auto; width: 52px; display: block;}
+.payment_box > label > .payment_text_box_5words { box-sizing: border-box; margin: 0 auto; width: 65px; display: block;}
+.payment_box > label > .payment_text_b.payment_box > label > .payment_text_box_normal { box-sizing: border-box; margin: 0 auto; width: 107px; display: block;}ox_3words { box-sizing: border-box; margin: 0 auto; width: 39px; display: block;}
+.payment_box > label > .payment_text_box_skpay { box-sizing: border-box; margin: 0 auto; width: 44px; display: block;}
+.payment_box > label > .payment_text_box_normal { box-sizing: border-box; margin: 0 auto; width: 107px; display: block;}
+/* 박스사이징 */
+.payment_box { border: 1px solid #eee; border-radius: 10px; width: 49.3%; height: 113px; box-sizing: border-box; display: block; margin-bottom: 10px;}
+.payment_box:nth-child(odd) { margin-right: 10px;}
+.payment_box > label { display: block; border-radius: 8px; box-sizing: border-box; cursor: pointer;}
+.payment_box:hover { border: 1px solid #5dab99;}
+.payment_box.payment_box_clicked{ border: 1px solid #5dab99;}
+.payment_box label img { display: block; margin: 0 auto;}
+.choose_payment_box { display: flex; flex-wrap: wrap; width: 100%; box-sizing: border-box; table-layout: fixed; justify-content: space-between; align-items: center;}
+/* 선택완료 버튼 */
+.button_submit { display: block; width: 100%; background-color: #5dab99; color: #fff; height: 50px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 500; text-align: center; letter-spacing: -0.8px; outline: none; border: 1px solid #5dab99; margin-top: 30px; cursor: pointer;}
+.button_submit:active { display: block; width: 100%; background-color: #5dab99; color: #fff; height: 50px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 500; text-align: center; letter-spacing: -0.8px; outline: none; border: 1px solid #5dab99; margin-top: 30px; cursor: pointer; opacity: 0.5;}
+/* ---------------------------------------------------------------- 결제 수단 선택 팝업창 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_cancel_hellopass 시작  ---------------------------------------------------------------- */
+.cancel_hellopass_box1 div { box-sizing: border-box;}
+.cancel_hellopass_box1 { display: flex; justify-content: space-between; align-items: center; margin: 0 auto; overflow: hidden; margin-top: 20px;}
+.cancel_hellopass_guide { padding-bottom: 50px; font-weight: 800; color: #333; line-height: 1.33; letter-spacing: -1.2px;}
+.cancel_hellopass_guide > h3 { font-size: 30px;}
+.cancel_hellopass_box2 > h2 { color: #333; line-height: 1.33; letter-spacing: -1.2px; margin-bottom: 30px;}
+.cancel_hellopass_box2 > p { font-size: 16px; letter-spacing: -.5px; color:#555; font-weight: 400;}
+.cancel_hellopass_box2 > p:last-child, .cancel_hellopass_box2 > p:nth-child(4) { font-size: 16px; letter-spacing: -.6px; text-indent: 0.9em;}
+.cancel_hellopass_box2 > p:nth-child(even) { margin-bottom: 16px;}
+.cancel_hellopass_bigbox { padding: 20px 20px 60px 20px; border-right: 1px solid #ccc; border-left: 1px solid #ccc;}
+.button_submit_no_margin { margin-top: 20px; display: block; width: 100%; background-color: #5dab99; color: #fff; height: 50px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; letter-spacing: -0.8px; outline: none; border: 1px solid #5dab99; cursor: pointer;}
+/* ---------------------------------------------------------------- mypage_cancel_hellopass 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_shipping 시작 ---------------------------------------------------------------- */
+.shipping_box1 { padding: 24px 20px; border: 1.5px solid #dddddd; border-radius: 8px; box-sizing: border-box; margin-top: 20px;}
+.shipping_box1_line1 { display: flex; align-items: center; width: 100%; justify-content: space-between}
+.shipping_box1_line2 { display: block; margin-top: 5px;}
+.shipping_delivery_detail { margin-top: 14px; padding-top: 14px; display: block;}
+.shipping_txt { display: flex; align-items: center; }
+.shipping_txt span:nth-child(1), .shipping_font { display: inline-block; font-size: 14px; font-weight: 700; line-height: 1.65; letter-spacing: -.6px; color: #333; margin-right: 10px;}
+.shipping_txt span:nth-child(2), .shipping_txt span:nth-child(3) { display: inline-block; height: 16px; border: 1px solid #11b082; border-radius: 10px; font-size: 11px; font-weight: 500; letter-spacing: -.5px; color: #fff; padding: 0 10px; margin-right: 5px; background-color: #11b082;}
+.shipping_edit_button { display: inline-block; font-size: 12px; font-weight: normal; letter-spacing: -.6px; color: #888;}
+#edit_button  { margin-top: 50px; width: 245px; height: 45px; border: 1px solid #5dab99; color: #ffffff; background-color: #5dab99; border-radius: 8px; font-weight: 500; cursor: pointer; margin-left: 280px;}
+.shipping_box1_line2 > span { font-size: 14px; line-height: 1.6; letter-spacing: -.6px; color: #555;}
+.shipping_delivery_detail span:nth-child(2) { font-size: 14px; line-height: 1.6; letter-spacing: -.6px; color: #555;}
+.shipping_button_box { display: flex; width: 100%; height: 50px; box-sizing: border-box; color: #555; border: 1.5px solid #ddd; cursor: pointer; justify-content: center; align-items: center; margin: 0 auto; border-radius: 10px; margin-top: 20px;}
+.shipping_button_box > a { font-weight: 500; font-size: 15px; color: #333; letter-spacing: -.6px; display: flex; justify-content: center; margin: 0 auto;}
+.shipping_button_box > a::before { content: ''; width: 21px; height: 21px; background: url("/user/images/mypage.img/shipping_plus_icon.png") center center no-repeat; display: inline-block; margin-right: 5px; background-size: cover;}
+.just-line { box-sizing: border-box; display: inline-block; border-right: 2px solid #ccc; width: 10px; height: 10px; margin-right: 5px;}
+.shipping_edit_box > span { display: inline-block; font-size: 12px; font-weight: normal; letter-spacing: -.6px; color: #888; cursor: pointer;}
+
+/* ---------------------------------------------------------------- mypage_shipping 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_post 시작 ---------------------------------------------------------------- */
+.contents_post_box { display: flex; padding: 20px; cursor: pointer;}
+#post_filter_used, #post_filter_available { color: #333; padding: 7px 0 11px; font-size: 14px; background-color: #fff; text-align: center; box-sizing: border-box; letter-spacing: -0.6px; line-height: 1.73; width: 410px; height: 46px; border-bottom: 1px solid #cccccc;}
+.post_filter_available2 { color: #333; padding: 7px 0 11px !important; font-size: 14px !important; background-color: #fff !important; text-align: center !important; box-sizing: border-box !important; letter-spacing: -0.6px !important; line-height: 1.73 !important; width: 410px !important; height: 46px !important; border-bottom: 3px solid #155c65 !important;}
+#post_filter_used:hover, #post_filter_available:hover { color: #00B081; padding: 7px 0 11px; font-size: 14px; background-color: #fff; text-align: center; box-sizing: border-box; letter-spacing: -0.6px; line-height: 1.73; width: 410px; height: 46px; border-bottom: 1px solid #155c65; }
+.post_button_box { margin-left: 600px;}
+.post_button { width: 98px; height: 32px; background-color: #00B081; padding: 1px; border: none; border-radius: 10px; color: #fff; display: block; box-sizing: border-box; font-weight: 600; text-align: center; letter-spacing: -.5px; outline: none; cursor: pointer; }
+.product_post_line { border-right: 1px solid #888; height: 8px; margin: 5px; margin: 7px;}
+.product_info_post { margin-left: 10px;}
+.product_post_firstline > p { font-size:     14px; line-height: 1.6;}
+.contents_box6_inner > p, .product_post_lastline p { font-size: 11px; color: #888; font-weight: 400; letter-spacing: -.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.product_post_lastline { display: flex; justify-content: start; align-items: center;}
+.product_post_lastline p:first-child { margin-right: 10px;}
+.post_delete_button { width: 20px; height: 20px; background: url("/user/images/mypage.img/post_cancel_icon.png") center center no-repeat; background-size: 20px; color:transparent; display: block; position: relative; top: -50px; left: 80px;}
+/* ---------------------------------------------------------------- mypage_post 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_enrollpost 시작 ---------------------------------------------------------------- */
+.enroll_post_bigbox { padding: 26px 20px; }
+.enroll_post_bigbox div { box-sizing: border-box;}
+.enroll_post_box1 { width: 780px; height: 90px; border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc; margin: 0 auto; padding: 12px 12px 14px; display: flex; align-items: center;}
+.enroll_post_box1_inner { display: flex; align-items: center;}
+.post_info > p { font-size: 16px; line-height: 1.63; letter-spacing: -.6px; text-align: center; color: #1d988e; font-weight: 700;}
+.post_info > p:last-child > span { color: #333; display: inline-block;}
+.post_info > p span::before { content: ''; background-color: #a8e2d7; border-radius: 3px; width: 100%; height: 6px; display: block; position: relative; bottom: -23px; opacity: 0.6;}
+.post_info { margin-bottom: 24px;}
+.enroll_post_box2 h3 { font-size: 18px; line-height: 1.5; letter-spacing: -.6px; color: #333; margin-top: 24px; margin-bottom: 10px;}
+.enroll_post_box2 #rv_like_tit { font-size: 14px; line-height: 1.5; letter-spacing: -.6px; color: #333; margin-right: 5px;}
+.enroll_post_box2 #rv_like { width: 100px; height: 25px; border-radius: 3px; border: 1px solid #ccc; margin-bottom: 10px; cursor: pointer;}
+/* 만족도 라디오 박스 */
+.enroll_post_radiobox { display: table; width: 100%; justify-content: space-between; align-items: center; padding-left: 35px; padding-top: 20px;}
+.enroll_post_radiobox > li { display: table-cell; text-align: center; z-index: 100;}
+/* 만족해요 */
+.enroll_post_radiobox > li > .post_radio1_span { position: relative; display: block; margin: 0 auto; width: 120px; height: 120px; justify-content: center; align-items: center;}
+.enroll_post_radiobox > li > .post_radio1_span > label { position: relative; font-size: 15px; margin-right: 0; font-weight: 700; line-height: 1.6; letter-spacing: -.6px; color: #333; opacity: .2; margin: 0 auto;}
+.enroll_post_radiobox > li > .post_radio1_span > label::after { content: ''; display: inline-block; width: 55px; height: 55px; background: #fafafa url("/user/images/mypage.img/enrollpost/smile_face.png") center center no-repeat; background-size: cover; border-radius: 50%; position: relative; top: -20px; right: 53px; cursor: pointer;}
+.enroll_post_radiobox > li > .available_smile { position: relative; display: block; margin: 0 auto; width: 120px; height: 120px; justify-content: center; align-items: center;}
+.enroll_post_radiobox > li > .available_smile > label { position: relative !important; font-size: 15px !important; margin-right: 0 !important; font-weight: 700 !important; line-height: 1.6 !important; letter-spacing: -.6px !important; color: #333 !important; margin: 0 auto !important;}
+.enroll_post_radiobox > li > .available_smile > label::after { content: ''; display: inline-block; width: 55px; height: 55px; background: #fafafa url("/user/images/mypage.img/enrollpost/smile_face.png") center center no-repeat; background-size: cover; border-radius: 50%; position: relative; top: -20px; right: 53px; cursor: pointer;}
+/* 괜찮아요 */
+.enroll_post_radiobox > li > .post_radio2_span { position: relative; display: block; margin: 0 auto; width: 120px; height: 120px; justify-content: center; align-items: center;}
+.enroll_post_radiobox > li > .post_radio2_span > label { position: relative; font-size: 15px; margin-right: 0; font-weight: 700; line-height: 1.6; letter-spacing: -.6px; color: #333; opacity: .2; margin: 0 auto;}
+.enroll_post_radiobox > li > .post_radio2_span > label::after { content: ''; display: inline-block; width: 55px; height: 55px; background: #fafafa url("/user/images/mypage.img/enrollpost/soso_face.png") center center no-repeat; background-size: cover; border-radius: 50%; position: relative; top: -20px; right: 53px; cursor: pointer;}
+.enroll_post_radiobox > li > .available_soso { position: relative; display: block; margin: 0 auto; width: 120px; height: 120px; justify-content: center; align-items: center;}
+.enroll_post_radiobox > li > .available_soso > label { position: relative !important; font-size: 15px !important; margin-right: 0 !important; font-weight: 700 !important; line-height: 1.6 !important; letter-spacing: -.6px !important; color: #333 !important; margin: 0 auto !important;}
+.enroll_post_radiobox > li > .available_soso > label::after { content: ''; display: inline-block; width: 55px; height: 55px; background: #fafafa url("/user/images/mypage.img/enrollpost/soso_face.png") center center no-repeat; background-size: cover; border-radius: 50%; position: relative; top: -20px; right: 53px; cursor: pointer;}
+/* 별로에요 */
+.enroll_post_radiobox > li > .post_radio3_span { position: relative; display: block; margin: 0 auto; width: 120px; height: 120px; justify-content: center; align-items: center;}
+.enroll_post_radiobox > li > .post_radio3_span > label { position: relative; font-size: 15px; margin-right: 0; font-weight: 700; line-height: 1.6; letter-spacing: -.6px; color: #333; opacity: .2; margin: 0 auto;}
+.enroll_post_radiobox > li > .post_radio3_span > label::after { content: ''; display: inline-block; width: 55px; height: 55px; background: #fafafa url("/user/images/mypage.img/enrollpost/down_face.png") center center no-repeat; background-size: cover; border-radius: 50%; position: relative; top: -20px; right: 53px; cursor: pointer;}
+.enroll_post_radiobox > li > .available_down { position: relative; display: block; margin: 0 auto; width: 120px; height: 120px; justify-content: center; align-items: center;}
+.enroll_post_radiobox > li > .available_down > label { position: relative !important; font-size: 15px !important; margin-right: 0 !important; font-weight: 700 !important; line-height: 1.6 !important; letter-spacing: -.6px !important; color: #333 !important; margin: 0 auto !important;}
+.enroll_post_radiobox > li > .available_down > label::after { content: ''; display: inline-block; width: 55px; height: 55px; background: #fafafa url("/user/images/mypage.img/enrollpost/down_face.png") center center no-repeat; background-size: cover; border-radius: 50%; position: relative; top: -20px; right: 53px; cursor: pointer;}
+/* textarea */
+.textarea_post { display: block; padding: 9px 10px; height: 160px; overflow: hidden; overflow-y: auto; width: 100%; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; background-color: #f6f6f6; letter-spacing: -.3px; color: #555; caret-color: #1d988e; outline: none;}
+.enroll_post_form > li > textarea { font-weight: 400; font-size: 15px; line-height: 1.73;}
+/* upload */
+#post_upload_file  { width: 100%; font-size: 0; white-space: nowrap; overflow: hidden; overflow-x: auto; box-sizing: border-box; margin-top: 15px;}
+.enroll_post_upload > ul li { position: relative; display: inline-block; width: 88px; height: 88px; border-radius: 4px; border: 1px solid rgba(50,50,50, 0.1); box-sizing: border-box; vertical-align: middle; overflow: hidden;}
+.enroll_post_upload > ul li > a { display: block; height: 100%; color: transparent;}
+.enroll_post_upload > ul li:first-child > a { background: #eee url("/user/images/mypage.img/enrollpost/upload_icon.png") center center no-repeat; background-size: 30px;}
+.enroll_post_upload > h5 { font-size: 15px; color: #333; font-weight: 700; line-height: 1.57; letter-spacing: -.6px; margin-top: 24px;}
+.post_upload_guide > p { font-size: 12px; color: #555; font-weight: 400; line-height: 1.58; letter-spacing: -.5px;}
+.post_upload_guide { margin-top: 12px; padding-right: 20px;}
+.warning_list_box > p { font-size: 12px; line-height: 1.58; letter-spacing: -.5px; color: #555;}
+.warning_list_box > p:first-child > a { color: #00B081 !important; display: inline;}
+.warning_list_box { margin-top: 24px; padding-left: 9px;}
+/* 구매후기 운영안내 */
+.post_guide_box_inner { vertical-align: middle; display: flex; align-items: center;}
+.post_guide_box div { box-sizing: border-box;}
+.post_guide_box { border-bottom: 1px solid #cccccc; border-top: 1px solid #cccccc; margin-top: 30px; padding: 20px; display: flex; justify-content: space-between; cursor: pointer;}
+.post_guide_help > p { font-size: 15px; font-weight: 700;}
+.post_guide_overview { border-right: 1px solid #cccccc; border-left: 1px solid #cccccc; border-bottom: 1px solid #cccccc; padding: 24px 20px; background-color: #eee; display: none;}
+/* 구매후기 운영안내 오버뷰 */
+.post_guide_overview ul li { position: relative; padding-left: 9px; margin-top: 2px;}
+.post_guide_overview ul { font-size: 12px; line-height: 1.58; letter-spacing: -.5px; color: #555;}
+/* ---------------------------------------------------------------- mypage_enrollpost 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_thegreen 시작 ---------------------------------------------------------------- */
+.thegreen_txt_box { width: 100%; min-height: 1200px; border: none; vertical-align: top; background: #fafafa url("/user/images/mypage.img/thegreen/thegreen_title.png") center center no-repeat; background-size: cover;}
+.thegreen_txt_box { text-align: center; margin: 0 auto; display: inline-block;}
+.thegreen_txt > strong { display: block; margin-bottom: 10px; font-size: 18px; color: #333; font-weight: 700; line-height: 1.5;}
+.thegreen_txt > h3 { margin-bottom: 15px; font-size: 46px; font-weight: 800; line-height: 0.91; letter-spacing: -1.38px; font-family: 'netmarbleM';}
+.thegreen_txt { display: block; margin-top: 35px;}
+.thegreen_txt > p { font-size: 15px; color: #555; font-weight: 400; line-height: 1.6;}
+.thegreen_txt > p > span { font-weight: 500; color: #333;}
+.main_contents_container { border-right: 1px solid #ccc; border-left: 1px solid #ccc; border-radius: 8px;}
+/* 신청자격 */
+.thegreen_client_right { padding: 0 20px; margin-top: 40px;}
+.thegreen_client_right > p:first-child { margin-bottom: 10px; font-size: 18px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -.8px;}
+.thegreen_client_right > p:last-child { font-size: 15px; color: #555; font-weight: 400; line-height: 1.6;}
+.thegreen_client_right > p:last-child > span { color: #00B081;}
+/* 신청방법 */
+.thegreen_apply_way div { box-sizing: border-box;}
+.thegreen_apply_way { margin-top: 40px; padding: 0 20px;}
+.thegreen_apply_way > p { margin-bottom: 10px; font-size: 18px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -.8px;}
+/* thegreen_request_box */
+.thegreen_request_box { display: table; table-layout: fixed; width: 100%;}
+.thegreen_request_box ul { position: relative; display: table-cell; text-align: center; vertical-align: middle; box-sizing: border-box;}
+.thegreen_request_box ul li span { display: block; background-color: #f1f1f1; width: 90px; height: 90px; border-radius: 45px; margin: 0 auto;}
+/* 신청하기 클릭 / 배송지 선택 / 보증금 결제완료 이미지 로고 크기 */
+.thegreen_request_box ul:first-child li span img { width: 30px; margin-top: 28px;}
+.thegreen_request_box ul:nth-child(2) li span img { width: 29px; margin-top: 28px;}
+.thegreen_request_box ul:last-child li span img { width: 39px; margin-top: 30px;}
+/* 신청하기 클릭 / 배송지 선택 / 보증금 결제완료 폰트 */
+.thegreen_request_box ul li p { font-size: 14px; line-height: 1.6; text-align: center; color: #222; letter-spacing: -.56px; margin-top: 10px;}
+/* thegreen_request_box > 화살표 */
+.thegreen_request_box ul li:after { content: ''; display: block; background: url("/user/images/mypage.img/thegreen/thegreen_right_arrow.png") no-repeat center / 100% auto; background-size: cover; width: 20px; height: 22px; position: relative; bottom: 85px; left: 250px;}
+/* thegreen_request_box 마지막 요소의 화살표 숨기기 */
+.thegreen_request_box ul:last-child li:after { visibility: hidden;}
+/* 더그린배송 알아보기 */
+.thegreen_link_box div { box-sizing: border-box;}
+.thegreen_link_box { box-sizing: border-box; border-top: 1px solid #ccc; margin-right: -20px; width: 100%; display: flex; justify-content: space-between; padding: 20px; margin-top: 30px;}
+.thegreen_link_txt > p { display: block;}
+.thegreen_link_txt > a { display: flex; justify-content: space-between; font-size: 17px; color: #333; letter-spacing: -.6px; line-height: 1.73; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.thegreen_link_txt { display: flex; align-items: center;}
+/* 신청하기 버튼 */
+.thegreen_apply_button { display: block; width: 100%; background-color: #5dab99; color: #fff; height: 50px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; letter-spacing: -0.8px; outline: none; border: 1px solid #5dab99; margin-top: 30px; cursor: pointer;}
+/* ---------------------------------------------------------------- mypage_thegreen 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_thegreen_shipping 시작 ---------------------------------------------------------------- */
+/* 체크박스 */
+.thegreen_checkbox_box { display: flex; justify-content: center; align-items: center;}
+.thegreen_checkbox { -webkit-appearance: none; -moz-appearance: none; appearance: none; outline: 0; box-shadow:none; border: none;}
+.thegreen_checkbox:before { background: url("/user/images/mypage.img/unchecked_radio.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer; margin-right: 10px;}
+.thegreen_checkbox:checked:before { background: url("/user/images/mypage.img/checked_radio.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer;}
+.thegreen_shipping_line1 { display: flex; justify-content: flex-start; align-items: center; width: 100%;} 
+/* thegreen_shipping_title */
+.thegreen_shipping_title { margin-bottom: 30px; margin-top: 20px; display: block; box-sizing: border-box; padding-left: 20px;}
+.thegreen_shipping_title > p { font-size: 14px; color: #333; font-weight: 400; line-height: 1.86; letter-spacing: -.6px;}
+.thegreen_shipping_title > p > span > em { font-weight: 700;}
+.underline::before { content: ''; position: relative; top: 2px; bottom: 0; left: -194px; right: 0; display: inline-block; width: 50px; height: 6px; border-radius: 4px; background-color: rgba(110, 211, 163, 0.6);}
+/* ---------------------------------------------------------------- mypage_thegreen_shipping 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_mantoman 시작 ---------------------------------------------------------------- */
+.mantoman_title, .mantoman_list > h5 { font-size: 16px; color: #333; font-weight: 700; line-height: 1.2; letter-spacing: 0.3px; padding: 20px 0 0 20px; box-sizing: border-box;}
+.mantoman_title > a { color: #333;}
+.button_submit_new { margin: 0 auto; display: block; width: 98%; background-color: #5dab99; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; letter-spacing: -0.8px; outline: none; border: 1px solid #5dab99; margin-top: 30px; cursor: pointer; text-align: center; outline: none; line-height: 45px; margin-bottom: 45px;}
+.mantoman_list > h5 { margin-bottom: 18px; line-height: 1.44;}
+.mantoman_list { border-bottom: 1px solid #ccc;}
+.empha_faq { color: #5dab99;}
+/* 문의하신 내역 오버뷰 */
+.mantoman_q_line { border-right: 1px solid #333; width: 7px; height: 10px; margin-right: 7px; display: inline-block;}
+.mantoman_list_box div { box-sizing: border-box;}
+.mantoman_list_box { align-items: flex-end; box-sizing: border-box; margin-right: -20px; width: 820px;  display: flex; justify-content: space-between; padding: 20px; cursor: pointer; border-bottom: 1px solid #ccc;}
+.mantoman_list_txt > p { display: block; }
+.mantoman_list_txt > a { display: flex; justify-content: space-between; font-size: 17px; color: #333; letter-spacing: -.6px; line-height: 1.73; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.mantoman_list_overview { width: 20px; height: 20px; background: white url("/user/images/mypage.img/down.png") center center no-repeat; background-size: 20px 13px; cursor: pointer;}
+.mantoman_post_date > p { font-size: 13px; color: #888; font-weight: 400; line-height: 1.58; letter-spacing: -.5px;}
+.mantoman_preview > a > p { margin-top: 4px; padding-right: 80px; font-size: 15px; color: #333; line-height: 1.63; letter-spacing: -.6px;}
+.mantoman_post_date { margin-bottom: 10px;}
+.mantoman_flag { color: #fff; background: #333; margin-left: 6px; padding: 5px 15px; border-radius: 11px; font-size: 11px; letter-spacing: -.5px; box-sizing: border-box;}
+.mantoman_flag_box { display: flex; justify-content: center; align-content: center;}
+.mantoman_contents_qna > div { display: block; box-sizing: border-box; }
+.mantoman_contents_qna { display: none; font-size: 13px; }
+.mantoman_q { padding: 24px 20px 26px 20px;}
+.mantoman_a { padding: 24px 20px 26px 20px;}
+/* 문의 상세내역 아이콘 시작 */
+.q_flag { width: 24px; height: 24px; border-radius: 50%; background: #1d988e url('/user/images/mypage.img/mantoman/mantoman_q.png') center center no-repeat; background-size: 30px;}
+.a_flag { width: 24px; height: 24px; border-radius: 50%; background: #ffe380 url('/user/images/mypage.img/mantoman/mantoman_a.png') center center no-repeat; background-size: 30px;}
+/* 문의 상세내역 아이콘 끝*/
+.mantoman_q > div { margin-top: 12px;}
+.mantoman_a > div { margin-top: 12px;}
+/* 문의내역 상세보기(오버뷰) 폰트 */
+.mantoman_q > div > span > span { font-size: 15px; color: #333; line-height: 1.57; letter-spacing: -.6px; font-weight: 700;}
+.mantoman_q > div > p, .mantoman_a > div > span { font-size: 15px; color: #333; font-weight: 400; line-height: 1.57; letter-spacing: -.6px;}
+.mantoman_a > div > p:first-child { font-size: 12px; color: #888; line-height: 1; letter-spacing: -.55px; margin-bottom: 20px;}
+/* ---------------------------------------------------------------- mypage_mantoman 끝 ---------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------- mypage_edit_shipping시작 ---------------------------------------------------------------- */
+.shipping_store_box { box-sizing: border-box; display: flex; align-items: center; padding: 20px; border-top: 1px solid #ccc; width: 810px; margin: 0 auto;}
+.shipping_store_box > label, .enrollpay_box_check > label { font-weight: 400; font-size: 16px; color: #333; line-height: 1.63; letter-spacing: -.6px;}
+.shipping_store_box_inner { display: flex; justify-content: center; align-items: center;}
+.shipping_store_checkbox { -webkit-appearance: none; -moz-appearance: none; appearance: none; outline: 0; box-shadow:none; border: none;}
+.shipping_store_checkbox:before { background: url("/user/images/mypage.img/unchecked_radio.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer; margin-right: 10px;}
+.shipping_store_checkbox:checked:before { background: url("/user/images/mypage.img/checked_radio.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer;}
+.essential { display: block; position: absolute; top: 0; left: 0; width: 1px; height: 1px; color: transparent; overflow: hidden;}
+.essbox { display: inline-block; position: relative;}
+.essbox::after { display: inline-block; position: absolute; top: 5px; right: -7px; width: 4px; height: 4px; background-color: #66d4c2; border-radius: 50%; content: '';}
+.shipping_form_list > li > h5 { font-size: 14px; color: #333; font-weight: 700; line-height: 1.57; letter-spacing: -.6px;}
+.edit_shipping_form div { box-sizing: border-box;}
+.edit_shipping_form { padding: 20px; display: block; box-sizing: border-box;}
+.input_text { margin-top: 6px; width: 100%; height: 50px; padding: 0 10px; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; background-color: #f6f6f6; letter-spacing: -.3px; color: #555; caret-color: #1d988e; outline: none;}
+.caution_not_input { color: #c20000; margin-top: 5px; font-size: 12px; line-height: 1.58; letter-spacing: -.5px; display: none;}
+.shipping_form_list li:not(:first-child) { margin-top: 24px; position: relative;}
+.search_address { position: absolute; top: 30px; right: 0; width: 50px; height: 50px; background-color: transparent; color: transparent; overflow: hidden;}
+.search_address::after { content:''; position: absolute; right: 50%; top: 50%; display: inline-block; width: 24px; height: 24px; margin: -12px -12px 0 0; background: url('/user/images/mypage.img/address_search_icon.png') center center no-repeat; background-size: 24px; cursor: pointer;}
+#userAddr1 { color: #ccc; background-color: #f6f6f6; background-image: none; opacity: 1;}
+.normalbox { display: inline-block; position: relative;}
+.edit_shipping_guide_box > ul > li > em { font-weight: bold;}
+.edit_shipping_guide_box > ul > li { font-size: 13px; color: #666; padding-left: 8px; font-weight: 400; position: relative; line-height: 1.6; letter-spacing: -.6px;}
+/* 중앙점 시작 */
+.edit_shipping_guide_box > ul > li::before { content: ''; position: absolute; top: 11px; left: 0; width: 2px; height: 2px; border-radius: 50%; background-color: #555;}
+/* 중앙점 끝 */
+.edit_shipping_guide_box > ul > li:last-child { margin-top: 16px;}
+.edit_shipping_guide_box { margin: 20px 0px; border-radius: 0px; background-color: #f6f6f6; padding: 18px 35px;}
+.edit_shipping_form, .shipping_store_box { border-right: 1px solid #ccc; border-left: 1px solid #ccc; width: 100%; margin: 0 auto;}
+.edit_shipping_allow { box-sizing: border-box; display: flex; align-items: center; padding: 20px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; width: 820px; margin: 0 auto; cursor: pointer;}
+.edit_shipping_allow > label { font-weight: 400; font-size: 16px; color: #333; line-height: 1.63; letter-spacing: -.6px;}
+/* 배송 요청사항 */
+.radio_list_box > ul { margin-top: 0; border-top: 0; box-sizing: border-box;}
+.radio_list_box > ul li { justify-content: flex-start; align-content: center; margin-top: 12px !important;}
+.radio_list_box > ul > li > label { display: inline-block; margin-right: 10px; font-size: 14px; vertical-align: middle;}
+.radio_button { background: url('/user/images/mypage.img/normal_radio_icon_unckecked.png') no-repeat 0 / 18px auto; zoom: 1; display: inline-block; width: 18px; height: 21px; margin-right: 6px; vertical-align: middle;}
+.radio_button > input[type="radio"]:checked { background: url('/user/images/mypage.img/normal_radio_icon_ckecked.png') no-repeat 0 / 18px auto; zoom: 1; display: inline-block; width: 18px; height: 21px; margin-right: 6px; vertical-align: middle;}
+#add_address_box{width: 600px; margin:0 auto;} 
+#add_address_cont_title h1{ font-size: 20px;  padding: 20px 0 10px 0; font-weight: 700; text-align: center; letter-spacing: -0.5px;}
+#add_address_box ul { color: #333;}
+/* 예쏠 */
+.base_shipping_addr { box-sizing: border-box; display: flex; align-items: center; padding: 10px 10px;}
+.base_shipping_addr > label { font-weight: 500; font-size: 16px; color: #4c4c4c; line-height: 1.63; letter-spacing: -.6px;}
+.base_shipping_addr_box { display: flex; justify-content: center; align-items: center;}
+.shipping_addr_check { -webkit-appearance: none; -moz-appearance: none; appearance: none; outline: 0; box-shadow:none; border: none;}
+.shipping_addr_check:before { background: url("/user/images/mypage.img/icon_check_on.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer; margin-right: 10px;}
+.shipping_addr_check:checked:before { background: url("/user/images/mypage.img/icon_check_off.png") no-repeat; background-size: contain; content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 100%; vertical-align: middle; cursor: pointer;}
+.essential_write::before {content: '*'; color: #5dab99;}
+.insert_door_pwd { padding: 5px 20px; border-radius: 3px; border: none; background-color: #fff;; height: 20px; width: 700px; margin-top: 8px; margin-bottom: 8px; display: block; border-radius: 8px;}
+.ask_addr_detail li div > div:nth-child(3) { padding-left: 10px; margin-bottom: 10px;}
+.insert_location { display: none; padding: 5px 20px; background-color: #f6f6f6; width: 738px; height: 31.6px; border-radius: 8px; margin-top: 10px; border: none;}
+.post_box { display: none; padding: 5px 20px; background-color: #f6f6f6; width: 738px; height: 31.6px; border-radius: 8px; margin-top: 10px; border: none;}
+.ask_detail_radio_2_msg { display: none; background-color: #f6f6f6; margin-top: 10px; margin-bottom: 10px; padding: 10px 20px; border-radius: 8px; font-size: 14px; color: #333; letter-spacing: -.6px; line-height: 1.57;} 
+.ask_detail_radio_3_msg { display: none; background-color: #f6f6f6; margin-top: 8px; padding: 10px 20px; border-radius: 8px; font-size: 14px; color: #333; letter-spacing: -.6px; line-height: 1.57;} 
+.select_detail_radio_1 { padding: 10px 0px 10px 20px; background-color: #f6f6f6; border-radius: 8px; margin-top: 10px; margin-bottom: 10px;}
+#add_address_cont_area li { padding-top: 10px;}
+#add_address_cont_area ul { padding: 20px 0 10px 10px; font-size: 16px; font-weight: 500;}
+#add_addr_button {width: 100%; height: 40px; border-radius: 3px; border:1px solid #5dab99; background-color: #5dab99; cursor: pointer; color: #ffffff; font-size: 15px; font-weight: bold;}
+.ask_addr_detail label { display: inline-block; margin-left: 10px; font-size: 14px; color: #333; font-weight: 500; line-height: 1.57; letter-spacing: -.6px;}
+.ask_addr_detail li{font-size: 15px; font-weight: 400;}
+.ask_addr_detail li input { position: relative; top: 1.5px;}
+.ask_detail_radio_2_msg, .ask_detail_radio_3_msg { font-size: 14px; font-weight: 500; color: #555;}
+.address_line input{ margin-bottom: 10px;}
+.shipping_guide_msg_box { margin-top: 30px; background-color: #f6f6f6; padding-bottom: 10px;}
+.shipping_guide_msg_box ul li { font-size: 12px; color: #666; font-weight: 400;}
+#search_address_btn{ width: 80px; height: 30px; border-radius: 3px; border:1px solid #5dab99; background-color: #ffffff; cursor: pointer; color: #5dab99; font-size: 13px; margin-bottom: 10px;}
+/* ---------------------------------------------------------------- mypage_edit_shipping 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_enroll_mantoman 시작 ---------------------------------------------------------------- */
+.enroll_mantoman_form { padding: 24px 20px 20px 20px; display: block; margin: 0 auto; box-sizing: border-box;}
+.enroll_mantoman_form div { box-sizing: border-box;}
+.mantoman_form_list > ul > li { margin-top: 24px; position: relative;}
+.essbox, .mantoman_form_list > ul > li > h5 { font-size: 14px; color: #333; font-weight: 700; line-height: 1.57; letter-spacing: -.6px;}
+.mantoman_form_list > ul:first-child > li:first-child > input[type="text"] { color: #ccc; background-color: #f6f6f6; background-image: none; opacity: 1;}
+.mantoman_email_choose { position: absolute; top: 30px; right: 0; height: 50px; padding-right: 30px; border: 0; font-size: 12px; color: #555; line-height: 50px; letter-spacing: -.5px; overflow: hidden; z-index: 1;}
+.mantoman_email_choose::after { content: ''; position: absolute; top: 50%; right: 0px; transform: translate(0, -50%); display: block; height: 24px; width: 24px; background: url('/user/images/mypage.img/mantoman_email_choose.png') center center no-repeat; background-size: 24px;}
+.mantoman_case_choose { position: absolute; top: 30px; right: 0; left: 20px; height: 50px; padding-right: 30px; border: 0; font-size: 12px; color: #555; line-height: 50px; letter-spacing: -.5px; overflow: hidden; z-index: 1;}
+.mantoman_case_choose::after { content: ''; position: absolute; top: 50%; right: 0px; transform: translate(0, -50%); display: block; height: 40px; width: 40px; background: url('/user/images/mypage.img/mantoman_email_choose.png') center center no-repeat; background-size: contain;}
+.mantoman_textarea { display: block; padding: 9px 10px; height: 160px; overflow: hidden; overflow-y: auto; width: 100%; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; background-color: #f6f6f6; letter-spacing: -.3px; color: #555; caret-color: #1d988e; outline: none; margin-top: 12px; resize: none;}
+/* 중앙점 */
+.post_upload_guide > ul > li { display: block; position: relative; padding-left: 20px; font-size: 12px; color: #555; font-weight: 400; line-height: 1.58; letter-spacing: -.5px;}
+.post_upload_guide > ul > li::before { content: ''; position: absolute; top: 10px; left: 10px; width: 2px; height: 2px; border-radius: 50%; background-color: #555;}
+/* ---------------------------------------------------------------- mypage_enroll_mantoman 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_edit1 시작 ---------------------------------------------------------------- */
+.check_password_form > h3 { font-size: 16px; color: #333; font-weight: 700; line-height: 1.44; letter-spacing: -.8px;}
+.check_password_form { display: block; padding: 24px 20px 20px 20px; box-sizing: border-box;}
+.form_list { margin-top: 19px; display: block; box-sizing: border-box;}
+.list_title_e { font-size: 14px; color: #333; font-weight: 700; line-height: 1.57; letter-spacing: -.6px;}
+.form_list li .edit1_email_data { margin-top: 8px; font-size: 15px; line-height: 1.6; color: #888;}
+.form_list li:not(:first-child) { margin-top: 24px;}
+.form_list li input[type="password"] { width: 100%; height: 50px; padding: 0 10px; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; background-color: #f6f6f6; letter-spacing: -.3px; color: #555; caret-color: #1d988e; outline: none; margin-top: 6px;}
+/* ---------------------------------------------------------------- mypage_edit1 끝 ---------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------- mypage_edit2 시작 ---------------------------------------------------------------- */
+.edit2_myinfo_bigbox { display: block; padding: 24px 20px 20px 20px; box-sizing: border-box;}
+.edit2_myinfo_bigbox div { box-sizing: border-box; display: block;}
+.edit2_form_list1, .edit2_form_list2, .edit2_form_list3, .edit2_form_list4 { padding: 0 20px 30px 0; display: block; }
+.edit2_form_title { position: relative; margin-bottom: 20px; color: #333; font-size: 18px; font-weight: 700; line-height: 1.44; letter-spacing: -.8px; display: block;}
+.edit2_form_title dl { margin-bottom: 20px;}
+
+/* 상위요소 > display: table */
+.edit2_myinfo_bigbox .edit2_form_list1 li dl, .edit2_form_list2 li dl, .edit2_form_list3 li dl, .edit2_form_list4 li dl { display: table; table-layout: fixed; width: 100%; padding-bottom: 16px;}
+/* 하위요소 > display: table-cell 시작 */
+.edit2_myinfo_bigbox .edit2_form_list1 li dl dt { display: table-cell; width: 100px; padding-right: 10px; box-sizing: border-box; line-height: 1.37; color: #555; word-break: keep-all;}
+.edit2_form_list2 li dl dt { display: table-cell; width: 170px; padding-right: 10px; box-sizing: border-box; line-height: 1.37; color: #555; word-break: keep-all;}
+.edit2_form_list3 li dl dt { display: table-cell; width: 170px; padding-right: 10px; box-sizing: border-box; line-height: 1.37; color: #555; word-break: keep-all;}
+.edit2_form_list4 li dl dt { display: table-cell; width: 50%; padding-right: 10px; box-sizing: border-box; line-height: 1.37; color: #555; word-break: keep-all; vertical-align: middle;}
+.edit2_myinfo_bigbox .edit2_form_list1 li dl dd, .edit2_form_list2 li dl dd, .edit2_form_list3 li dl dd { display: table-cell; color: #555;}
+.edit2_form_list4 li dl dd { text-align: right; vertical-align: middle; display: table-cell; color: #555;}
+/* 하위요소 > display: table-cell 끝 */
+.edit2_form_list_button { width: 20%; text-align: right;}
+.edit2_form_list_button > a { width: 54px; background-color: #ededed; color: #333; height: 30px; padding: 5px 16px; box-sizing: border-box; border-radius: 18px; font-size: 13px; font-weight: 700; text-align: center; line-height: 30px; letter-spacing: -.5px; outline: none;}
+.edit2_form_list2 > li > dl:nth-child(2) > dt::before { content: ''; background: url('/user/images/mypage.img/edit2/edit2_kakao.png') center center no-repeat; width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: -8px; background-size: contain;}
+.edit2_form_list2 > li > dl:nth-child(3) > dt::before { content: ''; background: url('/user/images/mypage.img/edit2/edit2_naver_green.png') center center no-repeat; width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: -8px; background-size: contain;}
+.edit2_form_list2 > li > dl:nth-child(4) > dt::before { content: ''; background: url('/user/images/mypage.img/edit2/edit2_apple.png') center center no-repeat; width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: -8px; background-size: contain;}
+.switch_label { position: relative; display: inline-block; width: 30px; height: 14px; top: .5px; left: 550px; cursor: pointer;}
+.slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 7px;}
+.slide_checkbox { position: absolute; top: 0; left: 0; width: 30px; height: 14px; margin-right: 0; background: none; cursor: pointer;}
+.slide_checkbox + .slider::before { content: ''; position: absolute; width: 20px; height: 20px; left: -2px; top: 50%; transform: translate(0, -50%); border-radius: 50%; background: #e2e2e2; transition: all 0.4s; box-shadow: 0 1px 4px 0 rgb(0 0 0 / 20%);}
+.switch_label:hover > .slider::before { background:#00B081; transform: translate(14px, -50%); transition: all 0.4s; box-shadow: 0 1px 4px 0 rgb(0 0 0 / 20%);}
+.slide_clicked > .slider::before { background:#00B081; transform: translate(14px, -50%); transition: all 0.4s; box-shadow: 0 1px 4px 0 rgb(0 0 0 / 20%); z-index: 100;}
+.edit2_form_list3 p { display: block; margin-top: -5px; font-size: 12px; font-weight: 400; line-height: 1.58; letter-spacing: -.5px; color: #888;}
+/*.edit2_form_ad { border-radius: 8px; background-color: #e8f6f3; margin: 20px 0; padding: 20px;}*/
+.edit2_form_ad > p:first-child { font-size: 14px; font-weight: 700; line-height: 1.57; letter-spacing: -.6px; color: #555; }
+.edit2_form_ad > p:last-child { color: #1d988e; font-size: 12px; font-weight: 400; line-height: 1.58; letter-spacing: -.5px; padding-bottom: 25px; }
+.eidt2_form_list4 li dl dt { font-size: 15px; font-weight: 400; color: #333; letter-spacing: -.6px; line-height: 1.73;}
+.withdrawal_button { color: white; text-align: center; min-width: auto; height: 25px; padding: 0 14px; border-radius: 8px; background-color: #eeeeee; color: white; font-size: 14px; font-weight: 500; line-height: 25px; padding: 10px; margin-top: 20px; margin-left: 280px; width: 30%;}
+/* ---------------------------------------------------------------- mypage_edit2 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_enroll_product_inq 시작 ---------------------------------------------------------------- */
+.product_inq_bigbox { padding: 26px 20px 0 20px; box-sizing: border-box; display: block;}
+.product_form_list > li > textarea { width: 100%; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; background-color: #f6f6f6; letter-spacing: -.3px; color: #555; caret-color: #1d988e; outline: none; display: block; padding: 9px 10px; height: 160px; overflow: hidden; overflow-y: auto; font-weight: 400; font-size: 15px; line-height: 1.73;}
+.product_guide_box { margin-top: 12px; box-sizing: border-box;}
+.product_guide_box > ul { font-size: 12px; line-height: 1.58; letter-spacing: -.5px; color: #555; display: block; position: relative;}
+.product_guide_box ul li { position: relative; padding-left: 9px;}
+.product_guide_box ul li:before { content: 'ㆍ'; position: absolute; top: 0; left: -2px;}
+.mantoman_connect_tomantoman { color: #00B081;}
+.button_submit_productInq { display: block; width: 100%; background-color: #ccc; color: #fff; height: 50px; padding: 0 10px; box-sizing: border-box; border-radius: 8px; font-size: 18px; font-weight: 700; text-align: center; letter-spacing: -0.8px; outline: none; border: 1px solid #5dab99; margin-top: 30px; cursor: pointer; border: none;}
+.button_submit_productInq:hover {background: #0db081}
+
+/* ---------------------------------------------------------------- mypage_enroll_product_inq 끝 ---------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- mypage_product_inq 끝 ---------------------------------------------------------------- */
+.product_inq_home { margin-bottom: 50px; box-sizing: border-box; display: block; padding: 26px 20px 0 20px;}
+.product_inq_title { margin-bottom: 16px; font-size: 18px; font-weight: 600; line-height: 1.5; letter-spacing: -.6px; color: #333; display: block;}
+.product_inq_title > span { display: inline-block; margin-bottom: 1px; font-size: 15px; font-weight: 600; line-height: 1.6; letter-spacing: -.6px; color: #ff4a43; vertical-align: bottom;}
+.product_box { width: 100%; height: 90px; margin: 0 auto; border-radius: 8px; padding: 12px 12px 14px; display: flex; align-items: center; box-sizing: border-box; background-color: #f6f6f6; margin-bottom: 18px; margin-top: 18px;}
+.product_inq_info { padding-left: 10px;}
+.product_inq_info > p { font-size: 14px; line-height: 1.6; line-height: 1.71; letter-spacing: -.56px;}
+.date { font-size: 12px; line-height: 1; letter-spacing: -.55px; color: #888;}
+.answer_flag { background-color: #eee; color: #231f20; display: inline-block; height: 22px; width: 57px; margin-left: 9px; border-radius: 12px; font-size: 11px; font-weight: 700; line-height: 22px; letter-spacing: -.5px; text-align: center;}
+.product_inq_question { margin-top: 11px; font-size: 15px; line-height: 1.73; letter-spacing: -.6px; color: #555;}
+.inq_button_box { display: block; margin: 16px 0 8px; font-size: 0; table-layout: fixed; box-sizing: border-box; text-align: right;}
+.inq_button_box li { position: relative; vertical-align: top; display: inline-block;}
+.inq_button_box li a { display: block; font-size: 14px; font-weight: 400; line-height: 1.57; color: #555;}
+.inq_button_box li + li { padding-left: 17px; margin-left: 16px;}
+/*.inq_button_box li + li::before { content: ''; position: absolute; top: 50%; left: 0; display: block; width: 1px; height: 15px; background-color: #ccc; transform: translate(0, -50%);}*/
+.product_inq_listbox { margin-top: 10px; display: block; border: 1px solid #ccc; padding: 20px; border-radius: 10px;}
+/* ---------------------------------------------------------------- mypage_product_inq 끝 ---------------------------------------------------------------- */
+
+
+
+
+/* 추가 */
+.mypage_dropdown { position: absolute; top: 35px; right: 0; margin-right: 10px; }
+.email_box { padding: 0 10px; background: #f6f6f6; padding: 10px; width: 100%; height: 50px; border: 2px solid #f6f6f6; border-radius: 4px; box-sizing: border-box; letter-spacing: -.3px; caret-color: #1d988e; outline: none; margin-top: 6px; display: flex; align-items: center;;}
+#str_email01 { border: none; background: #f6f6f6; padding: 10px; margin-right: 5px; }
+#selectEmail { border: none; background: #f6f6f6; margin-left: 5px; }
+.at_sign { display: flex; align-items: center; box-sizing: border-box; padding-bottom: 3px;}
+.filter_outline2 { display: flex; justify-content: space-between; width: 816px;}
+.filter_outline2 div { width: 204px; border: 1px solid #cccccc; margin-right: -4px;}
+.filter_outline2 div > a { display: flex; justify-content: center; padding: 8px;}
+.filter_outline2 div > a:hover { background-color: #e2e2e2; }
+
+.filter_outline3 { display: flex; justify-content: space-between; width: 816px;}
+.filter_outline3 div { width: 408px; border: 1px solid #cccccc; margin-right: -4px;}
+.filter_outline3 div > a { display: flex; justify-content: center; padding: 8px;}
+.filter_outline3 div > a:hover { background-color: #e2e2e2; }
+.filter_outline_on a { background-color: #e2e2e2; font-weight: 700; color: #5dab99; }
+.faq_category_box input[type="button"].faqClicked { background-color: #5dab99;  border: 1px solid #5dab99; color: #fff; }
+
+/* 0930 추가 */
+.enrollProductButton { padding: 5px 10px; display: flex; justify-content: flex-end; border: none; border-radius: 8px; font-size: 12px; margin-left: 320px; background-color: #11b082; outline: none; color: #fff; font-weight: 600; cursor: pointer;}
+.enrollProductButton:active { opacity: 0.5;}
+#hellopayEditNickname, #hellopayEditNickname { cursor: pointer;}
+.busiFlag{width: 30px; text-align: center; display: inline-block; height: 16px; border-radius: 10px; font-size: 11px; font-weight: 500; letter-spacing: -.5px; color: white; padding: 0 10px; margin-right: 5px; background-color: black; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 2021.10.29 수정사항 */
+.default_ship > p { font-size: 13px; padding-top: 10px; }
+#main_contents { padding-top: 50px; }
+#mg_period { padding: 20px 0px 10px 0px;  }
+#mg_period > input[type="date"] { border: 1px solid #ddd; padding: 5px 10px; color: #666; cursor: pointer; }
+#mg_period > input[type="button"] { margin-left: 10px; padding: 5px 10px; border: 1px solid #ddd; color: #333; background: #ddd; cursor: pointer; }
+.review_contents_box { padding-top: 20px; }
+/*.shipping_txt { width: 160px; padding: 0 0 0 20px; }*/
+.shipping_box1_line2 { width: 420px; }
+.hellopass_link_payment { font-size: 13px; }
+.mantoman_q > p:last-child { padding-top: 5px; }
+.mantoman_a { font-size: 13px; }
+.mantoman_a_date { padding-top: 5px; }
+.contents_name { padding-bottom: 10px; }
+#userPhoneNum > input { padding: 5px 10px; border: 1px solid #ccc; width: 230px; }
+#userPassword > input { padding: 5px 10px; border: 1px solid #ccc; width: 230px; }
+.edit2_form_list3 { border-bottom: 1px solid #ccc; }
+.edit2_form_list1 { padding-top: 24px; }
+.edit2_form_list4 { padding-top: 48px; }
+.edit2_myinfo_bigbox { font-size: 13px; }
+.center_faq_box { border-top: 1px solid #ccc; }
+#rev_answer_title { padding-bottom: 20px; }

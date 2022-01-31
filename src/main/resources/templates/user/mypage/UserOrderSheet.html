@@ -1,0 +1,1407 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문서</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/inner.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common2.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script2.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .main {
+            margin-bottom: 50px !important;
+        }
+
+        #content {
+            padding: 20px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if (data.userSelectedType === 'R') {
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                    }
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById("sample6_address").value = addr;
+                    document.getElementById('sample6_postcode').value = data.zonecode;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("sample6_detailAddress").focus();
+                }
+            }).open();
+        }
+
+        $(function () {
+            let netPrice = parseInt(sessionStorage.getItem("netPrice"));
+            let salePrice = parseInt(sessionStorage.getItem("salePrice"));
+            $("#realPrice").val(netPrice - salePrice)
+
+
+            $("input[name='detail_addr']").on('click', function () {
+                if ($("input[name='detail_addr']:checked").val() === "문앞") {
+                    $(".select_detail_radio_1").css("display", "block")
+                } else {
+                    $(".select_detail_radio_1").css("display", "none")
+                }
+            })
+        });
+
+
+        function coponuse(e) {
+            let coponDiscount = $("#select_coupon option:selected").attr("name")
+
+            if (coponDiscount > 100) {
+                $("#order_coupon").text(coponDiscount)
+                $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                    - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+            } else if (coponDiscount <= 100) {
+                let row = parseInt($("#realPrice").val());
+                $("#order_coupon").text(row * coponDiscount / 100);
+                $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                    - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+            } else {
+                $("#order_coupon").text(0)
+                $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                    - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+            }
+        }
+
+        /* 포인트 입력 (숫자 제한) */
+        function maxLengthCheck(object) {
+            if (object.value.length > object.maxLength) {
+                object.value = object.value.slice(0, object.maxLength);
+            }
+
+            if ($(".input_hcash").val() <= parseInt($("#showHelloCash").text())) {
+                $("#order_hello").text($(".input_hcash").val());
+                if ($(".input_hcash").val() === "") {
+                    $(".input_hcash").val(0)
+                    $("#order_hello").text($(".input_hcash").val());
+                    $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                        - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                    $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+                }
+                $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                    - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+            } else {
+                alert("가지고 있는 헬로캐쉬보다 많은 캐쉬를 사용할 수 없습니다")
+                $(".input_hcash").val(0)
+                $("#order_hello").text($(".input_hcash").val());
+                $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                    - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+            }
+
+            if ($(".input_hcash").val() >= parseInt($("#total_price").text())) {
+                alert("상품금액 보다 많은 헬로캐쉬를 사용할 수 없습니다")
+                $(".input_hcash").val(0)
+                $("#order_hello").text($(".input_hcash").val());
+            } else {
+                $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                    - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+            }
+        }
+
+        /* inner_mem_order_sheet.html - 택배배송 클릭 시 배송 알림 없음 처리 */
+        $(function () {
+            // 문앞 선택시
+            $("#ship_type01_first").click(function () {
+                $(".ship_type_select_msg").show();
+            });
+            // 경비실 선택시
+            $("#ship_type01_second").click(function () {
+                $(".ship_type_select_msg").hide();
+            });
+        });
+
+        function modal_open() {
+            document.getElementById("mw_temp_p").style.display = 'block';
+        }
+
+        function modal_close() {
+            document.getElementById("mw_temp_p").style.display = 'none';
+        }
+
+        function hello_modal_open() {
+            document.getElementById("mw_temp_h").style.display = 'block';
+        }
+
+        function hello_modal_close() {
+            document.getElementById("mw_temp_h").style.display = 'none';
+        }
+
+        function card_modal_open() {
+            document.getElementById("mw_temp_c").style.display = 'block';
+        }
+
+        function card_modal_close() {
+            document.getElementById("mw_temp_c").style.display = 'none';
+        }
+
+
+        $(function () {
+            let memIdx = $("#hidden_user").val()
+            let prodIdx = sessionStorage.getItem("prodIdx").split(",");
+            let proName = sessionStorage.getItem("prodName").split(",");
+            let proEA = sessionStorage.getItem("proEA").split(",");
+            let proImg = sessionStorage.getItem("proIMG").split(",");
+            let totalPrice = sessionStorage.getItem("totalPrice").split(",");
+            let realPriceList = sessionStorage.getItem("realPriceList").split(",")
+            let netPrice = sessionStorage.getItem("netPrice");
+            let salePrice = sessionStorage.getItem("salePrice");
+            let num = sessionStorage.getItem("num");
+
+            for (let i = 0; i < prodIdx.length; i++) {
+                let style = "";
+                if (totalPrice[i] == null || totalPrice[i] == "") {
+                    style = "none";
+                } else {
+                    style = "block"
+                }
+            }
+
+
+                for (let i = 0; i < prodIdx.length; i++) {
+                    let row = $('<div id="order_item_list">').append(
+                        '<div id="order_item_list"><div class="item_image"><img src="' + proImg[i] + '" style="width: 60px; height: 60px;"></div>' +
+                        '<div class="item_name"><a href="#">' + proName[i] + '</a></div>' +
+                        '<div class="item_count_k">' + proEA[i] + '개' + '</div>' +
+                        '<div class="item_price_k"><del>' + totalPrice[i] + '</del><p>' + realPriceList[i] + '</p></div></div>'
+                    )
+                    $("#order_item_box").append(row)
+                }
+
+                $("#order_netPrice").text(netPrice);
+                $("#order_salePrice").text(salePrice);
+
+                axios.get("/api/memberOrder/load/" + memIdx, {}).then(function (response) {
+                    let name = response.data.data.address.name;
+                    let hp = response.data.data.address.hp;
+                    let addrName = response.data.data.address.addrName;
+                    let zipcode = response.data.data.address.zipcode;
+                    let addr1 = response.data.data.address.addr1;
+                    let addr2 = response.data.data.address.addr2;
+                    let baseFlag = response.data.data.address.baseFlag;
+                    let dawnFlag = response.data.data.address.dawnFlag;
+                    let greenFlag = response.data.data.address.greenFlag;
+                    let hellocash = response.data.data.hellocash;
+                    let requestType = response.data.data.address.requestType;
+                    let requestMemo1 = response.data.data.address.requestMemo1;
+                    let requestMemo2 = response.data.data.address.requestMemo2;
+
+                    $("#greenFlag").val(greenFlag)
+                    $("#dawnFlag").val(dawnFlag)
+                    $("#requestType").val(requestType)
+                    $("#requestMemo1").val(requestMemo1)
+                    $("#requestMemo2").val(requestMemo2)
+                    $("#zipcode").val(zipcode)
+                    $("#hidden_addr2").val(addr2)
+                    $("#hidden_addr1").val(addr1)
+
+
+                    if (dawnFlag === "FALSE") {
+                        $("#ship_type01_first").attr("disabled", true)
+                        $("#ship_type01_second").prop("checked", true)
+                    }
+
+                    $("#addr").text(addrName + "/" + addr1)
+                    $("#name").val(name)
+                    $("#hp").val(hp)
+                    $("#addr2").text("[" + zipcode + "] " + addr2)
+
+                    $("#showHelloCash").text(hellocash + "원")
+                    $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                        - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                    $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+
+
+                    for (let i in response.data.data.couponList) {
+                        let couponTtile = response.data.data.couponList[i].title;
+                        let couponDiscount = response.data.data.couponList[i].discount;
+                        let couponEnd = response.data.data.couponList[i].dateEnd;
+                        let ctIdx = response.data.data.couponList[i].idx;
+
+                        let discount_val;
+                        if (couponDiscount > 100) {
+                            discount_val = couponDiscount + "원 할인"
+                        } else {
+                            discount_val = couponDiscount + "% 할인"
+                        }
+
+                        let row = $('<option value="' + ctIdx + '" name="' + couponDiscount + '">').append(
+                            couponTtile + ' ' + discount_val + '(쿠폰종료 날짜' + couponEnd + ')</option>'
+                        )
+
+                        $("#choice_coupon").after(row)
+                    }
+                }).catch(function (err) {
+                    console.log(err)
+                })
+            })
+
+            function hello_all() {
+                $(".input_hcash").val(parseInt($("#showHelloCash").text()));
+                $("#order_hello").text($(".input_hcash").val());
+                $("#total_price").text(parseInt($("#order_netPrice").text()) - parseInt($("#order_coupon").text()) - parseInt($("#order_salePrice").text())
+                    - parseInt($("#order_hello").text()) + parseInt($("#order_delivery").text()))
+                $("#hncash").text(parseInt($("#total_price").text()) * 0.01)
+            }
+
+            $(function () {
+                /* 더그린배송 결제수단 클릭시 결제수단 오버뷰 */
+                $(".hellopass_link_payment").on("click", () => {
+                    $(".popup_payment_box").toggle();
+                })
+                $(".popup_close").on("click", () => {
+                    $(".popup_payment_box").css("display", "none");
+                })
+                /* 더그린배송 결제 개인 정보 수집 및 이용 동의 오버뷰 */
+                $(".enrollpay_allow").on("click", () => {
+                    $(".enrollpay_allow_list2").toggle();
+                })
+                $(".enrollpay_allow2").on("click", () => {
+                    $(".enrollpay_allow_list3").toggle();
+                })
+                /* 결제수단 클릭상태 css */
+                $(".choose_payment_box > div").click(function (event) {
+                    $(this).add(".choose_payment_box > div").addClass("payment_box_clicked")
+                    $(".choose_payment_box > div").not($(this)).removeClass("payment_box_clicked")
+                    event.stopPropagation();
+                })
+            })
+
+            function order_check() {
+
+                let memIdx = $("#hidden_user").val();
+                let zipcode = $("#zipcode").val();
+                let address1 = $("#hidden_addr1").val();
+                let address2 = $("#hidden_addr2").val();
+                let green;
+                let dwan;
+                let alarm;
+
+                if ($("#greenFlag").val() === "TRUE") {
+                    green = 1;
+                } else {
+                    green = 0;
+                }
+
+                if ($("#dawnFlag").val() === "TRUE") {
+                    dwan = 1;
+                } else {
+                    dwan = 0;
+                }
+                let recName = $("#name").val();
+                let recHp = $("#hp").val();
+
+                if ($("input[name='ship_type01']:checked").val() === "새벽배송") {
+                    alarm = $("input[name='ship_type02']:checked").val()
+                } else {
+                    alarm = 3
+                }
+
+                let requestType = $("#requestType").val()
+                let requestMemo1 = $("#requestMemo1").val()
+                let requestMemo2 = $("#requestMemo2").val()
+
+                let proIdx = sessionStorage.getItem("prodIdx").split(",");
+                let proCount = sessionStorage.getItem("proEA").split(",");
+
+                let proIdxList = [];
+                let proCountList = [];
+
+                for (let i = 0; i < proIdx.length; i++) {
+                    proIdxList.push(proIdx[i])
+                }
+
+                for (let i = 0; i < proCount.length; i++) {
+                    proCountList.push(proCount[i])
+                }
+
+
+                let price = $("#total_price").text()
+                let paymentType = $("input[name='method']:checked").val()
+                let hellocash = $("#order_hello").text()
+                let cardNum = $("#hidden_real_cardNum").val()
+                let cpIdx = $("#select_coupon").val()
+                console.log(cpIdx)
+                if (cpIdx === "쿠폰을 선택하세요") {
+                    cpIdx = null;
+                } else {
+
+                }
+
+                if (paymentType === "1" && paymentType === "8") {
+
+                    axios.post("/api/memberOrder/create", {
+                        data: {
+                            memIdx: memIdx,
+                            zipcode: zipcode,
+                            address1: address1,
+                            address2: address2,
+                            greenFlag: green,
+                            dawnFlag: dwan,
+                            recName: recName,
+                            recHp: recHp,
+                            alarm: alarm,
+                            requestType: requestType,
+                            requestMemo1: requestMemo1,
+                            requestMemo2: requestMemo2,
+                            cpIdx: cpIdx,
+                            proIdxList: proIdxList,
+                            proCountList: proCountList,
+                            price: price,
+                            paymentType: paymentType,
+                            cardNum: cardNum,
+                            hellocash: hellocash
+                        }
+                    }).then(function () {
+                        alert("주문에 성공하셨습니다.")
+                        location.href = "/user/index/";
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                } else {
+
+                    axios.post("/api/memberOrder/create", {
+                        data: {
+                            memIdx: memIdx,
+                            zipcode: zipcode,
+                            address1: address1,
+                            address2: address2,
+                            greenFlag: green,
+                            dawnFlag: dwan,
+                            recName: recName,
+                            recHp: recHp,
+                            alarm: alarm,
+                            requestType: requestType,
+                            requestMemo1: requestMemo1,
+                            requestMemo2: requestMemo2,
+                            cpIdx: cpIdx,
+                            proIdxList: proIdxList,
+                            proCountList: proCountList,
+                            price: price,
+                            paymentType: paymentType,
+                            hellocash: hellocash
+                        }
+                    }).then(function () {
+                        alert("주문에 성공하셨습니다.")
+                        location.href = "/user/index";
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                }
+            }
+
+            $(function () {
+                $(".shipping_form_list > li").children("input").css("width", "600px");
+
+                let memIdx = $("#hidden_user").val()
+
+                axios.get('/api/membersAddresses/user/list/' + memIdx, {}).then(function (response) {
+
+                    for (let i in response.data.data) {
+                        let addrName = response.data.data[i].addrName;
+                        let id = response.data.data[i].idx;
+                        let name = response.data.data[i].name;                           // 받는 사람
+                        let hp = response.data.data[i].hp;                               // 전화번호
+                        let zipcode = response.data.data[i].zipcode;                     // 우편번호
+                        let addr1 = response.data.data[i].addr1;                         // 도로명주소 + 상세주소
+                        let addr2 = response.data.data[i].addr2;                         // 나머지주소
+                        let requestType = response.data.data[i].requestType;             // 배송타입
+                        let baseFlag = response.data.data[i].baseFlag;                   // 기본배송지
+                        let greenFlag = response.data.data[i].greenFlag;
+                        let dawnFlag = response.data.data[i].dawnFlag;
+                        let requestMemo1 = response.data.data[i].requestMemo1;
+                        let requestMemo2 = response.data.data[i].requestMemo2;
+
+                        let row = $("<table class='addr_list_table'>").append(
+                            '<tbody><tr><th>배송지</th><td id="eidt_addrName">' + addrName + '/' + addr1 + '</td></tr>' +
+                            '<tr><th>정보</th><td id="edit_info"><span id="edit_name">' + name + '</span>/<span id="edit_hp">' + hp + '</span></td></tr>' +
+                            '<tr><th>상세정보</th><td id="edit_addr2"><span id="edit_zipcode">' + zipcode + '</span>/<span>' + addr2 + '</span></td></tr></tbody>' +
+                            '<input type="hidden" value="' + zipcode + '" id="hidden_zip"><input type="hidden" value="' + dawnFlag + '" id="hidden_dawn"><input type="hidden" value="' + requestType + '" id="hidden_type">' +
+                            '<input type="hidden" value="' + greenFlag + '" id="hidden_green"><input type="hidden" value="' + requestMemo1 + '" id="hidden_memo1"><input type="hidden" value="' + requestMemo2 + '" id="hidden_memo2">' +
+                            '<input type="hidden" value="' + addr1 + '" id="hidden_addr1"><input type="hidden" value="' + addr2 + '" id="hidden_addr2"></table>'
+                        )
+                        $("#address_edit_box").append(row)
+                    }
+
+                    $(".addr_list_table").click(function (e) {
+
+                        $("#addr").text($(this).children("tbody").children("tr").children("#eidt_addrName").text())
+                        $("#addr2").text($(this).children("tbody").children("tr").children("#edit_addr2").text())
+                        $("#name").val($(this).children("tbody").children("tr").children("#edit_info").children("#edit_name").text())
+                        $("#hp").val($(this).children("tbody").children("tr").children("#edit_info").children("#edit_hp").text())
+
+                        $("#greenFlag").val(($(this).children("#hidden_green").val()));
+                        $("#dawnFlag").val(($(this).children("#hidden_dawn").val()))
+                        $("#requestType").val(($(this).children("#hidden_type").val()))
+                        $("#requestMemo1").val(($(this).children("#hidden_memo1").val()))
+                        $("#requestMemo2").val(($(this).children("#hidden_memo2").val()))
+                        $("#zipcode").val(($(this).children("#hidden_zip").val()))
+                        $("#hidden_addr2").val(($(this).children("#hidden_addr2").val()))
+                        $("#hidden_addr1").val(($(this).children("#hidden_addr1").val()))
+
+                        if ($("#dawnFlag").val() === "TRUE") {
+                            $("#ship_type01_first").removeAttr("disabled");
+                        } else {
+                            $("#ship_type01_first").attr("disabled", true)
+                        }
+
+
+                        alert("배송지가 수정되었습니다")
+                        document.getElementById("mw_temp_p").style.display = 'none';
+                    })
+
+                }).catch(function (err) {
+                    console.log(err)
+                })
+
+                $("#add_address_btn").click(function () {
+
+                    if ($(this).val() === "배송지 추가") {
+                        $(this).val("뒤로가기");
+                        $("#address_edit_box").css("display", "none")
+                        $("#address_add_box").css('display', "block")
+
+                    } else if ($(this).val() === "뒤로가기") {
+                        $("#address_edit_box").css("display", "block")
+                        $("#address_add_box").css('display', "none")
+                        $(this).val("배송지 추가");
+                    }
+                })
+            })
+
+
+            function sendit() {
+
+                let baseFlag;
+                let addressName = $('#addressName').val();                  // 배송지명
+                let userName = $("#userName").val();                        // 받는사람
+                let userHp = $("#userHp").val();                            // 연락처
+                let address = $("#sample6_address").val();                  // 도로명 주소
+                let detailAddress = $("#sample6_detailAddress").val();      // 상세 주소
+                let postcode = $("#sample6_postcode").val();                // 우편번호
+                let requestType = $("input:radio[name='detail_addr']:checked").val()      // 배송타입
+                let requestMemo1 = $(".insert_door_pwd").val()              // 배송 요청사항
+                let requestMemo2 = $("#remark_sir").val();                  // 배송기사님께
+                let dawnFlag;
+                let urlidx = $("#hidden_user").val()
+                let greenFlag = $("input:radio[name='Thegreen']:checked").val()
+                console.log(parseInt(postcode.substring(1, 2)));
+                console.log(parseInt(postcode.substring(0, 1)));
+                ;
+
+
+                if (parseInt(postcode.substring(1, 2)) <= 9 && parseInt(postcode.substring(1, 2)) >= 1 && parseInt(postcode.substring(0, 1)) === 0) {
+                    dawnFlag = 1;
+                } else {
+                    dawnFlag = 0;
+                }
+
+                if ($("input:checkbox[name='baseFlag']").is(':checked')) {
+                    baseFlag = 1;
+                } else {
+                    baseFlag = 0;
+                }
+
+                if (requestType === "문앞") {
+                    requestType = $("input:radio[name='chk_door']:checked").val();
+                }
+
+
+                const expHpCheck = RegExp(/^\d{3}-\d{3,4}-\d{4}$/);
+                if (!expHpCheck.test($('#userHp').val())) {
+                    alert('휴대폰 번호를 형식에 맞게 입력하세요 ( -포함 )');
+                    $('#userHp').val('');
+                    $('#userHp').focus();
+                    return false;
+                }
+
+                console.log(urlidx)
+                console.log(userName)
+                console.log(userHp)
+                console.log(postcode)
+                console.log(address)
+                console.log(detailAddress)
+                console.log(requestType)
+                console.log(requestMemo1)
+                console.log(requestMemo2)
+                console.log(baseFlag)
+                console.log(dawnFlag)
+                console.log(greenFlag)
+
+                axios.post('/api/membersAddresses/create', {
+                    headers: {'Content-type': 'application/json'},
+                    data: {
+                        memIdx: urlidx,
+                        addrName: addressName,
+                        name: userName,
+                        hp: userHp,
+                        zipcode: postcode,
+                        addr1: address,
+                        addr2: detailAddress,
+                        requestType: requestType,
+                        requestMemo1: requestMemo1,
+                        requestMemo2: requestMemo2,
+                        baseFlag: baseFlag,
+                        dawnFlag: dawnFlag,
+                        greenFlag: greenFlag
+                    }
+                }).then(function () {
+                }).catch(function (err) {
+                    console.log(err)
+                    return false;
+                });
+                alert('배송지 정보가 등록되었습니다.');
+                location.reload();
+            };
+
+
+            $(function () {
+                let memIdx = $("#hidden_user").val();
+                axios.get('/api/card/list/' + memIdx, {}).then(function (response) {
+                    console.log(response.data.data)
+                    for (let i in response.data.data) {
+                        let numList = response.data.data[i].num;
+                        let bankType = response.data.data[i].bank;
+                        let cardIdx = response.data.data[i].idx;
+                        let name = response.data.data[i].name;
+                        let baseFlag = response.data.data[i].baseFlag;
+                        let busiFlag = response.data.data[i].busiFlag;
+
+                        if (baseFlag === "TRUE") {
+                            $("input[name='radio_id']").prop("checked", true)
+                        }
+
+                        let show_busiFlag;
+                        if (busiFlag === "TRUE") {
+                            busiFlag = "법인"
+                            show_busiFlag = "block"
+                        } else {
+                            show_busiFlag = "none"
+                        }
+
+                        let num = numList.split("-");
+                        let splitNum = num[3];
+                        let lastNum = splitNum;
+
+                        let bank;
+                        switch (bankType) {
+                            case "KB":
+                                bank = "국민은헹";
+                                break;
+                            case "SINHAN":
+                                bank = "신한은행";
+                                break;
+                            case "CITY":
+                                bank = "한국씨티은행";
+                                break;
+                            case "IBK":
+                                bank = "IBK기업은행";
+                                break;
+                            case "KEB":
+                                bank = "KEB하나은행";
+                                break;
+                            case "BNK":
+                                bank = "부산은행";
+                                break;
+                            case "SC":
+                                bank = "SC제일은행";
+                                break;
+                            case "GWANGJU":
+                                bank = "광주은행";
+                                break;
+                            case "WOORI":
+                                bank = "우리은행";
+                                break;
+                        }
+
+                        let row = $('<div class="contents_hellopay_inputcard_h">').append(
+                            '<input type="hidden" class="hidden_card_num" value="' + numList + '">' +
+                            '<div class="hellopay_radio_box_h"><div class="hellopay_radio_box_inner"><input type="radio" name="radio_id" id="hellopay_radio" value="' + cardIdx + '" onclick="return(false);"/>' +
+                            '<label for="hellopay_radio"></label></div></div>' +
+                            '<div class="hellopay_card_info"><span class="hellopay_cardname">' + name + '</span><span style="display:' + show_busiFlag + '">' + busiFlag + '</span></div>' +
+                            '<div class="hellopay_card_info"><span class="hellopay_bankname">' + bank + '</span>' +
+                            '<span class="hellopay_star"><i>**** **** ****</i><span> ' + lastNum + '</span></span></div></div>'
+                        )
+                        $("#hello_list_box").append(row);
+                    }
+
+                    $(".contents_hellopay_inputcard_h").click(function (e) {
+                        $("#hidden_real_cardNum").val($(this).children(".hidden_card_num").val())
+                        $("#hidden_cardNum").val($(this).children(".hellopay_card_info").children(".hellopay_star").text())
+                        $("#hidden_bank").val($(this).children(".hellopay_card_info").children(".hellopay_bankname").text())
+                        hello_modal_close();
+                    })
+
+                }).catch(function (err) {
+                    console.log(err)
+                });
+
+                $("#card_enroll_btn").click(function () {
+                    let num1 = $("#card_num1").val();                   // 카드번호 4자리-1
+                    let num2 = $("#card_num2").val();                   // 카드번호 4자리-2
+                    let num3 = $("#card_num3").val();                   // 카드번호 4자리-3
+                    let num4 = $("#card_num4").val();                   // 카드번호 4자리-4
+                    const num = num1 + "-" + num2 + "-" + num3 + "-" + num4         // 1234-1234-1234-1234
+                    let cvc = $('#card_cvc').val();                     // 카드 cvc 3자리
+
+                    let distinctCvc = cvc.split("");
+                    let bank;
+                    let cvcFirst = distinctCvc[0]
+                    // cvc 첫번째 숫자로 은행 분류
+                    switch (cvcFirst) {
+                        case "1":
+                            bank = "국민은행";     // 국민은행
+                            break;
+                        case "2":
+                            bank = "신한은행";     // 신한은행
+                            break;
+                        case "3":
+                            bank = "한국씨티은행";     // 한국씨티은행
+                            break;
+                        case "4":
+                            bank = "기업은행";     // 기업은행
+                            break;
+                        case "5":
+                            bank = "하나은행";     // 하나은행
+                            break;
+                        case "6":
+                            bank = "부산은행";     // 부산은행
+                            break;
+                        case "7":
+                            bank = "제일은행";     // 제일은행
+                            break;
+                        case "8":
+                            bank = "광주은행";     // 광주은행
+                            break;
+                        case "9":
+                            bank = "우리은행";     // 우리은행
+                            break;
+                    }
+
+                    $("#hidden_real_cardNum").val(num)
+                    $("#hidden_cardNum").val("**** **** **** " + num4)
+                    $("#hidden_bank").val(bank)
+                    alert('등록이 완료되었습니다');
+                    card_modal_close();
+
+                })
+            })
+
+            function choice() {
+                if ($("input[name='method']:checked").val() === "1" || $("input[name='method']:checked").val() === "7") {
+                    $(".hellopass_link_payment").text(($("input[name='method']:checked").siblings("label").children("div").children("span").text()) + $("#hidden_cardNum").val() + $("#hidden_bank").val());
+                    alert("선택이 완료되었습니다")
+                } else {
+                    $(".hellopass_link_payment").text(($("input[name='method']:checked").siblings("label").children("div").children("span").text()));
+                    alert("선택이 완료되었습니다")
+                }
+            }
+    </script>
+</head>
+<body>
+<div id="mypage-box">
+    <input type="hidden" id="realPrice">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="main">
+            <section id="content">
+                <div method="post">
+                    <div id="mem_order_cont_box" class="order_cont_box">
+                        <div class="order_cont_title">
+                            <h1>주문서</h1>
+                        </div>
+                        <div id="order_form_box">
+                            <h2 class="order_form_title">주문상품</h2>
+                            <div id="order_item_box">
+                            </div>
+                            <!-- 폼 안에 들어갈 내용 -->
+                            <div class="wsriteOrderForm">
+                                <!-- 주문자 정보 -->
+                                <h2 class="order_form_title" id="order_info">주문자 정보</h2>
+                                <div class="order_section_data_orderer">
+                                    <table class="ordererinfo_table">
+                                        <tbody>
+                                        <tr>
+                                            <th>보내는 분</th>
+                                            <td th:text="${session['name']}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>휴대폰</th>
+                                            <td th:text="${session['hp']}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>이메일</th>
+                                            <td th:text="${session['email']}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- 배송 정보 -->
+                                <h2 class="order_form_title">배송 정보</h2>
+                                <div class="order_section_order_address">
+                                    <table class="addr_info_table">
+                                        <tbody>
+                                        <tr>
+                                            <th>배송지</th>
+                                            <td id="addr"></td>
+                                            <td>
+                                                <button class="addr_edit_btn" onclick='modal_open()'>수정</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>정보</th>
+                                            <td>받는 분 : <input type="text" id="name" placeholder="받는 분 이름을 입력하세요"> 연락처 :
+                                                <input type="text" id="hp" placeholder="휴대폰번호를 입력하세요">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>상세정보</th>
+                                            <td><span id="addr2">배송받을위치</span></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" id="greenFlag">
+                                    <input type="hidden" id="dawnFlag">
+                                    <input type="hidden" id="requestType">
+                                    <input type="hidden" id="requestMemo1">
+                                    <input type="hidden" id="requestMemo2">
+                                    <input type="hidden" id="zipcode">
+                                    <input type="hidden" id="hidden_addr1">
+                                    <input type="hidden" id="hidden_addr2">
+                                </div>
+
+                                <!--팝업창 부분 시작 -->
+                                <div id="mw_temp_p" class="mw_p">
+                                    <div class="bg_p"><!--이란에는 내용을 넣지 마십시오.--></div>
+                                    <div class="fg_p">
+                                        <div id="modal_title_s" class="modal_greentitle">
+                                            <p>배송지 수정<span><img src='/admin/img/close2.png' onclick="modal_close()"
+                                                                class="modal_closeBtn"></span></p>
+                                        </div>
+                                        <div class="Modal_s">
+                                            <div class="modal_cateBox" method="" action="#" id="modal_form">
+                                                <h2 class="address_list_title" style="margin: 30px">배송지 정보</h2>
+                                                <!--배송지목록 팝업-->
+                                                <div id="address_edit_box"
+                                                     style="height: 600px; overflow-x: hidden; overflow-y: scroll; display: block;">
+                                                </div>
+                                                <!--배송지목록 팝업 끝-->
+                                                <!--배송지추가 팝업-->
+                                                <div id="address_add_box"
+                                                     style="display: none; height: 600px;  overflow-x: hidden; overflow-y: scroll">
+                                                    <div>
+                                                        <div class="edit_shipping_form">
+                                                            <ul class="shipping_form_list">
+                                                                <li>
+                                                                    <h5 class="essbox">배송지명<span
+                                                                            class="essential">필수</span></h5>
+                                                                    <input type="text" name="addressName"
+                                                                           id="addressName" class="input_text"
+                                                                           placeholder="집, 회사 등 배송지 별칭 입력해주세요."
+                                                                           maxlength="10" required>
+                                                                    <div class="caution_not_input">
+                                                                        배송지 명을 입력해주세요.
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <h5 class="essbox">받는 사람<span
+                                                                            class="essential">필수</span></h5>
+                                                                    <input type="text" name="userName" id="userName"
+                                                                           class="input_text"
+                                                                           placeholder="받는 사람의 이름을 입력해주세요."
+                                                                           maxlength="15" required>
+                                                                    <div class="caution_not_input">
+                                                                        받는 사람을 입력해주세요.
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <h5 class="essbox">휴대전화<span
+                                                                            class="essential">필수</span></h5>
+                                                                    <input type="tel" name="userHp" id="userHp"
+                                                                           class="input_text"
+                                                                           placeholder="ex) 010-0000-0000" required>
+                                                                    <div class="caution_not_input">
+                                                                        전화번호를 입력해주세요.
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <h5 class="essbox">주소<span
+                                                                            class="essential">필수</span></h5>
+                                                                    <input type="text" name="address1"
+                                                                           id="sample6_address" class="input_text"
+                                                                           placeholder="배송받을 주소를 검색해주세요." maxlength="11"
+                                                                           readonly="readonly" required>
+                                                                    <span class="search_address"
+                                                                          onclick="sample6_execDaumPostcode()"></span>
+                                                                    <div class="caution_not_input">주소를 입력해주세요.</div>
+                                                                    <input type="text" name="address2"
+                                                                           id="sample6_detailAddress" class="input_text"
+                                                                           placeholder="상세 주소를 입력해주세요." required>
+                                                                    <div class="caution_not_input">상세주소를 입력해주세요.</div>
+                                                                    <input type="hidden" name="zipcode"
+                                                                           id="sample6_postcode" readonly>
+                                                                </li>
+                                                                <!-- 배송 요청사항 -->
+                                                                <li>
+                                                                    <h5 class="essbox">배송 요청사항<span
+                                                                            class="essential">필수</span></h5>
+                                                                    <div class="radio_list_box">
+                                                                        <!-- 배송 요청 사항 선택, 입력 -->
+                                                                        <ul class="ask_addr_detail">
+                                                                            <!-- 문앞 -->
+                                                                            <li>
+                                                                                <p><input type="radio"
+                                                                                          class="ask_detail_radio_1"
+                                                                                          name="detail_addr"
+                                                                                          id="detail_addr_1" value="문앞"><label
+                                                                                        for="detail_addr_1">문앞</label>
+                                                                                </p>
+                                                                                <div class="select_detail_radio_1"
+                                                                                     style="display: none">
+                                                                                    <p><input type="radio"
+                                                                                              class="chk_door"
+                                                                                              name="chk_door"
+                                                                                              id="entrance_pwd"
+                                                                                              value="1"><label
+                                                                                            for="entrance_pwd">공동현관 출입
+                                                                                        비밀번호</label></p>
+                                                                                    <p><input type="text"
+                                                                                              placeholder="정확한 비밀번호를 입력해주세요"
+                                                                                              class="insert_door_pwd">
+                                                                                    </p>
+                                                                                    <div class="caution_not_input">공동현관
+                                                                                        출입 비밀번호를 입력해주세요.
+                                                                                    </div>
+                                                                                    <p><input type="radio"
+                                                                                              class="chk_door"
+                                                                                              name="chk_door"
+                                                                                              id="no_pwd_enter"
+                                                                                              value="2"><label
+                                                                                            for="no_pwd_enter">비밀번호 없이
+                                                                                        출입 가능</label></p>
+                                                                                </div>
+                                                                            </li>
+                                                                            <!-- 경비실 -->
+                                                                            <li>
+                                                                                <p><input type="radio"
+                                                                                          class="ask_detail_radio_2"
+                                                                                          name="detail_addr"
+                                                                                          id="detail_addr_2"
+                                                                                          value="3"><label
+                                                                                        for="detail_addr_2">경비실</label>
+                                                                                </p>
+                                                                                <p class="ask_detail_radio_2_msg">※ 경비실
+                                                                                    호출 / 보관이 불가한 경우 공동 현관 앞에 배송될 수
+                                                                                    있습니다.</p>
+                                                                            </li>
+                                                                            <!-- 택배함 -->
+                                                                            <li>
+                                                                                <p>
+                                                                                    <input type="radio"
+                                                                                           class="ask_detail_radio_3"
+                                                                                           name="detail_addr"
+                                                                                           id="detail_addr_3" value="4"><label
+                                                                                        for="detail_addr_3">택배함</label>
+                                                                                </p>
+                                                                            </li>
+                                                                            <!-- 기타장소 -->
+                                                                            <li>
+                                                                                <p><input type="radio"
+                                                                                          class="ask_detail_radio_4"
+                                                                                          name="detail_addr"
+                                                                                          id="detail_addr_4"
+                                                                                          value="5"><label
+                                                                                        for="detail_addr_4">기타장소</label>
+                                                                                <p style="font-size: 13px">원하시는 장소를
+                                                                                    배송기사님께 메모해주세요</p>
+                                                                                </p>
+                                                                                <div class="caution_not_input">수령하실 장소를
+                                                                                    입력해주세요.
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </li>
+                                                                <!-- 배송 요청사항 -->
+                                                                <li>
+                                                                    <h5 class="normalbox">배송기사님께</h5>
+                                                                    <input type="text" name="remark_sir" id="remark_sir"
+                                                                           class="input_text"
+                                                                           placeholder="배송기사님께 전달할 메시지를 입력해주세요."
+                                                                           maxlength="30">
+                                                                </li>
+                                                            </ul>
+                                                            <div class="edit_shipping_guide_box">
+                                                                <ul>
+                                                                    <li>
+                                                                        새벽배송 시 공동현관 출입이 어려운 경우 부득이하게 <em>1층 또는 지하주차장
+                                                                        공동현관 앞 경비실 앞</em>으로 배송될 수 있는 점 참고
+                                                                        부탁드립니다.
+                                                                    </li>
+                                                                    <li>
+                                                                        비밀번호 미 입력 또는 불일치, 경비원 부재, 패드 오작동 등 세대별 출입 방법을
+                                                                        정확하게 입력 바랍니다.
+                                                                        <br>
+                                                                        예) 별 1234 샵 / 호출 1234 종 / 경비 2104 확인 등
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- edit_shipping_form 끝 -->
+                                                        </div>
+                                                        <!-- 개인 정보 동의 체크박스 시작 -->
+                                                        <div class="edit_shipping_allow">
+                                                            <div class="enrollhellopay_box_check_inner">
+                                                                <input type="checkbox"
+                                                                       class="check_business_credit_card check_privacy"
+                                                                       id="check_business_credit_card">
+                                                            </div>
+                                                            <label for="check_business_credit_card">개인 정보 수집 및 이용
+                                                                동의</label>
+                                                        </div>
+                                                        <!-- 개인 정보 수집 체크박스 끝 -->
+                                                        <button type="button" class="button_submit" onclick="sendit()">
+                                                            저장
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <input type="button" value="배송지 추가" id="add_address_btn"
+                                                           style="width: 580px; color:#5dab99; border-radius: 5px; text-align: center; cursor: pointer;
+                                                           margin: 0px 30px; border: 1px solid #5dab99; background-color: white; height: 50px; font-size: 15px; font-weight: 500;">
+                                                </div>
+                                            </div>
+                                            <!--배송지추가 팝업 끝-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--팝업창 부분 끝 -->
+                                <!--헬로페이 팝업창 부분 시작 -->
+                                <div id="mw_temp_h" class="mw_h">
+                                    <div class="bg_h"><!--이란에는 내용을 넣지 마십시오.--></div>
+                                    <div class="fg_h">
+                                        <div id="modal_title_h" class="modal_greentitle">
+                                            <p>헬로페이 목록<span><img src='/admin/img/close2.png'
+                                                                 onclick="hello_modal_close()"
+                                                                 class="modal_closeBtn"></span></p>
+                                        </div>
+                                        <div class="Modal_h">
+                                            <div class="modal_cateBox">
+                                                <h2 class="hello_list_title" style="margin: 30px">헬로페이 등록된 카드</h2>
+                                                <!--헬로페이 목록 팝업-->
+                                                <div id="hello_list_box"
+                                                     style="height: 600px; overflow-x: hidden; overflow-y: scroll;">
+                                                </div>
+                                                <!--헬로페이 목록 팝업 끝-->
+                                            </div>
+                                            <div>
+                                                <input type="button" value="헬로페이 추가" id="add_hello_btn"
+                                                       style="width: 580px; color:#5dab99; border-radius: 5px; text-align: center; cursor: pointer;
+                                                           margin: 0px 30px; border: 1px solid #5dab99; background-color: white; height: 50px; font-size: 15px; font-weight: 500;"
+                                                       onclick="location.href='/user/mypage_enrollHellopay/'"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--헬로페이 팝업창 부분 끝 -->
+                                <!--신용카드 팝업창 부분 시작 -->
+                                <div id="mw_temp_c" class="mw_c">
+                                    <div class="bg_c"><!--이란에는 내용을 넣지 마십시오.--></div>
+                                    <div class="fg_c">
+                                        <div id="modal_title_c" class="modal_greentitle">
+                                            <p>신용카드 등록<span><img src='/admin/img/close2.png'
+                                                                 onclick="card_modal_close()"
+                                                                 class="modal_closeBtn"></span></p>
+                                        </div>
+                                        <div class="Modal_h">
+                                            <div class="modal_cateBox">
+                                                <!--신용카드 팝업 내용-->
+                                                <div id="credit_card_box" style="height: 400px; margin: 0 30px;">
+                                                    <div class="enrollpay_box_inner3">
+                                                        <h5 class="form_title">카드번호</h5>
+                                                        <ul class="form_area">
+                                                            <li><input type="password" id="card_num1"
+                                                                       class="enrollpay_input" maxlength="4"
+                                                                       autocomplete="off"></li>
+                                                            <li><input type="password" id="card_num2"
+                                                                       class="enrollpay_input" maxlength="4"
+                                                                       autocomplete="off"></li>
+                                                            <li><input type="password" id="card_num3"
+                                                                       class="enrollpay_input" maxlength="4"
+                                                                       autocomplete="off"></li>
+                                                            <li><input type="tel" id="card_num4" class="enrollpay_input"
+                                                                       maxlength="4" autocomplete="off"></li>
+                                                        </ul>
+                                                        <div class="caution_not_input">
+                                                            카드번호를 입력해 주세요.
+                                                        </div>
+                                                    </div>
+                                                    <div class="enrollpay_box_inner4">
+                                                        <h5 class="form_title">유효기간 (월/년)</h5>
+                                                        <input type="tel" placeholder="월 /년도" class="enrollpay_input"
+                                                               id="card_range" maxlength="5" autocomplete="off">
+                                                        <div class="caution_not_input">
+                                                            유효기간을 입력해 주세요.
+                                                        </div>
+                                                    </div>
+                                                    <div class="enrollpay_box_inner7">
+                                                        <h5 class="form_title">CVC</h5>
+                                                        <input type="text" placeholder="cvc 3자리" class="enrollpay_input"
+                                                               id="card_cvc" maxlength="3" autocomplete="off">
+                                                        <div class="caution_not_input">
+                                                            카드 뒷편 cvc번호를 확인해주세요
+                                                        </div>
+                                                    </div>
+                                                    <div class="enrollpay_box_inner5">
+                                                        <h5 class="form_title">생년월일</h5>
+                                                        <input type="tel" placeholder="6자리" class="enrollpay_input"
+                                                               id="birth_sixnum" maxlength="6" autocomplete="off">
+                                                        <div class="caution_not_input">
+                                                            생년월일을 입력해 주세요.
+                                                        </div>
+                                                    </div>
+                                                    <div class="enrollpay_box_inner6">
+                                                        <h5 class="form_title">비밀번호</h5>
+                                                        <input type="password" placeholder="비밀번호 앞 2자리"
+                                                               class="enrollpay_input" id="card_pw" maxlength="2"
+                                                               autocomplete="off">
+                                                        <div class="caution_not_input">
+                                                            카드 비밀번호 앞 2자리를 입력해 주세요.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--신용카드 팝업  내용끝-->
+                                            </div>
+                                            <div>
+                                                <input type="button" value="카드 등록" id="card_enroll_btn"
+                                                       style="width: 580px; color:#5dab99; border-radius: 5px; text-align: center; cursor: pointer;
+                                                           margin: 0px 30px; border: 1px solid #5dab99; background-color: white; height: 50px; font-size: 15px; font-weight: 500;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--신용카드 팝업창 부분 끝 -->
+                                <div class="ship_type_select_box">
+                                    <div class="ship_type_select">
+                                        <div class="ship_type_tit">
+                                            배송 방법
+                                        </div>
+                                        <div class="ship_type_opt">
+                                            <input type="hidden" id="dwan_flag" value="">
+                                            <input type="radio" name="ship_type01" id="ship_type01_first" value="새벽배송"
+                                                   onclick="selectMsgShow()" checked><label
+                                                for="ship_type01_first">새벽배송</label>
+                                            <input type="radio" name="ship_type01" id="ship_type01_second" value="택배배송"><label
+                                                for="ship_type01_second">택배배송</label>
+                                        </div>
+                                    </div>
+                                    <div class="ship_type_select_msg">
+                                        <div class="ship_type_tit">
+                                            배송 알림
+                                        </div>
+                                        <div class="ship_type_opt">
+                                            <input class="ship_type_button" type="radio" name="ship_type02"
+                                                   id="ship_type02_first" value="1" checked><label
+                                                for="ship_type02_first">배송
+                                            후</label>
+                                            <input class="ship_type_button" type="radio" name="ship_type02"
+                                                   id="ship_type02_second" value="2"><label for="ship_type02_second">오전
+                                            7시
+                                            이후</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 쿠폰 / 적립금 -->
+                        <h2 class="order_form_title">쿠폰 / 적립금</h2>
+                        <div class="order_section_hello_coupon_cash">
+                            <ul class="hello_coupon_line">
+                                <li>
+                                    <h5 class="hello_coupon_cash_tit">쿠폰</h5>
+                                    <select id="select_coupon" onchange="coponuse(this)">
+                                        <option id="choice_coupon">쿠폰을 선택하세요</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <h5 class="hello_coupon_cash_tit">헬로캐시<span id="showHelloCash"></span></h5>
+                                    <ul class="hello_cash_line">
+                                        <li>
+                                            <input type="number" maxlength="8" class="input_hcash" placeholder="0"
+                                                   oninput="maxLengthCheck(this)">
+                                            <button class="use_all_hcash" onclick="hello_all()">모두 사용</button>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <h2 class="order_form_title">결제수단</h2>
+                        <!-- 결제 수단 시작 -->
+                        <div class="enroll_hellopass_instant">
+                            <a href="#" class="hellopass_link_payment">선택해주세요.</a>
+                            <!-- 결제 수단 끝 -->
+                        </div>
+                        <!-- 결제 수단 팝업창 -->
+                        <div class="popup_payment_box">
+                            <div class="popup_topline">
+                                <h2>결제 수단 선택</h2>
+                                <input type="hidden" id="hidden_real_cardNum">
+                                <input type="hidden" id="hidden_cardNum">
+                                <input type="hidden" id="hidden_bank">
+                            </div>
+                            <!-- popup_payment_form 시작 -->
+                            <div class="popup_payment_form">
+                                <h5>결제수단</h5>
+                                <!-- choose_payment_box 시작 -->
+                                <div class="choose_payment_box">
+                                    <!-- 헬로페이 -->
+                                    <div class="payment_box" id="hellopay_box">
+                                        <input type="radio" name="method" id="method1" class="popup_radio_hide"
+                                               value="1" onclick="hello_modal_open()">
+                                        <label for="method1">
+                                            <img src="/user/images/mypage.img/popup/popup_hellopay.png" alt="헬로네이처 간편결제"
+                                                 class="popup_hellopay">
+                                            <div class="payment_text_box_4words">
+                                                <span class="payment_text">헬로페이</span>
+                                                <input type="hidden" id="hello_pay_cardNum">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <!-- 헬로페이 -->
+                                    <!-- 차이페이 -->
+                                    <div class="payment_box">
+                                        <input type="radio" name="method" id="method2" class="popup_radio_hide"
+                                               value="2">
+                                        <label for="method2">
+                                            <img src="/user/images/mypage.img/popup/popup_chaipay.png" alt="헬로네이처 간편결제"
+                                                 class="popup_chaipay">
+                                            <div class="payment_text_box_4words">
+                                                <span class="payment_text">차이페이</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <!-- 차이페이 -->
+                                    <!-- 네이버페이 -->
+                                    <div class="payment_box">
+                                        <input type="radio" name="method" id="method3" class="popup_radio_hide"
+                                               value="3">
+                                        <label for="method3">
+                                            <img src="/user/images/mypage.img/popup/popup_naverpay.png" alt="헬로네이처 간편결제"
+                                                 class="popup_naverpay">
+                                            <div class="payment_text_box_5words">
+                                                <span class="payment_text">네이버페이</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <!-- 네이버페이 -->
+                                    <!-- 페이코 -->
+                                    <div class="payment_box">
+                                        <input type="radio" name="method" id="method4" class="popup_radio_hide"
+                                               value="4">
+                                        <label for="method4">
+                                            <img src="/user/images/mypage.img/popup/popup_payco.png" alt="헬로네이처 간편결제"
+                                                 class="popup_payco">
+                                            <div class="payment_text_box_3words">
+                                                <span class="payment_text">페이코</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <!-- 페이코 -->
+                                    <!-- 삼성페이 -->
+                                    <div class="payment_box">
+                                        <input type="radio" name="method" id="method5" class="popup_radio_hide"
+                                               value="5">
+                                        <label for="method5">
+                                            <img src="/user/images/mypage.img/popup/popup_samsungpay.png"
+                                                 alt="헬로네이처 간편결제" class="popup_samsungpay">
+                                            <div class="payment_text_box_4words">
+                                                <span class="payment_text">삼성페이</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <!-- 삼성페이 -->
+                                    <!-- SK페이 -->
+                                    <div class="payment_box">
+                                        <input type="radio" name="method" id="method6" class="popup_radio_hide"
+                                               value="6">
+                                        <label for="method6">
+                                            <img src="/user/images/mypage.img/popup/popup_skpay.png" alt="헬로네이처 간편결제"
+                                                 class="popup_skpay">
+                                            <div class="payment_text_box_skpay">
+                                                <span class="payment_text">SK페이</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <!-- SK페이 -->
+                                    <!-- 신용카드 일반결제 -->
+                                    <div class="payment_box">
+                                        <input type="radio" name="method" id="method7" class="popup_radio_hide"
+                                               value="7" onclick="card_modal_open()">
+                                        <label for="method7">
+                                            <img src="/user/images/mypage.img/popup/popup_normal.png" alt="헬로네이처 간편결제"
+                                                 class="popup_normal">
+                                            <div class="payment_text_box_normal">
+                                                <span class="payment_text">신용카드 일반결제</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button id="select_payment" class="button_submit" style="width: 850px;"
+                                        onclick="choice()">선택완료
+                                </button>
+                                <!-- popup_payment_form 끝 -->
+                            </div>
+                        </div>
+                        <!-- 총 결제 금액 -->
+                        <h2 class="order_form_title">결제 금액</h2>
+                        <div class="order_section_total_price">
+                            <dl class="total_price_view">
+                                <dt class="price_title">총 결제 금액</dt>
+                                <dd class="price">
+                                    <span class="num" id="total_price"></span>
+                                    <span class="won">원</span>
+                                </dd>
+                            </dl>
+                            <dl class="point_save_up">
+                                <span class="hello_cash_txt">헬로캐시</span>
+                                <span class="hncash"><span class="won">원</span></span><span>적립예정</span>
+                            </dl>
+                            <dl class="price_view" id="order_item_price">
+                                <dt class="price_title">주문 금액</dt>
+                                <dd class="price">
+                                    <span class="num" id="order_netPrice"></span>
+                                    <span class="won">원</span>
+                                </dd>
+                            </dl>
+                            <dl class="price_view">
+                                <dt class="price_title">할인금액</dt>
+                                <dd class="price">
+                                    <span class="num" id="order_salePrice">0</span>
+                                    <span class="won">원</span>
+                                </dd>
+                            </dl>
+                            <dl class="price_view">
+                                <dt class="price_title">쿠폰</dt>
+                                <dd class="price">
+                                    <span class="num" id="order_coupon">0</span>
+                                    <span class="won">원</span>
+                                </dd>
+                            </dl>
+                            <dl class="price_view">
+                                <dt class="price_title">헬로캐시</dt>
+                                <dd class="price">
+                                    <span class="num" id="order_hello">0</span>
+                                    <span class="won">원</span>
+                                </dd>
+                            </dl>
+                            <dl class="price_view">
+                                <dt class="price_title">배송비</dt>
+                                <dd class="price">
+                                    <span class="num" id="order_delivery">2000</span>
+                                    <span class="won">원</span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <!-- 개인 정보 동의 체크박스 시작 -->
+                        <div class="enrollpay_allow2">
+                            <div class="enrollhellopay_box_check_inner">
+                                <input type="checkbox" class="check_business_credit_card check_privacy"
+                                       id="check_business_credit_card">
+                            </div>
+                            <label for="check_business_credit_card">개인 정보 수집 및 이용 동의</label>
+                            <div class="allow_button2">
+                                <a href="#" alt="개인 정보 수집 및 이용 동의 오버뷰"></a>
+                            </div>
+                        </div>
+                        <!-- 개인 정보 수집 체크박스 끝 -->
+                        <!-- 개인 정보 수집 및 이용 동의 시작 -->
+                        <div class="enrollpay_allow_list3">
+                            <h5>개인 정보 수집 및 이용 동의</h5>
+                            <div class="allow_contents1">
+                                <p>헬로네이처는 고객님께서 구매하신 서비스 및 상품의 원활한 제공을 위해 최소한의 범위 내에서 아래와 같이 개인 정보를 수집 • 이용합니다. 고객님께서는
+                                    정보 제공에 동의하지 않으실 수 있으며 동의하지 않으실 경우, 일부 구매가 제한될 수 있습니다.</p>
+                            </div>
+                            <div class="allow_table">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <th>수집목적</th>
+                                        <td>상품 배송 및 서비스 제공을 위한 사용자 정보 확인</td>
+                                    </tr>
+                                    <tr>
+                                        <th>수집항목</th>
+                                        <td>주문자 정보(주문자명, 주문자 연락처 등) 배송정보(수취인명/수취인 주소, 수취인 연락처 등), 결제정보(현금영수증 발행여부 등)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>보유기간</th>
+                                        <td>5년 (계약 및 청약철회, 대금결제 및 재화 등의 공급) 또는 회원탈퇴 후 90일 까지</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- 개인 정보 수집 및 이용 동의 끝 -->
+                        <div id="payment_btns">
+                            <input type="button" class="cancel_payment" value="취소">
+                            <input type="submit" class="do_payment" onclick="order_check()" value="결제하기">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>

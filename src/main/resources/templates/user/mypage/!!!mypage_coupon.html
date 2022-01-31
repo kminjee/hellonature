@@ -1,0 +1,174 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script2.js}"></script>
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(2) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(2) > a {
+            color: #5dab99;
+        }
+    </style>
+    <script>
+        $(function () {
+            let useFlag;
+            let memIdx = $("#hidden_user").val()
+
+            $(".contents_coupon_box2 > a").click(function () {
+                if ($(this).text() === "사용가능한 쿠폰") {
+                    $(".coupon_box").empty()
+                    useFlag = "FALSE"
+
+                    axios.get("/api/memberCoupon/list?memIdx=" + memIdx + "&usedFlag=" + useFlag, {}).then(function (response) {
+                        for (let i in response.data.data){
+                            let dateStart = response.data.data[i].dateStart
+                            let dateEnd = response.data.data[i].dateEnd
+                            let title = response.data.data[i].title
+                            let discount = response.data.data[i].discount
+                            let minPrice = response.data.data[i].minPrice + "원 이상 구매 시"
+                            let discount_color;
+                            if(discount >= 100){
+                                discount += "원"
+                                discount_color = "#ff4a43"
+                            }else{
+                                discount += "%"
+                                discount_color = "#11b082"
+                            }
+
+                            let row = $('<div class="coupon_list" id="available_coupon_box">').append(
+                                '<div class="coupon_available_image" style="background-color: '+discount_color+'">'+discount+'</div><div class="coupon_info">' +
+                                '<p>'+title+'</p><p>'+minPrice+'</p><p>'+dateStart+'-'+dateEnd+'</p></div></div>'
+                            )
+
+                            $(".coupon_box").append(row)
+
+                        }
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+
+
+                } else {
+                    useFlag = "TRUE"
+                    $(".coupon_box").empty()
+
+                    axios.get("/api/memberCoupon/list?memIdx=" + memIdx + "&usedFlag=" + useFlag, {}).then(function (response) {
+                        for (let i in response.data.data){
+                            let dateStart = response.data.data[i].dateStart
+                            let dateEnd = response.data.data[i].dateEnd
+                            let title = response.data.data[i].title
+                            let discount = response.data.data[i].discount
+                            let minPrice = response.data.data[i].minPrice + "원 이상 구매 시"
+
+                            let discount_color;
+                            if(discount >= 100){
+                                discount += "원"
+                                discount_color = "#ff4a43"
+                            }else{
+                                discount += "%"
+                                discount_color = "#11b082"
+                            }
+
+                            let row = $('<div class="coupon_list" id="available_coupon_box">').append(
+                                '<div class="coupon_available_image">'+discount+'</div><div class="coupon_info">' +
+                                '<p>'+title+'</p><p>'+minPrice+'</p><p>'+dateStart+'-'+dateEnd+'</p></div></div>'
+                            )
+
+                            $(".coupon_box").append(row)
+
+                        }
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                }
+            })
+
+            $(".contents_coupon_submit").click(function (){
+                let ctIdx = $("#coupon_number").val()
+                axios.post("/api/memberCoupon/create", {
+                    data:{
+                        memIdx: memIdx,
+                        ctIdx: ctIdx
+                    }
+                }).then(function (){
+                    alert("쿠폰 등록에 성공하셨습니다")
+                    location.reload();
+                })
+            }).catch(function (err){
+                console.log(err)
+                alert("쿠폰번호를 확인하세요")
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside3">
+                <div th:replace="/user/fragment/sidebar3::sidebar3"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <!-- main_cotents 시작 -->
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">쿠폰</h2>
+                </div>
+                <div class="contents_coupon_box1">
+                    <input type="text" placeholder="쿠폰번호를 입력해주세요." title="쿠폰번호를 입력해주세요." name="coupon"
+                           id="coupon_number">
+                    <a herf="#" class="contents_coupon_submit">등록</a>
+                    <input type="hidden" id="cp_usedFlag">
+                    <input type="hidden" id="cp_dateStart">
+                    <input type="hidden" id="cp_dataEnd">
+                </div>
+                <div class="contents_coupon_box2">
+                    <a href="#" id="coupon_filter_available">사용가능한 쿠폰</a>
+                    <a href="#" id="coupon_filter_used">사용한 쿠폰</a>
+                </div>
+                <div class="coupon_box">
+
+                </div>
+                <!-- main_cotents 끝 -->
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>
+

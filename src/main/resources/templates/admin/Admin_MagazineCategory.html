@@ -1,0 +1,95 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+    <title>매거진 관리 | 카테고리 관리</title>
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous">
+    </script>
+    <script src="/admin/js/Admin.imeage.js"></script>
+    <script src="/admin/js/Admin.cate.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function sendit(){
+            let name = $("#MC_c1_cateul > li").click(function (e){
+                e.text()
+            })
+
+            let file = $("#file")
+
+            axios.post("/api/catergoy/create", {
+                data:{
+                    name : name,
+                    img : file,
+                    lifeFlag: ture
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<!--content_title 시작-->
+<div class="content_title"><p>매거진 관리<span>카테고리 관리</span></p></div>
+<!--content_title 끝-->
+<!--MCatrgory 시작-->
+<div class="MCatrgory">
+    <!--MC_c1 시작-->
+    <div class="MC_c1">
+        <div class="MC_c1_box">
+            <div class="MC_c1_title"><p>카테고리</p></div>
+            <form class="MC_c1_cateBox" method="" action="#" id="MC_c1_form">
+                <input type="hidden" class="test" value="no">
+                <ul class="MC_c1_cateul">
+                    <li class="cate" value="1">레시피</li>
+                    <li class="cate" value="2">탐험노트</li>
+                    <li class="cate"value="3">라이프 스타일</li>
+                    <li class="cate" value="4">키친 가이드</li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <!--MC_c1 끝-->
+    <!--MC_c2 시작-->
+    <div class="MC_c2">
+        <div class="MC_c2_title"><span>상단 배너 설정</span></div>
+        <form action="#" method="" class="MC_c2_bannerBox">
+            <input type="hidden" id="MC_c2_catevalue" value="null">
+            <table>
+                <tr class="MC_c2_btnBox">
+                    <td>
+                        <div class="file_input_div">
+                            <input type="button" value="파일 등록" class="file_input_button" style=" background-color: #266266; color:white;">
+                            <input type="file" class="file_input_hidden" id="MC_input">
+                        </div>
+                    </td>
+                    <td><input type="submit" value="등록" class="MC_c2_submit"></td>
+                </tr>
+                <tr>
+                    <td class="MC_c2_imgBox" colspan="2">
+                        <div class="MC_c2_img">
+                            <img src="" id="MC_banner">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="MC_c2_descrBox" colspan="2">
+                        <div class="MC_c2_description">
+                            권장크기 : 1000 x 1000 (윈도대상 750 x 1000)
+                            쇼핑검색에 노출되지 않는 경우 <u>가이드를 확인해주세요.</u>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--MC_c2 끝-->
+</div>
+<!--MCatrgory 끝-->
+</body>
+</html>

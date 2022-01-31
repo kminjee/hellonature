@@ -1,0 +1,238 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin story board main</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="/admin/css/script.css">
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script src="/admin/js/Admin_outline.js"></script>
+    <script src="/admin/js/popup.js.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="/admin/js/Admin_main.js"></script>
+    <script src="/admin/js/Admin.cate.js"></script>
+    <script src="/admin/js/Admin.imeage.js"></script>
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+    </script>
+</head>
+<body class="indexbody" id="indexbody">
+<!--wrap 시작-->
+<wrap>
+    <!--본문 시작-->
+    <!--container 시작-->
+    <div class="container">
+        <!--header 시작-->
+        <header id="header">
+            <div class="header_area">
+                <a href="#" class="logo">HelloNature<span>관리자 센터</span></a>
+            </div>
+            <div class="info">
+                <ul>
+                    <li><a href="#">admin 님</a></li>
+                    <li><a href="#">내정보</a></li>
+                    <li><a href="#">로그아웃</a></li>
+                </ul>
+            </div>
+        </header>
+        <!--header 끝-->
+        <!--category 시작-->
+        <div class="category">
+            <div class="profile">
+                <div><img src="/admin/img/profile.png" class="profile_img">
+                    <p>Admin님</p></div>
+            </div>
+            <div class="main_page">
+                <a href="#">메인 페이지</a>
+            </div>
+            <!--list 시작-->
+            <div class="list">
+                <div class="list_detail">
+                    <div class="sub_title" id="sub_title_1">
+                        <a href="#">전체 상품 관리
+                            <img src="/admin/img/down.png" style="width: 16px;" height="9.3px;" id="sub_title_btn_1">
+                        </a>
+                    </div>
+                    <ul id="sub_menu_1" class="sub_menu">
+                        <li><a href="#" id="sub_menu_1_1">상품 카테고리 관리</a></li>
+                        <li><a href="#" id="sub_menu_1_2">상품 관리</a></li>
+                        <li><a href="#" id="sub_menu_1_3">주문 관리</a></li>
+                        <li><a href="#" id="sub_menu_1_4">상품 문의</a></li>
+                        <li><a href="#" id="sub_menu_1_5">상품 후기</a></li>
+                    </ul>
+                </div>
+                <div class="list_detail">
+                    <div class="sub_title" id="sub_title_2"><a href="#">매거진 관리
+                        <img src="/admin/img/down.png" style="width: 16px;" height="9.3px;" id="sub_title_btn_2">
+                    </a>
+                    </div>
+                    <ul id="sub_menu_2" class="sub_menu">
+                        <li><a href="#" id="sub_menu_2_1">카테고리 관리</a></li>
+                        <li><a href="#" id="sub_menu_2_2">매거진 목록</a></li>
+                        <li><a href="#" id="sub_menu_2_3">매거진 등록</a></li>
+                        <li><a href="#" id="sub_menu_2_4">레시피 등록</a></li>
+                    </ul>
+                </div>
+
+                <!--                <div class="list_detail" id="list_detail_3">-->
+                <!--                    <div class="sub_title" id="sub_title_3"><a href="#">라이프존 관리-->
+                <!--                        <img src="/admin/img/down.png" style="width: 16px;" height="9.3px;" id="sub_title_btn_3">-->
+                <!--                    </a>-->
+                <!--                </div>-->
+                <!--                    <ul id="sub_menu_3" class="sub_menu">-->
+                <!--                        <li><a href="#" id="sub_menu_3_1">카테고리 관리</a></li>-->
+                <!--                        <li><a href="#" id="sub_menu_3_2">상세 목록 관리</a></li>-->
+                <!--                    </ul>       -->
+                <!--                </div>-->
+
+                <div class="list_detail">
+                    <div class="sub_title" id="sub_title_4"><a href="#">헬로네이처 추천 관리
+                        <img src="/admin/img/down.png" style="width: 16px;" height="9.3px;" id="sub_title_btn_4">
+                    </a>
+                    </div>
+                    <ul id="sub_menu_4" class="sub_menu">
+                        <!--                        <li><a href="#" id="sub_menu_4_1">더신선</a></li>-->
+                        <li><a href="#" id="sub_menu_4_2">팝업스토어</a></li>
+                        <li><a href="#" id="sub_menu_4_3">기획전/이벤트</a></li>
+                        <li><a href="#" id="sub_menu_4_4">브랜드관</a></li>
+                    </ul>
+                </div>
+
+                <div class="list_detail">
+                    <div class="sub_title" id="sub_title_5"><a href="#">고객센터
+                        <img src="/admin/img/down.png" style="width: 16px;" height="9.3px;" id="sub_title_btn_5">
+                    </a>
+                    </div>
+                    <ul id="sub_menu_5" class="sub_menu">
+                        <li><a href="#" id="sub_menu_5_1">공지사항 관리</a></li>
+                        <li><a href="#" id="sub_menu_5_2">결제 내역 관리</a></li>
+                        <li><a href="#" id="sub_menu_5_3">1:1 문의 내역</a></li>
+                        <li><a href="#" id="sub_menu_5_4">FAQ관리</a></li>
+                        <li><a href="#" id="sub_menu_5_5">회원관리</a></li>
+                        <li><a href="#" id="sub_menu_5_6">쿠폰관리</a></li>
+                        <li><a href="#" id="sub_menu_5_7">주소지관리</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--list 끝-->
+        </div>
+        <!--category 끝-->
+        <!--content 시작-->
+        <section id="content">
+            <!--content_title 시작-->
+            <div class="content_title"><p>공지사항</p></div>
+            <!--content_title 끝-->
+            <!--AMain 시작-->
+            <div class="AMain">
+                <!--Am_c1 시작-->
+                <div class="Am_c1">
+                    <div class="Am_c1_box" id="Am_c1_product">
+                        <p>상품</p>
+                        <ul id="Am_c1_productul">
+                            <li>판매중<span id="label_1"></span></li>
+                            <li>판매중지<span id="label_2"></span></li>
+                            <li>품절<span id="label_3"></span></li>
+                        </ul>
+                    </div>
+                    <div class="Am_c1_box" id="Am_c1_order">
+                        <p>입점브랜드</p>
+                        <ul>
+                            <li>신규입점<span id="label_4"></span></li>
+                            <li>입점중지<span id="label_5"></span></li>
+                        </ul>
+                    </div>
+                    <div class="Am_c1_box" id="Am_c1_claim">
+                        <p>상품문의</p>
+                        <ul>
+                            <li>미답변 문의<span id="label_6"></span></li>
+                            <li>미답변 후기<span id="label_7"></span></li>
+                        </ul>
+                    </div>
+                    <div class="Am_c1_box" id="Am_c1_delay">
+                        <p>1:1문의</p>
+                        <ul>
+                            <li>미답변 문의<span id="label_8"></span></li>
+                        </ul>
+                    </div>
+                    <div class="Am_c1_box" id="Am_c1_review">
+                        <p>매거진</p>
+                        <ul>
+                            <li>신규매거진<span id="label_9"></span></li>
+                            <li>전시중지 매거진<span id="label_10"></span></li>
+                        </ul>
+                    </div>
+                    <div class="Am_c1_box" id="Am_c1_question">
+                        <p>주문배송</p>
+                        <ul>
+                            <li>신규주문<span id="label_11"></span></li>
+                            <li>입금완료<span id="label_12"></span></li>
+                            <li>배송완료<span id="label_13"></span></li>
+                            <li>취소,환불,반품<span id="label_14"></span></li>
+                        </ul>
+                    </div>
+                    <div class="Am_c2_box" style="width: 47.5%; height: 300px;">
+                        <canvas id="myChart2">
+                        </canvas>
+                    </div>
+                </div>
+                <!--Am_c1 끝-->
+                <!--Am_preview 시작-->
+                <div class="Am_preview">
+                    <div class="content_title"><p>전체보기<span>미리보기</span></p></div>
+                    <div class="Am_preview_Box">
+                        <div class="Am_preview_list">
+                            <p>공지사항</p>
+                            <table class="preview_table" id="preview_table1">
+                            </table>
+                        </div>
+                        <div class="Am_preview_list">
+                            <p>1:1문의</p>
+                            <table class="preview_table" id="preview_table2">
+
+                            </table>
+                        </div>
+                        <div class="Am_preview_list">
+                            <p>상품후기</p>
+                            <table class="preview_table" id="preview_table3">
+                            </table>
+                        </div>
+                        <div class="Am_preview_list">
+                            <p>상품문의</p>
+                            <table class="preview_table" id="preview_table4">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--Am_preview 끝-->
+                <!--Am_c2 시작-->
+                <div class="Am_c2">
+                    <div class="content_title"><p>이용자 현황<span>(오전 8시 업데이트)</span></p></div>
+                    <ul>
+                        <li><a href="#" id="Am_c2_chart_1">가입자 수(일주일 간)<span></span></a></li>
+                        <li><a href="#" id="Am_c2_chart_2">주문건 수(일주일 간)<span></span></a></li>
+                        <li><a href="#" id="Am_c2_chart_3">취소,환불건 수(일주일 간)<span></span></a></li>
+                    </ul>
+                    <div class="Am_c2_graphBox">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+                <!--Am_c2 끝-->
+            </div>
+            <!--AMain 끝-->
+        </section>
+        <!--content 끝-->
+    </div>
+    <!--container 끝-->
+</wrap>
+<!--wrap 끝-->
+</body>
+</html>

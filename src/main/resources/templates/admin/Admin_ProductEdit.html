@@ -1,0 +1,513 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 상품 관리 | 상품 관리</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="/admin/js/popup.js"></script>
+    <script src="/admin/js/Admin.imeage.js"></script>
+    <script src="/admin/js/Admin.cate.js"></script>
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    //1차 카테고리 다중셀렉트
+    $(function () {
+        axios.get("/api/category/list/first?lifeFlag=FALSE", {}).then(function (response) {
+            for (let i in response.data.data) {
+                let $id = response.data.data[i].idx;
+                let $name = response.data.data[i].name;
+                let row = $('<option value=' + $id + '>').append(
+                    $name + '</option>'
+                )
+                console.log(row)
+                $('#PL_sel_1').append(row)
+            }
+        })
+    })
+
+    //2차 카테고리 다중셀렉트
+    function categoryChange(e) {
+        $('#PL_sel_2').empty();
+        axios.get("/api/category/list/second/?idx=" + e.value + "&lifeFlag=FALSE", {}).then(function (response) {
+            for (let i in response.data.data) {
+                console.log(response)
+                let $id = response.data.data[i].idx;
+                let $name = response.data.data[i].name;
+
+                let row = $('<option value=' + $id + '>').append(
+                    $name + '</option>'
+                )
+                console.log(row)
+                $('#PL_sel_2').append(row)
+            }
+        })
+    }
+
+    $(function (){
+        let id = sessionStorage.getItem("proIdx");
+        axios.get('/api/product/read/' + id, {
+
+        }).then(function(response){
+            let name = response.data.data.name;
+            let des = response.data.data.des;
+            let brIdx = response.data.data.brIdx;
+            let netPrice = response.data.data.netPrice;
+            let salePrice = response.data.data.salePrice;
+            let state = response.data.data.state;
+            let dateStart = response.data.data.dateStart;
+            let dateEnd = response.data.data.dateEnd;
+            let origin = response.data.data.origin;
+            let sizeWeight = response.data.data.sizeWeight;
+            let bestFlag = response.data.data.bestFlag;
+            let temp = response.data.data.temp;
+            let count = response.data.data.count;
+            let delivery = response.data.data.delivery;
+            let packing = response.data.data.packing;
+            let proDes = response.data.data.proDes;
+            let cateIdx = response.data.data.cateIdx;
+            let proType = response.data.data.proType;
+            let proName = response.data.data.proName;
+            let foodType = response.data.data.foodType;
+            let producer = response.data.data.producer;
+            let location = response.data.data.location;
+            let dateBuilt = response.data.data.dateBuilt;
+            let dateValid = response.data.data.dateValid;
+
+            $("#name").val(name);
+            $("#des").val(des);
+            $("#br_id_hidden").val(brIdx);
+            $('#brIdx').val();
+            $("#netPrice").val(netPrice);
+            $("#salePrice").val(salePrice);
+            $('input:radio[name="best_flag"][value="' + bestFlag + '"]').prop("checked", true);
+            $('input:radio[name="product_status"][value="' + state + '"]').prop("checked", true);
+            $("#dateStart").val(dateStart);
+            $("#dateEnd").val(dateEnd);
+            $("#origin").val(origin);
+            $("#sizeWeight").val(sizeWeight);
+            $("#temp").val(temp);
+            $("#count").val(count);
+            $('input:radio[name="shipping"][value="' + delivery + '"]').prop("checked", true);
+            $('input:radio[name="pack_type"][value="' + packing + '"]').prop("checked", true);
+            $("#PL_sel_2").val(cateIdx);
+            $("#proType").val(proType);
+            $("#proName").val(proName);
+            $("#foodType").val(foodType);
+            $("#producer").val(producer);
+            $("#location").val(location);
+            $("#dateBuilt").val(dateBuilt);
+            $("#dateValid").val(dateValid);
+            CKEDITOR.instances.PE_editor.setData(proDes);
+
+
+
+        }).catch(function(err){
+            console.log(err)
+            alert('불러오기 실패')
+        })
+    })
+
+    function edit(){
+        let id = sessionStorage.getItem("proIdx")
+        let data = {
+            idx: id,
+            name: $("#name").val(),
+            des: $("#des").val(),
+            brIdx: $("#br_id_hidden").val(),
+            netPrice: $("#netPrice").val(),
+            salePrice: $("#salePrice").val(),
+            state: $("input:radio[name='product_status']:checked").val(),
+            dateStart: $("#dateStart").val(),
+            dateEnd: $("#dateEnd").val(),
+            origin: $("#origin").val(),
+            sizeWeight: $("#sizeWeight").val(),
+            temp: $("#temp").val(),
+            count: $("#count").val(),
+            bestFlag: $('input:radio[name="best_flag"]:checked').val(),
+            delivery: $("input:radio[name='shipping']:checked").val(),
+            packing: $("input:radio[name='pack_type']:checked").val(),
+            proDes: CKEDITOR.instances.PE_editor.getData(),
+            cateIdx: $("#PL_sel_2").val(),
+            proType: $("#proType").val(),
+            proName: $("#proName").val(),
+            foodType: $("#foodType").val(),
+            producer: $("#producer").val(),
+            location: $("#location").val(),
+            dateBuilt: $("#dateBuilt").val(),
+            dateValid: $("#dateValid").val(),
+            lifeFlag: 'FALSE'
+        }
+        console.log(data.lifeFlag)
+        console.log(data.idx)
+        console.log(data.des)
+        console.log(data.name)
+        console.log(data.brIdx)
+        console.log(data.netPrice)
+        console.log(data.salePrice)
+        console.log(data.state)
+        console.log(data.dateStart)
+        console.log(data.dateEnd)
+        console.log(data.origin)
+        console.log(data.sizeWeight)
+        console.log(data.temp)
+        console.log(data.count)
+        console.log(data.delivery)
+        console.log(data.packing)
+        console.log(data.proDes)
+        console.log(data.cateIdx)
+        console.log(data.proType)
+        console.log(data.proName)
+        console.log(data.foodType)
+        console.log(data.producer)
+        console.log(data.location)
+        console.log(data.dateBuilt)
+        console.log(data.dateValid)
+
+
+        let files = ($('input[name="file"]'));
+        let fileList = [];
+        let formData = new FormData;
+
+        for(let i = 0; i < files.length; i++){
+            fileList.push(files[i].files[0]);
+            formData.append('files', files[i].files[0]);
+            console.log(formData)
+        }
+        formData.append("key", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+        axios.put('/api/product/update', formData, {
+            headers: {'Content-Type': 'multipart/form-data'}
+        }).then(function (){
+            alert("상품 정보가 수정되었습니다.")
+            $.ajax({
+                type:"GET",
+                url : "/admin/productlist/",
+                datatype : "html/text",
+                success: function(result){
+                    $("#content").html(result).trigger("create");
+                }
+            });
+        })
+    }
+
+    axios.get("/api/brand/list", {}).then(function (response) {
+        console.log(response.data.data)
+        for (let i in response.data.data) {
+            let $id = response.data.data[i].idx;
+            let $name = response.data.data[i].name;
+
+            let row = $('<li value="' + $id + '" class="brlist">').append(
+                $name + '</li>'
+            )
+
+            $('.brand_list').append(row)
+        }
+        $('.brand_list > li').click(function (e) {
+            $(this).add(".brand_list > li").addClass("on")
+            $(".brand_list > li").not($(this)).removeClass("on")
+
+            $('#br_name_hidden').val($(this).text());
+            $('#br_id_hidden').val($(this).val());
+        })
+    }).catch(function (err) {
+
+        console.log(err)
+    })
+
+    function brsc() {
+        $('.brand_list').empty();
+        let name = $("#brname").val();
+        axios.get("/api/brand/list?name=" + name, {}).then(function (response) {
+            for (let i in response.data.data) {
+                let $id = response.data.data[i].idx;
+                let $name = response.data.data[i].name;
+
+                let row = $('<li value="' + $id + '" class="brlist">').append(
+                    $name + '</li>'
+                )
+                $('.brand_list').append(row)
+            }
+            $('.brand_list > li').click(function (e) {
+                $(this).add(".brand_list > li").addClass("on")
+                $(".brand_list > li").not($(this)).removeClass("on")
+
+                $('#br_name_hidden').val($(this).text());
+                $('#br_id_hidden').val($(this).val());
+            })
+        })
+    }
+
+    function modal_submit() {
+        document.getElementById('mw_temp').style.display = 'none'
+        $('#br_name').val($('#br_name_hidden').val());
+    }
+
+
+</script>
+<body>
+<div class="content_title">
+    <p>전체 상품 관리<span>상품 관리</span></p>
+</div>
+<input type="hidden" id="br_name_hidden">
+<input type="hidden" id="br_id_hidden">
+<div class="content_title_click">
+    <a onclick="PL_location()">상품 등록</a>
+    <a onclick="PL_location_1()">상품 목록</a>
+<!--    <a onclick="PL_location_2()">공통문구 </a>-->
+</div>
+<div class="Pcreate">
+    <!--form 시작-->
+    <form name="product_create" enctype="multipart/form-data">
+        <input type="hidden" id="PRC_catevalue_1" value="null">
+        <input type="hidden" id="PRC_catevalue_2" value="null">
+        <p class="product_title" id="PC_c1_title"><label>상품 수정</label></p>
+        <table>
+            <tr>
+                <th>카테고리 선택</th>
+                <td colspan="3">
+                    <select onchange="categoryChange(this)" id="PL_sel_1">
+                        <option value="대분류">대분류</option>
+                    </select>
+                    <select id="PL_sel_2">
+                        <option value="중분류">중분류</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>상품명</th>
+                <td colspan="3"><input type="text" name="text" id="name"></td>
+            </tr>
+            <tr>
+                <th>상품 설명</th>
+                <td colspan="3"><input type="text" name="text" id="des" ></td>
+            </tr>
+            <tr>
+                <th>브랜드명</th>
+                <td colspan="3">
+                    <!--팝업창 부분 시작 -->
+                    <input type="text" name="brand" id="br_name">
+                    <button class="pop_btn" type="button" onclick="modal_open()"><img src="/admin/img/search_icon.png"
+                                                                                      alt=""
+                                                                                      style="width: 30px; border: 1px solid #266266;">
+                    </button>
+                    <div id="mw_temp" class="mw">
+                        <div class="bg"><!--이란에는 내용을 넣지 마십시오.--></div>
+                        <div class="fg">
+                            <div id="modal_title" class="modal_greentitle">
+                                <p>브랜드 찾기<span><img src='/admin/img/close2.png' onclick="modal_close()"
+                                                    class="modal_closeBtn"></span></p>
+                            </div>
+                            <div class="Modal">
+                                <div class="modal_cateBox" method="" action="#" id="modal_form">
+                                    <div class="modal_search"><span>브랜드명</span><input type="text" id="brname"><input
+                                            type="button" value="검색" onclick="brsc()"></div>
+                                    <div class="modal_list">
+                                        <span>목록</span>
+                                        <ul class="brand_list">
+                                        </ul>
+                                    </div>
+                                    <div class="modal_btn">
+                                        <input th:type="button" onclick="modal_submit()" value="확인">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--팝업창 부분 끝 -->
+            </tr>
+            <tr>
+                <th>판매가</th>
+                <td colspan="3"><input type="text" name="text" placeholder="숫자만 입력 가능합니다" id="netPrice"><span>원</span></td>
+            </tr>
+            <tr>
+                <th>할인율</th>
+                <td colspan="3"><input type="text" name="text" placeholder="0~100%" id="salePrice"><span>%</span></td>
+            </tr>
+            <tr>
+                <th>판매상태</th>
+                <td colspan="3">
+                    <span><input type="radio" name="product_status" value="0" checked>판매대기</span>
+                    <span><input type="radio" name="product_status" value="1">판매중</span>
+                    <span><input type="radio" name="product_status" value="2">판매중지</span>
+                    <span><input type="radio" name="product_status" value="3">판매종료</span>
+                </td>
+            </tr>
+            <tr>
+                <th>판매기간</th>
+                <td colspan="3">
+                    <input type="date" name="date" value="기간필터" id="dateStart"> - <input type="date" name="date" value="기간필터" id="dateEnd">
+                </td>
+            </tr>
+            <tr>
+                <th>베스트 설정</th>
+                <td colspan="3">
+                    <span><input type="radio" name="best_flag" value="TRUE">YES</span>
+                    <span><input type="radio" name="best_flag" value="FALSE" checked>NO</span>
+                </td>
+            </tr>
+            <tr>
+                <th>원산지</th>
+                <td colspan="3">
+                    <select id="origin">
+                        <option value="국내산" selected>국내산</option>
+                        <option value="미국산">미국산</option>
+                        <option value="중국산">중국산</option>
+                        <option value="호주산">호주산</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>보관온도</th>
+                <td colspan="3">
+                    <select id="temp">
+                        <option value="1" selected>냉장</option>
+                        <option value="2">냉동</option>
+                        <option value="3">실온</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>규격/중량</th>
+                <td colspan="3">
+                    <input type="text" name="text" placeholder="숫자만 입력 가능합니다" id="sizeWeight"><span>Kg</span>
+                </td>
+            </tr>
+            <tr>
+                <th>재고수량</th>
+                <td colspan="3">
+                    <input type="text" name="text" placeholder="숫자만 입력 가능합니다" id="count">
+                </td>
+            </tr>
+            <tr>
+                <th>배송구분</th>
+                <td colspan="3">
+                    <span><input type="radio" name="shipping" value="1">새벽배송</span>
+                    <span><input type="radio" name="shipping" value="2">택배배송</span>
+                    <span><input type="radio" name="shipping" value="3">새벽/택배배송</span>
+                </td>
+            </tr>
+            <tr>
+                <th>포장타입</th>
+                <td colspan="3">
+                    <span><input type="radio" name="pack_type" value="1" checked>냉장</span>
+                    <span><input type="radio" name="pack_type" value="2">냉동</span>
+                    <span><input type="radio" name="pack_type" value="3">실온</span>
+                    <span><input type="radio" name="pack_type" value="4">기타</span>
+                </td>
+            </tr>
+            <tr>
+                <th>상품 대표사진</th>
+                <td>
+                    <div class="file_input_div_s">
+                        <img src="img/plus_icon.png" class="file_input_button_s" id="preview_1">
+                        <input type="file" class="file_input_hidden_s" id="imgfile_1" name="file">
+                    </div>
+                </td>
+                <th>메인페이지</th>
+                <td>
+                    <div class="file_input_div_s">
+                        <img src="img/plus_icon.png" class="file_input_button_s">
+                        <input type="file" class="file_input_hidden_s" id="imgfile_2" name="file">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>상품페이지</th>
+                <td>
+                    <div class="file_input_div_s">
+                        <img src="img/plus_icon.png" class="file_input_button_s">
+                        <input type="file" class="file_input_hidden_s" name="file">
+                    </div>
+                </td>
+                <th>상품 추가사진</th>
+                <td>
+                    <div class="file_input_div_s">
+                        <img src="img/plus_icon.png" class="file_input_button_s">
+                        <input type="file" class="file_input_hidden_s" name="file">
+                    </div>
+                </td>
+            </tr>
+            <!--파일 등록시 미리보기 스크립트 시작-->
+            <script src="./js/Admin.imeage.js"></script>
+            <!--파일 등록시 미리보기 스크립트 끝-->
+            <tr>
+                <th style="color:gray; font-weight: normal; padding-top: 10px;">*식품표기</th>
+            </tr>
+            <tr>
+                <th>상품군</th>
+                <td colspan="3">
+                    <input type="text" name="text" id="proType">
+                </td>
+            </tr>
+            <tr>
+                <th>제품명</th>
+                <td colspan="3">
+                    <input type="text" name="text" id="proName">
+                </td>
+            </tr>
+            <tr>
+                <th>식품의 유형</th>
+                <td colspan="3">
+                    <input type="text" name="text" id="foodType">
+                </td>
+            </tr>
+            <tr>
+                <th>생산자</th>
+                <td colspan="3">
+                    <input type="text" name="text" id="producer">
+                </td>
+            </tr>
+            <tr>
+                <th>소재지</th>
+                <td colspan="3">
+                    <input type="text" name="text" id="location">
+                </td>
+            </tr>
+            <tr>
+                <th>제조연월일</th>
+                <td colspan="3">
+                    <input type="text" name="text" value="상품 설명 상품 이미지 참조" id="dateBuilt">
+                </td>
+            </tr>
+            <tr>
+                <th>유통기한</th>
+                <td colspan="3">
+                    <input type="text" name="text" value="상품 설명 상품 이미지 참조" id="dateValid">
+                </td>
+            </tr>
+            <tr>
+                <th>상세설명</th>
+                <td colspan="3">
+                    <div class='MCT_c3_htmllist'>
+                        <div class='create_html'><span>HTML</span></div>
+                        <textarea class='textarea' name='textarea' id="PE_editor"></textarea>
+                    </div>
+                    <script type="text/javascript">
+                        CKEDITOR.replace('PE_editor'
+                            , {
+                                height: 300
+                            });
+                    </script>
+                </td>
+            </tr>
+        </table>
+        <!--PC_c1_btnBox 시작-->
+        <div id="PC_c1_btnBox" class="bottom_btn">
+            <span><input type="reset" name="reset" value="초기화"></span>
+            <span><input type="button" name="submit" value="수정" onclick="edit()"></span>
+        </div>
+        <!--PC_c1_btnBox 끝-->
+    </form>
+    <!--form 끝-->
+</div>
+<!--Pcreate 끝-->>
+</body>
+</html>

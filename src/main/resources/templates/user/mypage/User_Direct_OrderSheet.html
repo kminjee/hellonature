@@ -1,0 +1,422 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문서</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/inner.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common2.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%; overflow-y: auto;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%;}
+        .main { margin-bottom: 50px !important;}
+        #content { padding: 20px;}
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script language="javascript">
+        //버튼클릭시 javascript 호출합니다.
+        function javascript(){
+            //팝업창출력
+            //width : 300px크기
+            //height : 300px크기
+            //top : 100px 위의 화면과 100px 차이해서 위치
+            //left : 100px 왼쪽화면과 100px 차이해서 위치
+            //툴바 X, 메뉴바 X, 스크롤바 X , 크기조절 X
+            window.open('./inner_regist_shipping_popup.html','popName',
+                        'width=600,height=800,top=100%,left=100%,toolbar=no,menubar=no,scrollbars=no,resizable=yes,status=no');
+        }
+        function javascript2(){
+        //팝업창출력
+        //width :  크기
+        //height : 크기
+        //top : 100px 위의 화면과 100px 차이해서 위치
+        //left : 100px 왼쪽화면과 100px 차이해서 위치
+        //툴바 X, 메뉴바 X, 스크롤바 X , 크기조절 X
+        window.open('./inner_shipping_popup.html','popName',
+                    'width=600,height=800,top=100%,left=100%,toolbar=no,menubar=no,scrollbars=no,resizable=no,status=no');
+        }
+        /* 포인트 입력 (숫자 제한) */
+        function maxLengthCheck(object) {
+            if (object.value.length > object.maxLength) {
+            object.value = object.value.slice(0, object.maxLength);
+            }
+        }
+        /* inner_mem_order_sheet.html - 택배배송 클릭 시 배송 알림 없음 처리 */
+        $(function(){
+            // 문앞 선택시
+            $("#ship_type01_first").click(function(){
+            $(".ship_type_select_msg").show();      
+            });
+            // 경비실 선택시
+            $("#ship_type01_second").click(function(){
+                $(".ship_type_select_msg").hide();    
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="main">
+                <section id="content">
+                    <form action="" method="post">
+                        <div id="mem_order_cont_box" class="order_cont_box">
+                            <div class="order_cont_title">
+                                <h1>주문서</h1>
+                            </div>          
+                            <div id="order_form_box">                              
+                                <h2 class="order_form_title">주문상품</h2>
+                                <div id="order_item_box">
+                                    <div id="order_item_list">
+                                        <div class="item_image">  
+                                            <a href="#">상품이미지</a>
+                                        </div>                                    
+                                        <!-- 상품이름 -->
+                                        <div class="item_name">
+                                            <a href="#">상품이름</a>                                            
+                                        </div>                                    
+                                        <div class="item_count">
+                                            <span>1개</span>                                            
+                                        </div>
+                                        <!-- 상품 금액 -->
+                                        <div class="item_price">  
+                                            <p>100,000원</p>
+                                        </div>
+                                    </div>
+                                    <div id="order_item_list">
+                                        <div class="item_image">  
+                                            <a href="#">상품이미지</a>
+                                        </div>                                    
+                                        <!-- 상품이름 -->
+                                        <div class="item_name">
+                                            <a href="#">상품이름</a>                                            
+                                        </div>                                    
+                                        <div class="item_count">
+                                            <span>1개</span>                                            
+                                        </div>
+                                        <!-- 상품 금액 -->
+                                        <div class="item_price">  
+                                            <p>100,000원</p>
+                                        </div>
+                                    </div>
+                                    <div id="order_item_list">
+                                        <div class="item_image">  
+                                            <a href="#">상품이미지</a>
+                                        </div>                                    
+                                        <!-- 상품이름 -->
+                                        <div class="item_name">
+                                            <a href="#">상품이름</a>                                            
+                                        </div>                                    
+                                        <div class="item_count">
+                                            <span>1개</span>                                            
+                                        </div>
+                                        <!-- 상품 금액 -->
+                                        <div class="item_price">  
+                                            <p>100,000원</p>
+                                        </div>
+                                    </div>                                
+                                </div>          
+                                <!-- 폼 안에 들어갈 내용 -->
+                                <form action="#" class="wsriteOrderForm">
+                                    <!-- 주문자 정보 -->
+                                    <h2 class="order_form_title" id="order_info">주문자 정보</h2>
+                                    <div class="order_section_data_orderer">
+                                        <table class="ordererinfo_table">
+                                            <tbody>
+                                                <tr>
+                                                    <th>보내는 분</th>  
+                                                    <td>김사과</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>휴대폰</th>
+                                                    <td>01011111111</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>이메일</th>
+                                                    <td>apple@apple.com</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>            
+                                    <!-- 배송 정보 -->
+                                    <h2 class="order_form_title">배송 정보</h2>
+                                    <div class="order_section_order_address">
+                                        <table class="addr_info_table">
+                                            <tbody>
+                                                <tr>
+                                                    <th>배송지</th>  
+                                                    <td>입력주소</td>
+                                                    <td><button class="addr_edit_btn" onclick='javascript2()'>수정</button></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>정보</th>
+                                                    <td><span>받는사람 </span>/<span> 연락처</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>상세정보</th>
+                                                    <td><span>배송받을위치 </span>/<span> 배송위치상세정보</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="ship_type_select_box">
+                                        <div class="ship_type_select">
+                                        <div class="ship_type_tit">
+                                            배송 방법
+                                        </div>
+                                        <div class="ship_type_opt">
+                                            <input type="radio" name="ship_type01" id="ship_type01_first" value="새벽배송" onclick="selectMsgShow()" checked><label for="ship_type01_first">새벽배송</label>          
+                                            <input type="radio"name="ship_type01" id="ship_type01_second" value="택배배송"><label for="ship_type01_second">택배배송</label>
+                                        </div>
+                                    </div>
+                                    <div class="ship_type_select_msg">
+                                        <div class="ship_type_tit">
+                                            배송 알림
+                                        </div>
+                                        <div class="ship_type_opt">
+                                            <input class="ship_type_button" type="radio" name="ship_type02" id="ship_type02_first" checked><label for="ship_type02_first">배송 후</label>
+                                            <input class="ship_type_button" type="radio" name="ship_type02" id="ship_type02_second"><label for="ship_type02_second">오전 7시 이후</label>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>        
+                            <!-- 쿠폰 / 적립금 -->
+                            <h2 class="order_form_title">쿠폰 / 적립금</h2>
+                            <div class="order_section_hello_coupon_cash">
+                                <ul class="hello_coupon_line">
+                                    <li>
+                                        <h5 class="hello_coupon_cash_tit">쿠폰</h5>
+                                        <select id="select_coupon">
+                                            <option value="쿠폰선택">쿠폰을 선택하세요</option>
+                                            <option value="#none"></option>
+                                            <option value="#none"></option>
+                                            <option value="#none"></option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <h5 class="hello_coupon_cash_tit">헬로캐시<span id="showHelloCash"> 0원</span></h5>
+                                        <ul class="hello_cash_line">
+                                            <li>
+                                                <input type="number" maxlength="8" class="input_hcash" placeholder="0" oninput="maxLengthCheck(this)"><button class="use_all_hcash">모두 사용</button>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>                                  
+                            <h2 class="order_form_title">결제수단</h2> 
+                            <!-- 결제 수단 시작 -->
+                            <div class="enroll_hellopass_instant">
+                                <a href="#" class="hellopass_link_payment">선택해주세요.</a>
+                            <!-- 결제 수단 끝 -->
+                            </div>                
+                            <!-- 결제 수단 팝업창 -->
+                            <div class="popup_payment_box">
+                                <div class="popup_topline">
+                                    <h2>결제 수단 선택</h2>
+                                    <div class="popup_close">
+                                        <a href="#">close</a>
+                                    </div>
+                                </div>
+                                <!-- popup_payment_form 시작 -->
+                                <div class="popup_payment_form">
+                                    <h5>결제수단</h5>
+                                    <!-- choose_payment_box 시작 -->                            
+                                    <div class="choose_payment_box">
+                                        <!-- 헬로페이 -->
+                                        <div class="payment_box">
+                                            <input type="radio" name="method" id="method1" class="popup_radio_hide">                                         
+                                            <label for="method1">                                    
+                                                <img src="/user/images/mypage.img/popup/popup_hellopay.png" alt="헬로네이처 간편결제" class="popup_hellopay">
+                                                <div class="payment_text_box_4words">
+                                                    <span class="payment_text">헬로페이</span>
+                                                </div> 
+                                            </label>                            
+                                        </div>
+                                        <!-- 헬로페이 -->     
+                                        <!-- 차이페이 -->                   
+                                        <div class="payment_box">
+                                            <input type="radio" name="method2" id="method2" class="popup_radio_hide">                                         
+                                            <label for="method2">                                    
+                                                <img src="/user/images/mypage.img/popup/popup_chaipay.png" alt="헬로네이처 간편결제" class="popup_chaipay">
+                                                <div class="payment_text_box_4words">
+                                                    <span class="payment_text">차이페이</span>
+                                                </div> 
+                                            </label>                        
+                                        </div>
+                                        <!-- 차이페이 -->
+                                        <!-- 네이버페이 -->
+                                        <div class="payment_box">
+                                            <input type="radio" name="method3" id="method3" class="popup_radio_hide">                                         
+                                            <label for="method3">                                    
+                                                <img src="/user/images/mypage.img/popup/popup_naverpay.png" alt="헬로네이처 간편결제" class="popup_naverpay">
+                                                <div class="payment_text_box_5words">
+                                                    <span class="payment_text">네이버페이</span>
+                                                </div> 
+                                            </label>                        
+                                        </div>
+                                        <!-- 네이버페이 -->
+                                        <!-- 페이코 -->
+                                        <div class="payment_box">
+                                            <input type="radio" name="method4" id="method4" class="popup_radio_hide">                                         
+                                            <label for="method4">                                    
+                                                <img src="/user/images/mypage.img/popup/popup_payco.png" alt="헬로네이처 간편결제" class="popup_payco">
+                                                <div class="payment_text_box_3words">
+                                                    <span class="payment_text">페이코</span>
+                                                </div> 
+                                            </label>                        
+                                        </div>
+                                        <!-- 페이코 -->
+                                        <!-- 삼성페이 -->
+                                        <div class="payment_box">
+                                            <input type="radio" name="method5" id="method5" class="popup_radio_hide">                                         
+                                            <label for="method5">                                    
+                                                <img src="/user/images/mypage.img/popup/popup_samsungpay.png" alt="헬로네이처 간편결제" class="popup_samsungpay">
+                                                <div class="payment_text_box_4words">
+                                                    <span class="payment_text">삼성페이</span>
+                                                </div> 
+                                            </label>                        
+                                        </div>
+                                        <!-- 삼성페이 -->
+                                        <!-- SK페이 -->
+                                        <div class="payment_box">
+                                            <input type="radio" name="method6" id="method6" class="popup_radio_hide">                                         
+                                            <label for="method6">                                    
+                                                <img src="/user/images/mypage.img/popup/popup_skpay.png" alt="헬로네이처 간편결제" class="popup_skpay">
+                                                <div class="payment_text_box_skpay">
+                                                    <span class="payment_text">SK페이</span>
+                                                </div> 
+                                            </label>                        
+                                        </div>
+                                        <!-- SK페이 -->
+                                        <!-- 신용카드 일반결제 -->
+                                        <div class="payment_box">
+                                            <input type="radio" name="method7" id="method7" class="popup_radio_hide">                                         
+                                            <label for="method7">                                    
+                                                <img src="/user/images/mypage.img/popup/popup_normal.png" alt="헬로네이처 간편결제" class="popup_normal">
+                                                <div class="payment_text_box_normal">
+                                                    <span class="payment_text">신용카드 일반결제</span>
+                                                </div> 
+                                            </label>                        
+                                        </div>
+                                    </div>                       
+                                    <button type="submit" id="select_payment" class="button_submit">선택완료</button>
+                                <!-- popup_payment_form 끝 -->    
+                                </div>
+                            </div>                                                                                 
+                            <!-- 총 결제 금액 -->
+                            <h2 class="order_form_title">결제 금액</h2>
+                            <div class="order_section_total_price">
+                                <dl class="total_price_view">
+                                    <dt class="price_title">총 결제 금액</dt>
+                                    <dd class="price">
+                                        <span class="num">3,650</span>
+                                        <span class="won">원</span>
+                                    </dd>                          
+                                </dl>
+                                <dl class="point_save_up">
+                                    <span class="hello_cash_txt">헬로캐시</span>
+                                    <span class="hncash">183<span class="won">원</span></span><span>적립예정</span>
+                                </dl>
+                                <dl class="price_view" id="order_item_price">
+                                    <dt class="price_title">주문 금액</dt>
+                                    <dd class="price">
+                                        <span class="num">3,650</span>
+                                        <span class="won">원</span>
+                                    </dd>
+                                </dl>
+                                <dl class="price_view">
+                                    <dt class="price_title">할인금액</dt>
+                                    <dd class="price">
+                                        <span class="num">0</span>
+                                        <span class="won">원</span>
+                                    </dd>
+                                </dl>
+                                <dl class="price_view">
+                                    <dt class="price_title">상품할인</dt>
+                                    <dd class="price">
+                                        <span class="num">0</span>
+                                        <span class="won">원</span>
+                                    </dd>
+                                </dl>
+                                <dl class="price_view">
+                                    <dt class="price_title">쿠폰</dt>
+                                    <dd class="price">
+                                        <span class="num">0</span>
+                                        <span class="won">원</span>
+                                    </dd>
+                                </dl>
+                                <dl class="price_view">
+                                    <dt class="price_title">헬로캐시</dt>
+                                    <dd class="price">
+                                        <span class="num">3,650</span>
+                                        <span class="won">원</span>
+                                    </dd>
+                                </dl>
+                                <dl class="price_view">
+                                    <dt class="price_title">배송비</dt>
+                                    <dd class="price">
+                                        <span class="num">0</span>
+                                        <span class="won">원</span>
+                                    </dd>
+                                </dl>                                                        
+                            </div>                                            
+                            <!-- 개인 정보 동의 체크박스 시작 -->
+                            <div class="enrollpay_allow2">
+                                <div class="enrollhellopay_box_check_inner">
+                                    <input type="checkbox" class="check_business_credit_card check_privacy" id="check_business_credit_card">
+                                </div>
+                                <label for="check_business_credit_card">개인 정보 수집 및 이용 동의</label>                        
+                                <div class="allow_button2">
+                                    <a href="#" alt="개인 정보 수집 및 이용 동의 오버뷰"></a>
+                                </div>
+                            </div>
+                            <!-- 개인 정보 수집 체크박스 끝 -->
+                            <!-- 개인 정보 수집 및 이용 동의 시작 -->
+                            <div class="enrollpay_allow_list3">
+                                <h5>개인 정보 수집 및 이용 동의</h5>
+                                <div class="allow_contents1">
+                                    <p>헬로네이처는 고객님께서 구매하신 서비스 및 상품의 원활한 제공을 위해 최소한의 범위 내에서 아래와 같이 개인 정보를 수집 • 이용합니다. 고객님께서는 정보 제공에 동의하지 않으실 수 있으며 동의하지 않으실 경우, 일부 구매가 제한될 수 있습니다.</p>                            
+                                </div>
+                                <div class="allow_table">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <th>수집목적</th>
+                                                <td>상품 배송 및 서비스 제공을 위한 사용자 정보 확인</td>
+                                            </tr>
+                                            <tr>
+                                                <th>수집항목</th>
+                                                <td>주문자 정보(주문자명, 주문자 연락처 등) 배송정보(수취인명/수취인 주소, 수취인 연락처 등), 결제정보(현금영수증 발행여부 등)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>보유기간</th>
+                                                <td>5년 (계약 및 청약철회, 대금결제 및 재화 등의 공급) 또는 회원탈퇴 후 90일 까지</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- 개인 정보 수집 및 이용 동의 끝 -->                    
+                            <div id="payment_btns">
+                                <button class="cancel_payment">취소</button>
+                                <input type="submit" class="do_payment" onclick="check()" value="결제하기"></bu>
+                            </div>
+                        </div>
+                    </form>
+                </section>              
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script2.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>

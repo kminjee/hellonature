@@ -1,0 +1,228 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구매후기 등록</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(3) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(3) > a {
+            color: #5dab99;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(function () {
+            $(".product_info > p").text(sessionStorage.getItem("review_prodName"))
+            $(".enroll_post_box1_inner > p").text(sessionStorage.getItem("review_prodDate"))
+            let proImg = sessionStorage.getItem("review_prodImg")
+            console.log(proImg)
+            $(".product_image").css("background", "url('" + proImg + "'), no-repeat")
+            $(".product_image").css("background-size", "cover")
+
+            $(".overview").click(function (e){
+                if( $(".post_guide_overview").css("display") === "none") {
+                    $(".post_guide_overview").css("display", "block");
+                }else{
+                    $(".post_guide_overview").css("display", "none");
+                }
+            })
+        })
+
+        function sendit() {
+            let proIdx = sessionStorage.getItem("review_prodDroIdx")
+            let rvIdx = sessionStorage.getItem("review_rvIdx")
+            let memIdx = $("#hidden_user").val();
+            let like = $("#rv_like").val();
+            let content = $("#post_review").val()
+
+            let data = {
+                idx: rvIdx,
+                memIdx: memIdx,
+                like: like,
+                content: content,
+                proIdx: proIdx,
+                ansFlag: "FALSE"
+            }
+            let files = ($('input[name="file"]'));
+            let fileList = [];
+            let formData = new FormData();
+
+            for(let i = 0; i < files.length; i++){
+                fileList.push(files[i].files[0]);
+                formData.append('files', files[i].files[0]);
+                console.log(fileList)
+            }
+            formData.append("key", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+            axios.put("/api/productReview/update/", formData, {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }).then(function (){
+                alert("후기가 등록되었습니다!")
+                location.href = '/user/mypage_review'
+            }).catch(function (err){
+                console.log(err)
+            })
+        }
+    </script>
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <!-- main_contents 시작 -->
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <div class="back_button">
+                        <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                    </div>
+                    <h2 class="contents_name">후기 작성</h2>
+                </div>
+                <!-- enroll_post_bigbox 시작 -->
+                <div class="enroll_post_bigbox">
+                    <div class="post_info">
+                        <p>구매후기를 남겨주시면</p>
+                        <p>
+                            <span><em>일반 후기 50원</em> ,</span><span><em> 포토 후기 100원</em></span>을 적립해드려요
+                        </p>
+                    </div>
+                    <!-- enroll_post_box1 시작 -->
+                    <div class="enroll_post_box1">
+                        <div class="product_image"></div>
+                        <div class="product_info">
+                            <p></p>
+                            <div class="enroll_post_box1_inner">
+                                <p></p>
+                            </div>
+                        </div>
+                        <!-- enroll_post_box1 끝 -->
+                    </div>
+                    <!-- enroll_post_box2 시작 -->
+                    <div class="enroll_post_box2">
+                        <h3>상품은 어떠셨나요?</h3>
+                            <span id="rv_like_tit">만족도를 선택해주세요 </span><select id="rv_like">
+                                <option value="0">1 점</option>
+                                <option value="1">2 점</option>
+                                <option value="2">3 점</option>
+                                <option value="3">4 점</option>
+                                <option value="4">5 점</option>
+                                <option value="5">6 점</option>
+                                <option value="6">7 점</option>
+                                <option value="7">8 점</option>
+                                <option value="8">9 점</option>
+                                <option value="9">10 점</option>
+                            </select>
+                        <ul class="enroll_post_form">
+                            <li>
+                                <textarea id="post_review" maxlength="2000" class="textarea_post"
+                                          placeholder="맛, 신선도, 배송 포장 등을 다양하게 알려주세요."></textarea>
+                            </li>
+                        </ul>
+                        <div class="enroll_post_upload">
+                            <h5>사진</h5>
+<!--                            <ul id="post_upload_file">-->
+<!--                                <li class="input_image">-->
+<!--                                    <a href="#">업로드</a>-->
+                                        <input type="file" name="file" onchange="setImage(event);"/>
+                                        <div id="img_container"></div>
+                                        <script>
+                                            function setImage(event){
+                                                var reader = new FileReader();
+                                                reader.onload = function (event){
+                                                    var img = document.createElement("img");
+                                                    img.setAttribute("src", event.target.result);
+                                                    document.querySelector("div#img_container").appendChild(img);
+                                                    img.style.width = "300px";
+                                                    img.style.height = "300px";
+                                                };
+                                                reader.readAsDataURL(event.target.files[0]);
+                                            }
+                                        </script>
+<!--                                     <input type="file" id="file" multiple accept="image/*, video/*">-->
+<!--                                     <input type="hidden" id="fileSave" data-ea="0" data-maxsize="0">-->
+<!--                                </li>-->
+                            </ul>
+                        </div>
+                        <div class="post_upload_guide">
+                            <p>ㆍ이미지는 JPEG, JPG, PNG만 가능하며, 개수는 1개, 업로드 용량은 최대 50MB까지 등록 가능합니다.</p>
+                        </div>
+                        <ul class="enroll_post_submit">
+                            <li>
+                                <button type="button" class="button_submit" id="upload_button" onclick="sendit()">등록</button>
+                            </li>
+                        </ul>
+                        <div class="warning_list_box">
+                            <p>ㆍ교환/환불 관련 내용은 <a href="#" >1:1문의</a>를 이용해주세요.</p>
+                            <p>ㆍ상품과 무관한 내용, 동일문자 반복 등 부적합한 후기는 통보없이 삭제 및 혜택 회수될 수 있습니다.</p>
+                            <p>ㆍ상품에 대한 잘못된 정보 또는 혐오감을 주는 이미지가 포함된 후기는 임의로 삭제될 수 있습니다.</p>
+                            <p>ㆍ작성하신 후기는 상품 홍보 목적으로 외부 채널에 노출될 수 있습니다.</p>
+                        </div>
+                        <div class="post_guide_box">
+                            <div class="post_guide_box_inner">
+                                <div class="post_guide_help">
+                                    <p>구매후기 운영안내</p>
+                                </div>
+                            </div>
+                            <div class="overview">
+                                <a href="#" alt="구매후기 이용안내 오버뷰"></a>
+                            </div>
+                        </div>
+                        <div class="post_guide_overview">
+                            <ul>
+                                <li>
+                                    구매 후기 게시판은 고객님 간 구매 경험을 공유하는 커뮤니케이션 공간입니다. 교환/환불을 비롯한 서비스 전반에 대한 문의나 요청사항은
+                                    고객센터(1644-4339) 또는 1:1 문의에 남겨주세요.
+                                </li>
+                                <li>
+                                    구매 후기 게시판의 성격과 다른 글, 상품에 대한 잘못된 정보, 혐오감을 주는 이미지가 포함된 후기 등은 사전동의 없이 삭제 및 혜택이 회수될 수
+                                    있습니다.
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- enroll_post_box2 끝 -->
+                    </div>
+                    <!-- enroll_post_bigbox 끝 -->
+                </div>
+                <!-- main_contents 끝 -->
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>
+

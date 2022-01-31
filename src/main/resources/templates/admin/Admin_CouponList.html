@@ -1,0 +1,344 @@
+<html
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 | 쿠폰 관리</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script src="/admin/js/checkbox.js"></script>
+</head>
+<script>
+    $(function () {
+        let page = $('.page').val();
+        axios.get('/api/memberCouponType/list?page=' + page, {}).then(function (response) {
+            let tb = $('<tbody class="tbody">');
+            for (let i in response.data.data) {
+                let id = response.data.data[i].idx
+                let title = response.data.data[i].title;
+                let minPrice = response.data.data[i].minPrice;
+                let dateStart = response.data.data[i].dateStart;
+                let dateEnd = response.data.data[i].dateEnd;
+                let count = response.data.data[i].count;
+                let k = parseInt(i) + 2
+
+                let row = $('<tr>').append(
+                    '<td><input type="checkbox"  id="CP_check_' + k + '" name="coupon" onclick="CL_checkSelectAll()" value="'+id+'"><label for="CP_check_' + k + '"></label></td>' +
+                    '<td>' + id + '</td>' +
+                    '<td>' + title + '</td>' +
+                    '<td>' + minPrice + '원</td>' +
+                    '<td>' + dateStart + '~ ' + dateEnd + '</td>' +
+                    '<td>' + count + '</td></tr>'
+                )
+                tb.append(row);
+            }
+            tb.append('</tbody>');
+            $('.thead').after(tb);
+
+            $("#Maxprev").siblings(".page_num").remove();
+            for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                let pages = $('<li class="page_num" id="page_num ' + i + '" value="' + (i - 1) + '">').append(
+                    i + '</li>'
+                )
+                $('#prev').after(pages);
+            }
+
+            $('.page_num').click(function (e) {
+                $('.tbody').empty();
+                $('.page').val($(this).val())
+                let page = $('.page').val()
+
+                axios.get('/api/memberCouponType/list?page=' + page, {}).then(function (response) {
+                    let tb = $('<tbody class="tbody">');
+                    for (let i in response.data.data) {
+                        let id = response.data.data[i].idx
+                        let title = response.data.data[i].title;
+                        let minPrice = response.data.data[i].minPrice;
+                        let dateStart = response.data.data[i].dateStart;
+                        let dateEnd = response.data.data[i].dateEnd;
+                        let count = response.data.data[i].count;
+                        let k = parseInt(i) + 2
+
+                        let row = $('<tr>').append(
+                            '<td><input type="checkbox" value="'+id+'" id="CP_check_' + k + '" name="coupon" onclick="CL_checkSelectAll()"><label for="CP_check_' + k + '"></label></td>' +
+                            '<td>' + id + '</td>' +
+                            '<td>' + title + '</td>' +
+                            '<td>' + minPrice + '원</td>' +
+                            '<td>' + dateStart + '~ ' + dateEnd + '</td>' +
+                            '<td>' + count + '</td></tr>'
+                        )
+                        tb.append(row);
+                    }
+                    tb.append('</tbody>');
+                    $('.thead').after(tb);
+                })
+            })
+        })
+    })
+
+    $(function () {
+        let now = new Date();
+        let now_result = now.toISOString().substring(0, 10);
+
+        document.getElementById("weekbtn").addEventListener("click", function () {
+            let week = new Date();
+            week.setDate(week.getDate() - 7);
+            var week_result = week.toISOString().substring(0, 10);
+
+            document.getElementById("date_start").value = week_result;
+            document.getElementById("date_end").value = now_result;
+        })
+
+        document.getElementById("monthbtn").addEventListener("click", function () {
+
+            let month = new Date();
+            month.setMonth(month.getMonth() - 1);
+            var month_result = month.toISOString().substring(0, 10);
+
+
+            document.getElementById("date_start").value = month_result;
+            document.getElementById("date_end").value = now_result;
+        })
+
+        document.getElementById("three_monthbtn").addEventListener("click", function () {
+
+            let three_month = new Date();
+            three_month.setMonth(three_month.getMonth() - 3);
+            var three_month_result = three_month.toISOString().substring(0, 10);
+
+
+            document.getElementById("date_start").value = three_month_result;
+            document.getElementById("date_end").value = now_result;
+        })
+    })
+
+    $('#schbtn').click(function () {
+        $('.tbody').empty();
+
+        let page = $('.page').val();
+        let dateStart = $('#date_start').val();
+        let dateEnd = $('#date_end').val();
+        let title = $('#title').val();
+
+        let url = '/api/memberCouponType/list?page=' + page;
+
+        if (dateStart == "" && dateEnd == "") {
+            url = url
+        } else if (dateStart == "" && dateEnd != "") {
+            url = url + '&dateEnd=' + dateEnd;
+        } else if (dateStart != "" && dateEnd == "") {
+            url = url + '&dateStart=' + dateStart;
+        } else if (dateStart != "" && dateEnd != "") {
+            url = url + '&dateStart=' + dateStart + '&dateEnd=' + dateEnd;
+        }
+
+        if (title === "") {
+            url = url;
+        } else if (title !== "") {
+            url = url + '&title=' + title;
+        }
+
+        console.log(url);
+
+        axios.get(url, {}).then(function (response) {
+            let tb = $('<tbody class="tbody">');
+            for (let i in response.data.data) {
+                let id = response.data.data[i].idx
+                let title = response.data.data[i].title;
+                let minPrice = response.data.data[i].minPrice;
+                let dateStart = response.data.data[i].dateStart;
+                let dateEnd = response.data.data[i].dateEnd;
+                let count = response.data.data[i].count;
+                let k = parseInt(i) + 2
+
+                let row = $('<tr>').append(
+                    '<td><input type="checkbox" value="'+id+'" id="CP_check_' + k + '" name="coupon" onclick="CL_checkSelectAll()"><label for="CP_check_' + k + '"></label></td>' +
+                    '<td>' + id + '</td>' +
+                    '<td>' + title + '</td>' +
+                    '<td>' + minPrice + '원</td>' +
+                    '<td>' + dateStart + '~ ' + dateEnd + '</td>' +
+                    '<td>' + count + '</td></tr>'
+                )
+                tb.append(row);
+            }
+            tb.append('</tbody>');
+            $('.thead').after(tb);
+
+
+            $("#Maxprev").siblings(".page_num").remove();
+            for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                let pages = $('<li class="page_num" id="page_num ' + i + '" value="' + (i - 1) + '">').append(
+                    i + '</li>'
+                )
+                $('#prev').after(pages);
+            }
+
+            $('.page_num').click(function (e) {
+                $('.tbody').empty();
+
+                $('.page').val($(this).val());
+                let page = $('.page').val();
+                let dateStart = $('#date_start').val();
+                let dateEnd = $('#date_end').val();
+                let title = $('#title').val();
+
+                let url = '/api/memberCouponType/list?page=' + page;
+
+                if (dateStart == "" && dateEnd == "") {
+                    url = url
+                } else if (dateStart == "" && dateEnd != "") {
+                    url = url + '&dateEnd=' + dateEnd;
+                } else if (dateStart != "" && dateEnd == "") {
+                    url = url + '&dateStart=' + dateStart;
+                } else if (dateStart != "" && dateEnd != "") {
+                    url = url + '&dateStart=' + dateStart + '&dateEnd=' + dateEnd;
+                }
+
+                if (title === "") {
+                    url = url;
+                } else if (title !== "") {
+                    url = url + '&title=' + title;
+                }
+
+                axios.get(url, {}).then(function (response) {
+                    let tb = $('<tbody class="tbody">');
+                    for (let i in response.data.data) {
+                        let id = response.data.data[i].idx
+                        let title = response.data.data[i].title;
+                        let minPrice = response.data.data[i].minPrice;
+                        let dateStart = response.data.data[i].dateStart;
+                        let dateEnd = response.data.data[i].dateEnd;
+                        let count = response.data.data[i].count;
+                        let k = parseInt(i) + 2
+
+                        let row = $('<tr>').append(
+                            '<td><input type="checkbox" value="'+id+'" id="CP_check_' + k + '" name="coupon" onclick="CL_checkSelectAll()"><label for="CP_check_' + k + '"></label></td>' +
+                            '<td>' + id + '</td>' +
+                            '<td>' + title + '</td>' +
+                            '<td>' + minPrice + '원</td>' +
+                            '<td>' + dateStart + '~ ' + dateEnd + '</td>' +
+                            '<td>' + count + '</td></tr>'
+                        )
+                        tb.append(row);
+                    }
+                    tb.append('</tbody>');
+                    $('.thead').after(tb);
+
+                    $("#Maxprev").siblings(".page_num").remove();
+                    for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                        let pages = $('<li class="page_num" id="page_num ' + i + '" value="' + (i - 1) + '">').append(
+                            i + '</li>'
+                        )
+                        $('#prev').after(pages);
+                    }
+                })
+            })
+        })
+    })
+
+    $(function () {
+        //선택삭제
+        $('#delbtn').click(function (){
+            confirm("정말 삭제하시겠습니까?")
+            let id = [];
+            ($("input:checkbox[name='coupon']:checked").each(function (e){
+                id.push($(this).val())
+            }));
+            id = String(id)
+            console.log(id)
+
+            if(confirm){
+                axios.delete("/api/memberCouponType/deleteList/" + id,  {
+                }).then(function (){
+                    alert("쿠폰이 삭제되었습니다")
+                    location.reload();
+                })
+            }
+        }).catch(function (err){
+            console.log(err)
+        })
+    })
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title">
+    <p>고객센터<span>쿠폰 관리</span></p>
+</div>
+<!--content_title 끝-->
+<!--Cou_list 시작-->
+<div class="Cou_list">
+    <!--CL_c1 시작-->
+    <div class="CL_c1">
+        <!--form 시작-->
+        <form name="coupon_search">
+            <p id="CL_c1_title" class="product_title"><label>쿠폰 조회</label> <span style="margin-left: 20px;"><input
+                    type="button" name="button" value="쿠폰 등록하기" onclick="CC_location()"></span></p>
+            <!--table 시작-->
+            <table>
+                <tr>
+                    <th width="130">쿠폰명</th>
+                    <td><input type="text" name="cou_number" id="title"></td>
+                </tr>
+                <tr>
+                    <th>기간</th>
+                    <td><input type="date" name="date" value="기간필터" id="date_start"> - <input type="date" name="date"
+                                                                                              value="기간필터"
+                                                                                              id="date_end"></td>
+                </tr>
+            </table>
+            <!--table 끝-->
+            <div class="bottom_btn">
+                <span><input type="reset" name="reset" value="초기화"></span>
+                <span><input type="button" name="submit" value="검색" id="schbtn"></span>
+            </div>
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--CL_c1 끝-->
+    <!--CL_c2 시작-->
+    <div class="CL_c2">
+        <!--CL_c2_title 시작-->
+        <div id="CL_c2_title" class="green_title">
+            <p>쿠폰 목록</p>
+        </div>
+        <!--CL_c2_title 끝-->
+        <!--form 시작-->
+        <form name="coupon_list">
+                <span><input type="button" name="button" value="선택 삭제" id="delbtn">
+                </span>
+            <!--table 시작-->
+            <table width="100%">
+                <thead class="thead">
+                <tr>
+                    <th width="5%"><input type="checkbox" value="cou_list" id="CP_check" name="selectall"
+                                          onclick="CL_selectAll(this)"><label for="CP_check"></label></th>
+                    <th width="15%">쿠폰번호</th>
+                    <th width="22%">쿠폰명</th>
+                    <th width="14%">최소구매가격</th>
+                    <th width="11%">사용기간</th>
+                    <th width="10%">남은 쿠폰</th>
+                </tr>
+                </thead>
+            </table>
+            <!--table 끝-->
+            <!-- pageBox 시작-->
+            <div class="pageBox">
+                <ul>
+                    <li id="Maxprev"><a href="#"><<</a></li>
+                    <li id="prev"><</li>
+                    <li>></li>
+                    <li id="Maxnext"><a href="#">>></a></li>
+                </ul>
+                <input type="hidden" value="0" class="page">
+                <input type="hidden" value="0" class="page_hidden">
+                <input type="hidden" id="ajax_hidden">
+            </div>
+            <!-- pageBox 끝-->
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--CL_c2 끝-->
+</div>
+<!--Cou_list 끝-->
+</body>
+</html>

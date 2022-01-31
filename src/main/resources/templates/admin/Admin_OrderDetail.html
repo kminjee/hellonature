@@ -1,0 +1,201 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 상품 관리 | 주문 관리</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function(){
+        let id = sessionStorage.getItem("idx4");
+        console.log(id)
+
+        axios.get('/api/orderList?orderIdx='+ id, {
+
+        }).then(function(response){
+            for(let i in response.data.data){
+                let name = response.data.data[i].name;
+                let proName = response.data.data[i].proList;
+                let regdate = response.data.data[i].regdate;
+                let proIdx = response.data.data[i].proIdx;
+                let state = response.data.data[i].state;
+                let price = response.data.data[i].price;
+
+                // if(state == 1) {
+                //     state = '입금완료'
+                // }else if(state == 2){
+                //     state = '상품준비중'
+                // }else if(state == 3){
+                //     state = '배송준비중'
+                // }else if(state == 4){
+                //     state = '배송중'
+                // }else if(state == 5){
+                //     state = '배송완료'
+                // }else if(state == 6){
+                //     state = '취소'
+                // }else if(state == 7){
+                //     state = '반품요청'
+                // }else if(state == 8){
+                //     state = '반품완료'
+                // }else if(state == 9){
+                //     state = '환불요청'
+                // }else if(state == 0){
+                //     state = '환불완료'
+                // }
+
+                console.log(price)
+                console.log(name)
+                console.log(regdate)
+                console.log(proIdx)
+                console.log(state)
+
+                $('#name').text(name);
+                $('#regdate').text(regdate);
+                $('#proList').text(proName)
+                $('#proIdx').text(proIdx);
+                // $('#state').text(state);
+                $('#price').text(price + '원');
+                $('input:checkbox[name="order_state"][value="' + state + '"]').prop("checked", true);
+            }
+        }).catch(function(err){
+            console.log(err)
+        })
+    })
+
+    function sendit(){
+
+        let id = sessionStorage.getItem("idx4");
+        let state = $('input:checkbox[name="order_state"]:checked').val();
+        if(state == '입금완료') {
+            state = 1
+        }else if(state == '상품준비중'){
+            state = 2
+        }else if(state == '배송준비중'){
+            state = 3
+        }else if(state == '배송중'){
+            state = 4
+        }else if(state == '배송완료'){
+            state = 5
+        }else if(state == '취소'){
+            state = 6
+        }else if(state == '반품요청'){
+            state = 7
+        }else if(state == '반품완료'){
+            state = 8
+        }else if(state == '환불요청'){
+            state = 9
+        }else if(state == '환불완료'){
+            state = 0
+        }
+
+        axios.get('/api/memberOrder/update/state?idx=' + id + '&state=' + state, {
+        }).then(function (){
+            alert('주문상태가 수정되었습니다')
+            $.ajax({
+                type:"GET",
+                url : "/admin/OrderList",
+                datatype : "html/text",
+                success: function(result){
+                    $("#content").html(result).trigger("create");
+                }
+            });
+        })
+    }
+
+    $('input[name="order_state"]').click(function(e){
+        let count = $('input:checked[name="order_state"]').length;
+        if(count > 1){
+            $(this).prop('checked', false);
+            alert('한개만 선택해주세요')
+        }
+    })
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title">
+    <p>전체 상품 관리 <span>주문 상세</span></p>
+</div>
+<!--content_title 끝-->
+<!--Question_list 시작-->
+<div class="Order">
+    <!--PQ_c1 시작-->
+    <div class="Order_c1">
+        <!--form 시작-->
+        <form name="OrderForm">
+            <p class="product_title"><label>주문 상세</label></p>
+            <!--table 시작-->
+            <table id="orderDetail">
+                <tr>
+                    <th>주문자명</th>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <th>주문번호</th>
+                    <td id="proIdx"></td>
+                </tr>
+                <tr>
+                    <th>주문상품</th>
+                    <td id="proList"></td>
+                </tr>
+                <tr>
+                    <th>결제금액</th>
+                    <td id="price"></td>
+                </tr>
+                <tr>
+                    <th>주문날짜</th>
+                    <td id="regdate"></td>
+                </tr>
+<!--                <tr>-->
+<!--                    <th>주문상태</th>-->
+<!--                    <td id="state"></td>-->
+<!--                </tr>-->
+            </table>
+            <!--table 끝-->
+        </form>
+        <p id="O_title2" class="product_title"><label>주문상태 변경</label></p>
+        <form>
+            <!--table 시작-->
+            <table id="order_answer">
+                <tr>
+                    <th>주문 상태</th>
+                    <td>
+                        <span><input type="checkbox" name="order_state" value="1" id="OL_check_1"><label for="OL_check_1">입금완료</label></span>
+                        <span><input type="checkbox" name="order_state" value="2"  id="OL_check_2"><label for="OL_check_2">상품준비중</label></span>
+                        <span><input type="checkbox" name="order_state" value="3"  id="OL_check_3"><label for="OL_check_3">배송준비중</label></span>
+                        <span><input type="checkbox" name="order_state" value="4"  id="OL_check_4"><label for="OL_check_4">배송중</label></span>
+                        <span><input type="checkbox" name="order_state" value="5"  id="OL_check_5"><label for="OL_check_5">배송완료</label></span><br>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <span><input type="checkbox" name="order_state" value="6"  id="OL_check_6"><label for="OL_check_6">취소</label></span>
+                        <span><input type="checkbox" name="order_state" value="7"  id="OL_check_7"><label for="OL_check_7">반품요청</label></span>
+                        <span><input type="checkbox" name="order_state" value="8"  id="OL_check_8"><label for="OL_check_8">반품</label></span>
+                        <span><input type="checkbox" name="order_state" value="9"  id="OL_check_9"><label for="OL_check_9">환불요청</label></span>
+                        <span><input type="checkbox" name="order_state" value="0"  id="OL_check_10"><label for="OL_check_10">환불</label></span>
+                    </td>
+                </tr>
+            </table>
+            <!--table 끝-->
+            <!--QL_c1_btnBox 시작-->
+            <div id="QL_c1_btnBox" class="bottom_btn">
+                <input type="button" name="submit" value="상태 변경하기" onclick="sendit()">
+            </div>
+            <!--QL_c1_btnBox 끝-->
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--QL_c1 끝-->
+</div>
+<!--Question_list 끝-->
+</body>
+</html>

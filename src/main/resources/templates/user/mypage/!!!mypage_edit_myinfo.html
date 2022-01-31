@@ -1,0 +1,262 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인정보수정</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(7) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(7) > a { color: #5dab99;}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function (){
+
+        let memIdx = $("#hidden_user").val();
+
+        axios.get('/api/member/read/' + memIdx, {
+
+        }).then(function (response){
+            let $email = response.data.data.email;
+            let $name = response.data.data.name;
+            let $hp = response.data.data.hp;
+            let $password = response.data.data.password;
+            let $emailFlag = response.data.data.emailFlag;
+            let $smsFlag = response.data.data.smsFlag;
+            let $greenFlag = response.data.data.greenFlag;
+
+            $('input:checkbox[id="switch_check5"]').val($smsFlag);
+            $('#email').text($email);
+            $('#name').text($name);
+            $('#hp').val($hp);
+            // $('#password').val($password);
+            $('input:checkbox[id="switch_check4"]').val($emailFlag);
+            $('#greenFlag').val($greenFlag);
+
+            console.log("연락처: "+$hp)
+            console.log("이메일: "+$email)
+            console.log("sns수신동의여부: "+$smsFlag)
+            console.log("이메일수신동의여부: "+$emailFlag)
+            console.log("더그린회원여부: "+$greenFlag);
+
+            // 비밀번호 보기 버튼 클릭하면 비밀번호 볼 수 있게(암호화된 비밀번호...볼 수 있음 ㅜ)
+            // $('#pass_check').click(function (e){
+            //     $('#password').val($password);
+            // })
+
+            // $emailFlag의 value가 TRUE이면 checked 되게
+            if($emailFlag == "TRUE"){
+                $('input:checkbox[id="switch_check4"]').prop('checked', true);
+            }else{
+                $('input:checkbox[id="switch_check4"]').prop('checked', false);
+            }
+            // $smsFlag의 value가 TRUE이면 checked 되게
+            if($smsFlag == "TRUE"){
+                $('input:checkbox[id="switch_check5"]').prop('checked', true);
+            }else{
+                $('input:checkbox[id="switch_check5"]').prop('checked', false);
+            }
+        });
+    });
+
+    function edit(){
+        let memIdx = $("#hidden_user").val();
+        let name = $("#name").text();
+        let hp = $('#hp').val();
+        let password = $('#password').val();
+        let emailFlag = $('input:checkbox[id="switch_check4"]').val();
+        let smsFlag = $('input:checkbox[id="switch_check5"]').val();
+        let greenFlag = $('#greenFlag').val();
+        let kakaoFlag = $('#switch_check1').val();
+
+        let greenFlagInt, smsFlagInt, emailFlagInt;
+
+        if (greenFlag == "FALSE") { greenFlagInt = 0; }
+        else if (greenFlag == "TRUE") { greenFlagInt = 1; }
+
+        if ($("input[id='switch_check4']:checkbox").is(":checked") == true) { emailFlagInt = 1; }
+        else if ($("input[id='switch_check4']:checkbox").is(":checked") == false) { emailFlagInt = 0; }
+
+        if ($("input[id='switch_check5']:checkbox").is(":checked") == true) { smsFlagInt = 1; }
+        else if ($("input[id='switch_check5']:checkbox").is(":checked") == false) { smsFlagInt = 0; }
+
+
+        if (password === null || password === undefined || password ==='') {
+            axios.put("/api/member/update",{
+                data: {
+                    idx: memIdx,
+                    name: name,
+                    hp: hp,
+                    emailFlag: emailFlagInt,
+                    smsFlag: smsFlagInt,
+                    greenFlag: greenFlagInt
+                }
+            }).then(function (res){
+                alert("회원정보가 수정되었습니다.");
+                location.href = '/user/logout';
+            }).catch(function (err){
+                console.log(err)
+            });
+        } else if (password !== null || password !== undefined || password !=='' ) {
+            axios.put("/api/member/update",{
+                data: {
+                    idx: memIdx,
+                    name: name,
+                    hp: hp,
+                    password: password,
+                    emailFlag: emailFlagInt,
+                    smsFlag: smsFlagInt,
+                    greenFlag: greenFlagInt
+                }
+            }).then(function (res){
+                alert("회원정보가 수정되었습니다.");
+                location.href = '/user/logout';
+            }).catch(function (err){
+                console.log(err)
+            });
+        }
+    }
+
+    function delInfo(){
+
+        let memIdx = $("#hidden_user").val();
+        if(confirm("회원 탈퇴를 진행하시겠습니까?")){
+            alert("탈퇴 시 철회가 불가능합니다")
+            if(confirm("정말 탈퇴하시겠습니까?")) {
+                axios.delete('/api/member/delete/' + memIdx, {
+                }).then(function (){
+                    alert("정상적으로 탈퇴되었습니다.")
+                    location.href = '/user/logout';
+                });
+            }else{
+                return;
+            }
+        }else{
+            return;
+        }
+    }
+</script>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <!-- main_contents 시작 -->
+            <div class="main_contents">
+                <!-- contents_box1 -->
+                <div class="contents_box1">
+                    <div class="back_button">
+                        <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                    </div>
+                    <h2 class="contents_name">내 정보 관리</h2>
+                </div>
+                <!-- contents_box1 -->
+                <!-- edit2_myinfo_bigbox 시작 -->
+                <div class="edit2_myinfo_bigbox">
+                    <ul class="edit2_form_list1">
+                        <li>
+                            <h5 class="edit2_form_title">기본 정보</h5>
+                            <dl>
+                                <dt>이메일</dt>
+                                <dd id="email"></dd>
+                            </dl>
+                            <dl>
+                                <dt>이름</dt>
+                                <dd id="name"></dd>
+                            </dl>
+                            <dl>
+                                <dt>휴대폰</dt>
+                                <dd id="userPhoneNum">
+                                    <input type="text" id="hp">
+                                </dd>
+                                <!--                                        <dd class="edit2_form_list_button">-->
+                                <!--                                            <a href="#" id="edit_a">변경</a>-->
+                                <!--                                        </dd>-->
+                            </dl>
+                            <dl>
+                                <dt>비밀번호</dt>
+                                <dd id="userPassword">
+                                    <input type="password" id="password">
+                                    <!--<input type="button" value="비밀번호 보기" id="pass_check">-->
+                                </dd>
+                                <!--                                        <dd class="edit2_form_list_button">-->
+                                <!--                                            <a href="#">변경</a>-->
+                                <!--                                        </dd>-->
+                            </dl>
+                        </li>
+                    </ul>
+                    <ul class="edit2_form_list3">
+                        <li>
+                            <h5 class="edit2_form_title">광고 정보 수신</h5>
+                            <div class="edit2_form_ad">
+                                <p>쿠폰, 특가상품 이벤트 등 혜택/정보 수신</p>
+                            </div>
+                            <dl>
+                                <dt>이메일 수신동의</dt>
+                                <dd>
+                                    <label for="switch_check4" class="switch" id="switch_label4">
+                                        <input type="checkbox" id="switch_check4" class="check_slider" name="switch_check4">
+                                    </label>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>SMS 수신동의</dt>
+                                <dd>
+                                    <label for="switch_check5" class="switch" id="switch_label5">
+                                        <input type="checkbox" id="switch_check5" class="check_slider">
+                                        <!-- <span class="slider round"></span> -->
+                                    </label>
+                                </dd>
+                            </dl>
+                            <p>주문 및 배송 관련 SMS는 수신 동의와 상관없이 발송됩니다.</p>
+                            <input type="hidden" value="" id="greenFlag">
+                            <input type="button" value="수정" id="edit_button" onclick="edit()">
+                        </li>
+                    </ul>
+                    <ul class="edit2_form_list4">
+                        <li>
+                            <h5 class="edit2_form_title">회원탈퇴</h5>
+                            <dl>
+                                <dt>
+                                    회원 탈퇴를 하시면 쿠폰과 적립금 등 보유 중인 혜택은 모두 사라집니다.
+                                    <a href="#" class="withdrawal_button" onclick="delInfo()">회원탈퇴</a>
+                                </dt>
+                            </dl>
+                        </li>
+                    </ul>
+                    <!-- edit2_myinfo_bigbox 끝 -->
+                </div>
+                <!-- main_contents 끝 -->
+            </div>
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+</body>
+</html>

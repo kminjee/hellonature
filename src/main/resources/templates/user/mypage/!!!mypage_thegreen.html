@@ -1,0 +1,139 @@
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>더그린배송</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(4) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(4) > a { color: #5dab99;}
+    </style>
+</head>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    $(function (){
+        let memIdx = $("#hidden_user").val()
+        axios.get("/api/theGreen/check/" + memIdx, {}).then(function (response){
+            let flag = response.data.data;
+
+            if(flag === "TRUE"){
+                $(".thegreen_apply_button").text("해지하기")
+                $(".thegreen_apply_button").click(function (){
+                    confirm("더그린 배송을 해지하시겠습니까?")
+                    if(confirm){
+                        alert("해지 시 철회가 불가능합니다")
+                        confirm("정말 더그린 배송을 해지하시겠습니까?")
+                        if(confirm) {
+                            axios.delete("/api/theGreen/delete/" + memIdx, {}).then(function () {
+                                alert("더 그린 배송이 해지되었습니다")
+                                location.href = "/user/mypage_thegreen/"
+                            })
+                        }
+                    }
+                })
+            }else if (flag === "FALSE"){
+                $(".thegreen_apply_button").text("신청하기")
+                $(".thegreen_apply_button").click(function (){
+                    location.href='/user/mypage_chooseThegreen'
+                })
+            }
+        })
+    })
+</script>
+
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="contents">
+                <div th:replace="/user/fragment/section::section"></div>
+            </div>
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <div class="main_leftaside1">
+                    <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+                </div>
+                <div class="main_contents">
+                    <div class="contents_box1">
+                        <h2 class="contents_name">더그린배송</h2>
+                    </div>
+                <!-- main_contents_container 시작 -->
+                <div class="main_contents_container">
+                    <!-- 더그린배송 타이틀 텍스트 시작 -->
+                    <div class="thegreen_txt_box">
+                        <div class="thegreen_txt">
+                            <strong>매일 받아도 가뿐한 새벽배송</strong>
+                            <h3>더그린배송</h3>
+                            <p>
+                                처치 곤란한 포장재도 환경에 대한 부담도 없이<br>                            
+                                매일의 더 신선한 음신만 담아 전합니다.<br>
+                                헬로네이처의 한결 가뿐한 <span>친환경 배송 서비스</span><br>
+                                <span>더그린배송</span>을 신청하세요.
+                            </p>            
+                        </div>                    
+                    </div>
+                    <!-- 더그린배송 타이틀 텍스트 끝 -->
+                    <!-- 신청자격 시작 -->
+                    <div class="thegreen_client_right">
+                        <p>신청자격</p>
+                        <p><span>새벽배송</span> 가능 지역 거주 고객님</p>                    
+                    </div>
+                    <!-- 신청자격 끝 -->
+                    <!-- 신청방법 시작 -->
+                    <div class="thegreen_apply_way">
+                        <p>신청방법</p>
+                        <div class="thegreen_request_box">
+                            <ul>
+                                <li>
+                                    <span><img src="/user/images/mypage.img/thegreen/thegreen_request_img01.png" alt="신청하기 클릭"></span>
+                                    <p>신청하기 클릭</p>                                    
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <span><img src="/user/images/mypage.img/thegreen/thegreen_request_img02.png" alt="배송지 선택"></span>
+                                    <p>배송지 선택</p>                                    
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <span><img src="/user/images/mypage.img/thegreen/thegreen_request_img03.png" alt="보증금 결제완료"></span>
+                                    <p>보증금 결제완료</p>                                    
+                                </li>
+                            </ul>
+                        </div> 
+                        <div class="thegreen_link_box">                        
+                            <div class="thegreen_link_txt">    
+                                <a href="#">더그린배송 알아보기</a>                                                        
+                            </div>
+                            <div class="link_move">
+                                <a href="#" alt="더그린배송 알아보기 화살표"></a>
+                            </div>
+                        </div>   
+                    <!-- 신청방법 끝 -->                                                      
+                    </div>
+                    <button type="submit" class="thegreen_apply_button"></button>
+                    <!-- main_contents_container 끝 -->
+                    </div>                   
+                <!-- main_contents 끝 -->
+                </div>                
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+</body>
+</html>
+

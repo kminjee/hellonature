@@ -1,0 +1,458 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 | 결제내역 관리</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script src="/admin/js/checkbox.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function (){
+        let page = $('.page').val();
+        axios.get('/api/memberPayment/list?startPage=' + page, {
+
+        }).then(function (response){
+
+            let tb = $('<tbody class="tbody">');
+
+            for(let i in response.data.data){
+                let $id = response.data.data[i].idx;
+                let $mordName = response.data.data[i].memName;
+                let $state = response.data.data[i].state;
+                let $price = response.data.data[i].price;
+                let $mordReg = response.data.data[i].regdate;
+                let $num = response.data.data[i].num;
+                let $type = response.data.data[i].paymentType;
+                $mordReg = $mordReg.toString().substring(0,10);
+                // $num = $num.toString().substring(16,20);
+
+                if($state == 1){
+                    $state = '결제완료'
+                }else if($state == 2){
+                    $state = '결제취소'
+                }
+
+                if($type == 1){
+                    $type = '헬로페이'
+                }else if($type == 2){
+                    $type = '차이페이'
+                }else if($type == 3){
+                    $type = '네이버페이'
+                }else if($type == 4){
+                    $type = '카카오페이'
+                }else if($type == 5){
+                    $type = '페이코'
+                }else if($type == 6){
+                    $type = '삼성페이'
+                }else if($type == 7){
+                    $type = 'SK페이'
+                }else if($type == 8){
+                    $type = '신용카드/일반결제'
+                }
+
+                let row = $('<tr>').append(
+                    '<td><input type="checkbox" id="PH_check_'+ i +'" name="pay" onclick="PH_checkSelectAll()" value="'+$id+'"><label for="PH_check_'+ i +'"></td>' +
+                    '<td>'+ $id +'</td>' +
+                    '<td>'+ $mordName +'</td>' +
+                    '<td>'+ $state +'</td>' +
+                    '<td>'+ $price +'</td>' +
+                    '<td>'+ $mordReg +'</td>' +
+                    '<td>'+ $num +'</td>' +
+                    '<td>'+ $type +'</td></tr>'
+                )
+                tb.append(row);
+            }
+            $('.thead').after(tb);
+
+            for(let i = response.data.pagination.totalPages; i > 0; i--){
+                let page = $('<li class="page_num" value="'+ (i - 1) +'" id="page_num '+ i +'">').append(
+                    i + '</li>'
+                )
+                $('#prev').after(page);
+            }
+
+            $('.page_num').click(function(e){
+
+                $('.tbody').empty();
+
+                $('.page').val($(this).val());
+                let page = $('.page').val();
+
+                axios.get('/api/memberPayment/list?startPage=' + page, {
+
+                }).then(function (response) {
+
+                    let tb = $('<tbody class="tbody">');
+
+                    for (let i in response.data.data) {
+                        let $id = response.data.data[i].idx;
+                        let $mordName = response.data.data[i].memName;
+                        let $state = response.data.data[i].state;
+                        let $price = response.data.data[i].price;
+                        let $mordReg = response.data.data[i].regdate;
+                        let $num = response.data.data[i].num;
+                        let $type = response.data.data[i].paymentType;
+
+                        $mordReg = $mordReg.toString().substring(0,10);
+
+                        if($state == 1){
+                            $state = '결제완료'
+                        }else if($state == 2){
+                            $state = '결제취소'
+                        }
+
+                        if($type == 1){
+                            $type = '헬로페이'
+                        }else if($type == 2){
+                            $type = '차이페이'
+                        }else if($type == 3){
+                            $type = '네이버페이'
+                        }else if($type == 4){
+                            $type = '카카오페이'
+                        }else if($type == 5){
+                            $type = '페이코'
+                        }else if($type == 6){
+                            $type = '삼성페이'
+                        }else if($type == 7){
+                            $type = 'SK페이'
+                        }else if($type == 8){
+                            $type = '신용카드/일반결제'
+                        }
+
+                        let row = $('<tr>').append(
+                            '<td><input type="checkbox" id="PH_check_' + i + '" name="pay" onclick="PH_checkSelectAll()" value="'+$id+'"><label for="PH_check_' + i + '"></td>' +
+                            '<td>' + $id + '</td>' +
+                            '<td>' + $mordName + '</td>' +
+                            '<td>' + $state + '</td>' +
+                            '<td>' + $price + ' 원</td>' +
+                            '<td>' + $mordReg + '</td>' +
+                            '<td>' + $num + '</td>' +
+                            '<td>' + $type + '</td></tr>'
+                        )
+                        tb.append(row);
+                    }
+                    $('.thead').after(tb);
+                })
+            })
+        })
+    })
+
+    $(function(){
+        let now = new Date();
+        let now_result = now.toISOString().substring(0, 10);
+
+        //일주일, 일개월, 삼개월버튼
+        document.getElementById("weekbtn").addEventListener("click", function () {
+            let week = new Date();
+            week.setDate(week.getDate() - 7);
+            var week_result = week.toISOString().substring(0, 10);
+
+            document.getElementById("date_start").value = week_result;
+            document.getElementById("date_end").value = now_result;
+        })
+
+        document.getElementById("monthbtn").addEventListener("click", function () {
+
+            let month = new Date();
+            month.setMonth(month.getMonth() - 1);
+            var month_result = month.toISOString().substring(0, 10);
+
+
+            document.getElementById("date_start").value = month_result;
+            document.getElementById("date_end").value = now_result;
+        })
+
+        document.getElementById("three_monthbtn").addEventListener("click", function () {
+
+            let three_month = new Date();
+            three_month.setMonth(three_month.getMonth() - 3);
+            var three_month_result = three_month.toISOString().substring(0, 10);
+
+
+            document.getElementById("date_start").value = three_month_result;
+            document.getElementById("date_end").value = now_result;
+        })
+
+        $('#shcbtn').click(function(e){
+
+            $('.tbody').empty();
+            $('.page_num').remove();
+
+            let page = $('.page').val();
+            let dateStart = $('#date_start').val();
+            let dateEnd = $('#date_end').val();
+            let member = $('#member').val();
+            let number = $('#number').val();
+            let url = '/api/memberPayment/list?dateStart=' + dateStart + '&dateEnd=' + dateEnd;
+
+            if(dateStart == "" && dateEnd == ""){
+                url = '/api/question/list?startPage=' + page;
+            }else if(dateStart == "" && dateEnd != ""){
+                url = '/api/question/list?startPage=' + page + '&dateEnd=' + dateEnd;
+            }else if(dateStart != "" && dateEnd == ""){
+                url = '/api/question/list?startPage=' + page + '&dateStart=' + dateStart;
+            }else if(dateStart != "" && dateEnd != ""){
+                url = url + '&startPage=' + page;
+            }
+
+            if(member == undefined){
+                url = url;
+            }else if(member != undefined){
+                url = url + '&idx=' + number;
+            }
+            console.log(url)
+
+            axios.get(url, {
+            }).then(function(response) {
+
+
+                let tb = $('<tbody class="tbody">');
+
+                for (let i in response.data.data) {
+                    let $id = response.data.data[i].idx;
+                    let $mordName = response.data.data[i].memName;
+                    let $state = response.data.data[i].state;
+                    let $price = response.data.data[i].price;
+                    let $mordReg = response.data.data[i].regdate;
+                    let $num = response.data.data[i].num;
+                    let $type = response.data.data[i].paymentType;
+                    $mordReg = $mordReg.toString().substring(0, 10);
+                    // $num = $num.toString().substring(16,20);
+
+                    if ($state == 1) {
+                        $state = '결제완료'
+                    } else if ($state == 2) {
+                        $state = '결제취소'
+                    }
+
+                    if ($type == 1) {
+                        $type = '헬로페이'
+                    } else if ($type == 2) {
+                        $type = '차이페이'
+                    } else if ($type == 3) {
+                        $type = '네이버페이'
+                    } else if ($type == 4) {
+                        $type = '카카오페이'
+                    } else if ($type == 5) {
+                        $type = '페이코'
+                    } else if ($type == 6) {
+                        $type = '삼성페이'
+                    } else if ($type == 7) {
+                        $type = 'SK페이'
+                    } else if ($type == 8) {
+                        $type = '신용카드/일반결제'
+                    }
+
+                    let row = $('<tr>').append(
+                        '<td><input type="checkbox" id="PH_check_' + i + '" name="pay" onclick="PH_checkSelectAll()" value="'+$id+'"><label for="PH_check_' + i + '"></td>' +
+                        '<td>' + $id + '</td>' +
+                        '<td>' + $mordName + '</td>' +
+                        '<td>' + $state + '</td>' +
+                        '<td>' + $price + '</td>' +
+                        '<td>' + $mordReg + '</td>' +
+                        '<td>' + $num + '</td>' +
+                        '<td>' + $type + '</td></tr>'
+                    )
+                    tb.append(row);
+                }
+                $('.thead').after(tb);
+
+                $("#Maxprev").siblings(".page_num").remove();
+                for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                    let page = $('<li class="page_num" value="' + (i - 1) + '" id="page_num ' + i + '">').append(
+                        i + '</li>'
+                    )
+                    $('#prev').after(page);
+                }
+
+                $('.page_num').click(function (e) {
+
+                    $('.tbody').empty();
+
+                    $('.page').val($(this).val());
+                    let page = $('.page').val();
+
+                    axios.get('/api/memberPayment/list?startPage=' + page, {}).then(function (response) {
+
+                        let tb = $('<tbody class="tbody">');
+
+                        for (let i in response.data.data) {
+                            let $id = response.data.data[i].idx;
+                            let $mordName = response.data.data[i].memName;
+                            let $state = response.data.data[i].state;
+                            let $price = response.data.data[i].price;
+                            let $mordReg = response.data.data[i].regdate;
+                            let $num = response.data.data[i].num;
+                            let $type = response.data.data[i].paymentType;
+
+                            $mordReg = $mordReg.toString().substring(0, 10);
+
+                            if ($state == 1) {
+                                $state = '결제완료'
+                            } else if ($state == 2) {
+                                $state = '결제취소'
+                            }
+
+                            if ($type == 1) {
+                                $type = '헬로페이'
+                            } else if ($type == 2) {
+                                $type = '차이페이'
+                            } else if ($type == 3) {
+                                $type = '네이버페이'
+                            } else if ($type == 4) {
+                                $type = '카카오페이'
+                            } else if ($type == 5) {
+                                $type = '페이코'
+                            } else if ($type == 6) {
+                                $type = '삼성페이'
+                            } else if ($type == 7) {
+                                $type = 'SK페이'
+                            } else if ($type == 8) {
+                                $type = '신용카드/일반결제'
+                            }
+
+                            let row = $('<tr>').append(
+                                '<td><input type="checkbox" id="PH_check_' + i + '" name="pay" onclick="PH_checkSelectAll()" value="'+$id+'"><label for="PH_check_' + i + '"></td>' +
+                                '<td>' + $id + '</td>' +
+                                '<td>' + $mordName + '</td>' +
+                                '<td>' + $state + '</td>' +
+                                '<td>' + $price + ' 원</td>' +
+                                '<td>' + $mordReg + '</td>' +
+                                '<td>' + $num + '</td>' +
+                                '<td>' + $type + '</td></tr>'
+                            )
+                            tb.append(row);
+                        }
+                        $('.thead').after(tb);
+                    })
+                })
+            })
+        })
+    })
+
+    $(function () {
+        //선택삭제
+        $('#delbtn').click(function (){
+            confirm("정말 삭제하시겠습니까?")
+            let id = [];
+            ($("input:checkbox[name='pay']:checked").each(function (e){
+                id.push($(this).val())
+            }));
+            id = String(id)
+            console.log(id)
+
+            if(confirm){
+                axios.delete("/api/memberPayment/deleteList/" + id,  {
+                }).then(function (){
+                    alert("결제내역 삭제 성공")
+                    location.reload();
+                })
+            }
+        }).catch(function (err){
+            console.log(err)
+        })
+    })
+
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title">
+    <p>고객센터<span>결제내역 관리</span></p>
+</div>
+<!--content_title 끝-->
+<!--Pay_list 시작-->
+<div class="Pay_list">
+    <!--PH_c1 시작-->
+    <div class="PH_c1">
+        <!--form 시작-->
+        <form name="payment_search">
+            <p class="product_title" id="PH_c1_title"><label>결제내역 조회</label></p>
+            <!--table 시작-->
+            <table>
+                <tr>
+                    <th width="100">결제일 기준</th>
+                    <td>
+                        <input type="date" name="date" value="기간필터" id="date_start"> - <input type="date" name="date" value="기간필터" id="date_end">
+                        <span class="datebtn">
+                                <input type="button" name="button" value="최근 1주일" id="weekbtn">
+                                <input type="button" name="button" value="최근 1개월" id="monthbtn">
+                                <input type="button" name="button" value="최근 3개월" id="three_monthbtn">
+                            </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <select id="member">
+                            <option value="1">고객번호</option>
+                        </select>
+                        <input type="text" name="text" placeholder="직접 입력" id="number">
+                    </td>
+                </tr>
+            </table>
+            <!--table 끝-->
+            <!--No_c1_btnBox 시작-->
+            <div class="bottom_btn" id="PH_c1_btnBox">
+                <span><input type="button" name="button" value="초기화"></span>
+                <span><input type="button" name="button" value="검색" id="shcbtn"></span>
+            </div>
+            <!--No_c1_btnBox 끝-->
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--PH_c1 끝-->
+    <!--No_c2 시작-->
+    <div class="No_c2">
+        <!--No_c2_title 시작-->
+        <div id="No_c2_title" class="green_title">
+            <p>결제내역 목록<span>(<span>현재 등록 : 10개</span>)</span></p>
+        </div>
+        <!--No_c2_title 끝-->
+        <!--form 시작-->
+        <form name="notice_list">
+                <span>
+                    <input type="button" name="button" value="선택삭제">
+                </span>
+            <!--table 시작-->
+            <table width="100%" class="list_table">
+                <thead class="thead">
+                <tr>
+                    <th width="5%"><input type="checkbox" id="PH_check" name="selectall" onclick="PH_selectAll(this)"><label for="PH_check"></th>
+                    <th width="10%">고객번호</th>
+                    <th width="12%">이름</th>
+                    <th width="15%">결제상태</th>
+                    <th width="15%">금액</th>
+                    <th width="18%">결제일</th>
+                    <th width="10%">카드번호(끝 4자리)</th>
+                    <th width="15%">결제방식</th>
+                </tr>
+                </thead>
+            </table>
+            <!--table 끝-->
+            <!-- pageBox 시작-->
+            <div class="pageBox">
+                <ul>
+                    <li id="Maxprev"><a href="#"><<</a></li>
+                    <li id="prev"><</li>
+                    <li>></li>
+                    <li id="Maxnext"><a href="#">>></a></li>
+                </ul>
+                <input type="hidden" value="0" class="page">
+            </div>
+            <!-- pageBox 끝-->
+        </form>
+        <!--form 끝-->
+    </div>
+    <!--No_c2 끝-->
+</div>
+<!--Pay_list 끝-->
+</body>
+</html>

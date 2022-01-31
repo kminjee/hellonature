@@ -1,0 +1,94 @@
+<html
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 | 공지사항 관리</title>
+    <link rel="stylesheet" href="/static/admin/css/style2.css">
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    function sendit(){
+        let type = $("#type").val();
+        let title = $("#title").val();
+        let content =  CKEDITOR.instances.NC_editor.getData();
+
+        axios.post('/api/notice/create', {
+            data: {
+                type: type,
+                title: title,
+                content: content,
+                ingFlag : 1
+            }
+        }).then(function(response){
+            alert("공지사항 작성이 완료되었습니다")
+            $.ajax({
+                type:"GET",
+                url : "/admin/Notice",
+                datatype : "html/text",
+                success: function(result){
+                    $("#content").html(result).trigger("create");
+                }
+            });
+        }).catch(function (err){
+            console.log(err)
+        })
+    }
+
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title"><p>고객센터<span>공지사항 관리</span></p></div>
+<!--content_title 끝-->
+<!--Ncreate 시작-->
+<div class="Ncreate">
+    <!--form 시작-->
+    <form name="notice_create">
+        <p class="product_title" id="NC_c1_title"><label>공지사항 등록</label></p>
+        <!--table 시작-->
+        <table>
+            <tr>
+                <th>분류</th>
+                <td>
+                    <select id="type">
+                        <option value="1">일반</option>
+                        <option value="2">이벤트</option>
+                        <option value="3">배송지연</option>
+                        <option value="4">상품</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td><input type="text" name="text" placeholder="100자 이내로 입력하세요" maxlength="100" id="title"></td>
+            </tr>
+        </table>
+        <!--table 끝-->
+        <!--NC_c2_title 시작-->
+        <div id="NC_c2_title" class="green_title">
+            <p>HTML</p>
+        </div>
+        <!--NC_c2_title 끝-->
+        <!-- CKEditor 시작-->
+        <textarea name="productText" id="NC_editor" cols="30" rows="10"></textarea>
+        <script type="text/javascript">
+            CKEDITOR.replace('NC_editor'
+                , {height: 300
+                });
+        </script>
+        <!-- CKEditor 끝-->
+        <!--NC_c1_btnBox 시작-->
+        <div id="NC_c1_btnBox" class="bottom_btn">
+            <span><input type="reset" name="reset" value="초기화"></span>
+            <span><input type="button" name="submit" value="등록" onclick="sendit()"></span>
+        </div>
+        <!--NC_c1_btnBox 끝-->
+    </form>
+    <!--form 끝-->
+</div>
+<!--Ncreate 끝-->
+</body>
+</html>

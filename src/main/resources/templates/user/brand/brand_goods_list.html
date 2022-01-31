@@ -1,0 +1,290 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>브랜드 메인</title>
+    <link rel="stylesheet" href="/resource/css/bootstrap.css">
+    <link rel="stylesheet" href="/user/css/index_style.css">
+    <link rel="stylesheet" th:href="@{/user/css/layout.css}">
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        /* ---- axios ---- */
+        $(function (){  // 브랜드 메인 사진(banner), 브랜드명(name), 설명(des)
+
+            const currUrl = new URL(location.href);           // 현재 url   : http://127.0.0.1:8080/user/brand_goods_list?brIdx=1&order=1
+            const searchParams = currUrl.searchParams;        // 파라미터 값 : ?brIdx=1&order=1
+            let brIdx = searchParams.get("brIdx");            // brIdx 값   : 1
+            let order = searchParams.get("order");            // order 값   : 1
+
+            let memIdx = $("#hidden_user").val();             // header.html에 있는 memIdx 가져오기
+
+            axios.get('/api/brand/read/'+brIdx, {             // url에서 빼온 brIdx값 대입하기 : /api/brand/read/1
+            }).then(function(res) {                           // 데이터가 잘 가져와졌다면
+
+                let name = res.data.data.name;                // 이름
+                let des = res.data.data.des;                  // 설명
+                let logo = res.data.data.logo;                // 로고 이미지
+                let banner = res.data.data.banner;            // 배너 이미지
+
+                document.getElementById("brand_logo").style.backgroundImage = "url("+logo+")";    // 현재 있는 html 틀에서 로고 div에 이미지 넣기
+                document.getElementById("brand_name").innerText = name;                           // 이름 넣기
+                document.getElementById("brand_des").innerText = des;                             // 설명 넣기
+                document.getElementById("brand_bnr").style.backgroundImage = "url("+banner+")";   // 이미지 넣기
+                document.getElementById("br_name").innerText = name;                              // 카테고리 이름 넣기
+
+            }).catch(function(err) {            // 에러나면
+                console.log(err);               // 원인 콘솔에 찍기
+            });
+
+
+            axios.get('/api/product/user/list?brIdx='+brIdx+'&order='+order, {     // url에서 가져온 brIdx값, order값 api주소에 대입하기
+            }).then(function (res) {
+
+                let ul = $(".brand_bnr_wrap");                      // 먼저 html에 있는 ul태그 안에 하나 존재하는 li 태그를 선언해주고
+
+                for (let i in res.data.data) {                      // 데이터가 존재하는 동안 데이터들을 하나씩 뽑는다.
+                    let idx = res.data.data[i].idx;                 // 상품 idx
+                    let img = res.data.data[i].img;                 // 상품 이미지
+                    let name = res.data.data[i].name;               // 상품 이름
+                    let netPrice = res.data.data[i].netPrice;       // 상품 정상가
+                    let salePrice = res.data.data[i].salePrice;     // 상품 할인율
+                    let saleStyle = "";
+                    if (salePrice == 0 || salePrice == null) {      // 할인율이 존재하지 않으면
+                        saleStyle = "none";                         // 할인박스를 숨기고
+                    } else {                                        // 할인율이 존재하면
+                        saleStyle = "inline-block";                 // 할인박스 보여주기
+                    }
+
+                    let price = res.data.data[i].price;             // 상품 판매가
+                    let bestFlag = res.data.data[i].bestFlag;       // 상품 베스트 여부
+                    if (bestFlag == "FALSE") {                      // 베스트가 false면
+                        bestFlag = "none";                          // 베스트박스를 숨기고
+                    } else {                                        // 베스트가 true면
+                        bestFlag = "inline-block";                  // 베스트박스 보여주기
+                    }
+
+                    let star = res.data.data[i].star;               // 상품 평점
+                        star = Math.floor(star);                    // 소수점 버림
+                    let stars = "";
+                    if ( star == 0 ) { stars = "☆☆☆☆☆"; star = "0"; }
+                    else if ( star == 1 ) { stars = "★☆☆☆☆"; }
+                    else if ( star == 2 ) { stars = "★★☆☆☆"; }
+                    else if ( star == 3 ) { stars = "★★★☆☆"; }
+                    else if ( star == 4 ) { stars = "★★★★☆"; }
+                    else if ( star >= 5 ) { stars = "★★★★★"; star = "5"; }
+
+
+                    let temp = res.data.data[i].temp;               // 상품 보관온도
+                    let text = "";
+                    switch (temp){
+                        case 1 :
+                            text = "냉장";
+                            break;
+                        case 2 :
+                            text = "냉동";
+                            break;
+                        case 3 :
+                            text = "상온";
+                            break;
+                    }
+
+                    netPrice = netPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    price = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    let li = $('<li class="brand_item_wrap">').append(                       // 상품 하나가 뽑아져 나올때마다 li태그 한뭉탱이로 완성시킨다.
+                        '<div class="item_info">'+
+                        '<span class="item_sale" style="display: ' + saleStyle + ';">' + salePrice + '% </span>' +
+                        '<span class="item_best" style="display: ' + bestFlag + ';">Best</span>' +
+                        '</div>' +
+                        `<a href="/user/product?prodIdx=${idx}" class="item_img" style="background-image: url('${img}');"></a>` +
+                        '<a href="/user/product?prodIdx= ' + idx + '" class="item_name">'+ name + '</a>' +
+                        '<div class="item_price"><span>'+ price + '</span>원</div>' +
+                        '<span style="display: '+ saleStyle + '; text-decoration: line-through; margin-left: 5px; color: #767676; font-size: 13px;">' + netPrice + '원</span>' +
+                        '<div class="item_storage"><span>'+ text +'</span></div>' +
+                        '<div class="like_area">' +
+                        '<span class="item_star">'+ star +'점</span>' +
+                        '<div class="rating">'+ stars +'</div>' +
+                        '<a href="#">' +
+                        '<input type="hidden" value="' + idx + '">'+
+                        '<button class="price_cart">카트에 담기</button>' +
+                        '</a>' +
+                        '</div>' +
+                        '</li>'
+                    )
+                    ul.after(li);       // 완성된 상품 한뭉탱이를 선언한 태그 안에다 추가시킨다.
+                                        // 데이터가 남지 않을 때까지 for문을 실행시켜서 또 li 한뭉탱이 만들어서 누적시키고 누적시킨다.
+                }
+
+                let searchBtn = document.getElementById("filter_search");   // 필터 [검색] 버튼 요소 가져오기
+                let filter = document.querySelectorAll(".filter_item");     // 필터에 체크버튼들 가져오기 (클래스명이 동일해서 배열로 담김)
+
+                searchBtn.addEventListener('click', function() {            // [검색] 버튼이 클릭됐을 때
+                    for (let i=0; i<filter.length; i++) {                   // 체크버튼들 반복돌려서
+                        if (filter[i].checked == true) {                    // 요소중에 체크가 된게 있으면
+                            let filterValue = filter[i].value;              // 그 요소의 value값 가져오기 <input type="checkbox" class="filter_item" value="hot">
+                            let num;
+                            switch (filterValue) {                          // value가 담긴 변수를 가지고
+                                case "new":                                 // value값이 "new" 이면
+                                    num = 1;                                // num 이라는 변수에 1을 주고
+                                    break;
+                                case "rec":                                 // "rec" 이면
+                                    num = 2;                                // 2를 주고...
+                                    break;
+                                case "hot":
+                                    num = 3;
+                                    break;
+                                case "low":
+                                    num = 4;
+                                    break;
+                                case "high":
+                                    num = 5;
+                                    break;
+                            }
+                            searchParams.set('order', String(num));                       // url의 order=에 값을 재설정해준다. ?brIdx=1&order=num
+                            let newParam = searchParams.toString();                       // 문자열로 변환해주고
+                            location.href = location.pathname + '?' + newParam, '_self';  // 재설정해준 값으로 다시 url을 실행시킨다.
+                        }                                                                 // http://127.0.0.1:8080/user/brand_goods_list?brIdx=1&order=num
+                    }
+                });
+
+                let cartBtn = document.querySelectorAll(".price_cart");      // 모든 장바구니 버튼 다 가져오기
+                for (let i=0; i<cartBtn.length; i++) {                       // 그 장바구니버튼을 반복 돌려서
+                    cartBtn[i].addEventListener('click', function() {        // [i]번째 장바구니가 클릭되면
+                        let el = cartBtn[i].previousSibling;                 // 그 [i]번째의 바로 위에 형제(<input type="hidden" value="idx">) 요소를 가져온다음
+                        let proIdx = el.value;                               // input 요소의 value값(=상품idx)를 변수에 담아준다.
+
+                        if (memIdx !== "") {                                 // 만약 로그인된 상태라면
+                            axios.post('/api/basket/create', {               // 그 회원번호로 장바구니에 해당 상품을 담아준다.
+                                data: {
+                                    memIdx: memIdx,
+                                    proIdx: proIdx,
+                                    proCount: 1,
+                                }
+                            }).then(function() {
+                                alert('장바구니에 등록되었습니다.');
+                                location.reload();                           // 디비에 저장이 성공적으로 이뤄지면, 새로고침시켜서 헤더의 장바구니에 표시를 띄운다.
+                            }).catch(function(err) {
+                                console.log(err);
+                            });
+                        } else {                                             // 로그인 상태가 아니라면
+                            alert("비회원입니다.")
+                            let proidx_list = [];
+
+                            sessionStorage.setItem("noMem", proIdx);         // 해당 상품을 세션에 저장한다.
+                        }
+                    });
+                }
+
+            }).catch(function(err) {
+                console.log(err);
+            });
+        });
+        /* ---- axios ---- */
+    </script>
+</head>
+<body>
+<div id="container">
+
+    <!--header thymeleaf-->
+    <div th:replace="/user/fragment/header::header"></div>
+
+    <!-- main 시작 -->
+    <main>
+
+        <!-- 브랜드 아이템 리스트 -->
+        <section id="item_list_brand">
+
+            <div class="list_bg">
+                <div class="category_bg">
+                    <div class="category_mold">
+
+                        <div class="ico_cate">
+                            <span class="txt">브랜드관</span>
+                        </div>
+                        <div class="mold">
+                            <ul class="list">
+                                <li class="prod_cate" id="br_name" style="font-weight: bold; color: #0db081;"></li>
+                            </ul>
+                        </div>
+                        <div class="list_ability">
+                            <div class="sort_menu">
+                                <div class="select_type user_sort">
+                                    <button id="filter_btn">
+                                        <div class="filter_info">필터</div>
+                                        <span class="filter_btn_img"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 세부 카테고리 시작 -->
+                        <div id="filter_box" class="filter_box_wrap" style="display: none;">
+                            <div class="list_filters">
+                                <div class="ckeck_filter">
+                                    <input type="checkbox" class="filter_item" id="new" name="filter" value="new" onclick="checkOnlyOne(this)" checked>
+                                    <span class="box">box</span>
+                                    <label class="filter_cursor" for="new">신상품순</label>
+
+                                    <input type="checkbox" class="filter_item" id="rec" name="filter" value="rec" onclick="checkOnlyOne(this)">
+                                    <span class="box">box</span>
+                                    <label class="filter_cursor" for="rec">추천순</label>
+
+                                    <input type="checkbox" class="filter_item" id="hot" name="filter" value="hot" onclick="checkOnlyOne(this)">
+                                    <span class="box">box</span>
+                                    <label class="filter_cursor" for="hot">인기순</label>
+
+                                    <input type="checkbox" class="filter_item" id="low" name="filter" value="low" onclick="checkOnlyOne(this)">
+                                    <span class="box">box</span>
+                                    <label class="filter_cursor" for="low">낮은 가격순</label>
+
+                                    <input type="checkbox" class="filter_item" id="high" name="filter" value="high" onclick="checkOnlyOne(this)">
+                                    <span class="box">box</span>
+                                    <label class="filter_cursor" for="high">높은 가격순</label>
+                                </div>
+                                <input class="filter_btn" id="filter_search" type="button" value="검색">
+                            </div>
+                        </div>
+                        <!-- 세부 카테고리 끝 -->
+                    </div>
+                </div>
+
+                <ul class="list_mold">
+                    <!-- 브랜드 배너 -->
+                    <li class="brand_bnr_wrap">
+                        <div id="brand_bnr" class="brand_bnr">
+                            <div id="brand_tit" class="brand_tit_wrap">
+                                <div class="logo" id="brand_logo"></div>
+                                <span class="brand_name" id="brand_name"></span>
+                                <span id="brand_des"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- 브랜드 배너 -->
+
+                </ul>
+
+            </div>
+        </section>
+
+    </main>
+    <!-- main 끝 -->
+
+    <!--footer thymeleaf-->
+    <div th:replace="/user/fragment/footer::footer"></div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+
+</body>
+
+</html>

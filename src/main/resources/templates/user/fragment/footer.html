@@ -1,0 +1,70 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<div th:fragment="footer">
+    <!-- footer 시작 -->
+    <footer>
+        <div id="footer_in" class="footer_bg">
+            <div class="footer_mold">
+                <div class="footer_mold_top">
+                    <div class="footer_mold_brandname">
+                        <span>hellonature</span>
+                    </div>
+                    <div class="footer_login_wrap">
+                        <a href="/user/mypage_userLogin" sec:authorize="!isAuthenticated()"><span>로그인</span></a>
+                        <a href="/user/logout" sec:authorize="isAuthenticated()"><span>로그아웃</span></a>
+<!--                        <a href="#"><span>채용</span></a>-->
+                        <a href="/user/mypage_faq"><span>고객센터</span></a>
+                    </div>
+                </div>
+
+
+                <button id="footer_info_btn">
+                    <div class="footer_info1"> 사업자 정보 확인</div>
+                    <span class="ico on"></span>
+                </button>
+
+                <ul id="footer_info_none">
+                    <li>대표이사 : 오정후</li>
+                    <li>법인명(단체명): (주) 헬로네이처</li>
+                    <li>사업자 등록번호 : 105-87-66628</li>
+                    <li>통신판매 신고번호 : 제2012 서울강남 02931호</li>
+                    <li>개인정보 보호책임자 : 이소영</li>
+                    <li>입점문의 : 입점문의하기</li>
+                    <li>제휴문의 : mkt@hellonature.co.kr</li>
+                    <li>채용문의 : recruit@hellonature.co.kr</li>
+                    <li>기타문의 : help@hellonature.co.kr</li>
+                    <li>고객센터 : 1644-4339</li>
+                    <li>주소 : 서울특별시 강남구 봉은사로 16길 33(역삼동) 우 06127</li>
+                </ul>
+
+
+                <div class="footer_info2_wrap">
+                    <a href="#"><span>서비스가입사실확인</span></a>
+                    <a href="#"><span>식품안전기준</span></a>
+                    <a href="#"><span>이용약관</span></a>
+                    <a href="#"><span>개인정보취급방침</span></a>
+                    <div class="footer_info_line1"></div>
+                    <div class="footer_info_line2"></div>
+                    <div class="footer_info_line3"></div>
+                </div>
+                <div class="footer_info3">COPYRIGHT (C) 2021 HELLONATURE. ALL RIGHTS RESERVED.</div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer 끝 -->
+
+    <!-- aside 시작 -->
+    <aside class="quick_area">
+        <label><a><img src="/user/images/icon/aside_deli.png" alt="퀵 배너" class="q_bnr_deli"></a></label>
+        <div class="q_bnr_list">
+            <div class="q_bnr_list1"><label><a href="/user/recommend/event">이벤트</a></label></div>
+            <div class="q_bnr_list2"><label><a href="/user/magazine">매거진</a></label></div>
+            <div class="q_bnr_list3"><label><a href="/user/innerbrand">브랜드관</a></label></div>
+        </div>
+    </aside>
+    <!-- aside 끝 -->
+
+</div>
+
+</html>

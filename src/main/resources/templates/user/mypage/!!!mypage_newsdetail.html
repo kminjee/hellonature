@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(2) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(2) > a { color: #5dab99;}
+        .faq_clicked_button > input[type="button"] { background-color: #5dab99 !important; color: #fff !important; border: 1px solid #5dab99 !important;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function (){
+        let idx = sessionStorage.getItem("notice_idx");
+
+        axios.get('/api/notice/read/' + idx,{
+        }).then(function (response){
+                let $title =response.data.data.title;
+                let $date = response.data.data.regdate;
+                let $content = response.data.data.content;
+                $date = $date.toString().substring(0,10);
+
+                console.log($title);
+                console.log($date);
+                console.log($content);
+
+                $('.news_highlight').text($title);
+                $('.news_contents_box').html($content);
+                $("#news_date").text($date);
+
+        }).catch(function (err){
+            console.log(err)
+        })
+    });
+</script>
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="contents">
+                <div th:replace="/user/fragment/section::section"></div>
+            </div>
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <div class="main_leftaside2">
+                    <div th:replace="/user/fragment/sidebar2::sidebar2"></div>
+                <!-- main_leftaside 끝 -->   
+                </div>      
+                <!-- main_contents 시작 -->
+                <div class="main_contents">
+                    <div class="contents_box1">
+                        <div class="back_button">
+                            <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                        </div>
+                        <h2 class="contents_name">NEWS</h2>                        
+                    </div>
+                    <!-- 공지사항 제목 시작 -->
+                    <div class="center_link_move_box" id="center_news1">                        
+                        <div class="center_link_txt">                            
+                            <div class="news_upload_date">
+                                <p id="news_date"></p>
+                            </div>
+                            <a href="#" class="news_highlight"></a>
+                        </div>
+                    <!-- 공지사항 제목 끝 -->                        
+                    </div>
+                    <!-- 공지사항 내용 시작 -->
+                    <div class="news_contents_box">
+                    </div>        
+                <!-- main_contents 끝 -->        
+                </div>                                 
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>
+

@@ -1,0 +1,198 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송지관리</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/index_style.css}">
+    <style>
+        #mypage-box {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .container {
+            min-width: 1050px;
+            margin: 0 auto;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .list li:nth-child(2) {
+            background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%;
+            background-size: 6px 11px;
+            font-weight: 700;
+            color: #5dab99;
+        }
+
+        .list li:nth-child(2) > a {
+            color: #5dab99;
+        }
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(function () {
+
+            let urlidx = $("#section_hidden").val()
+
+            axios.get('/api/membersAddresses/user/list/' + urlidx, {}).then(function (response) {
+
+                for (let i in response.data.data) {
+                    let addrName = response.data.data[i].addrName;
+                    let id = response.data.data[i].idx;
+                    let name = response.data.data[i].name;                           // 받는 사람
+                    let hp = response.data.data[i].hp;                               // 전화번호
+                    let zipcode = response.data.data[i].zipcode;                     // 우편번호
+                    let addr1 = response.data.data[i].addr1;                         // 도로명주소 + 상세주소
+                    let addr2 = response.data.data[i].addr2;                         // 나머지주소
+                    let requestType = response.data.data[i].requestType;             // 배송타입
+                    let baseFlag = response.data.data[i].baseFlag;                // 기본배송지
+                    let greenFlag = response.data.data[i].greenFlag;
+                    let dawnFlag = response.data.data[i].dawnFlag;
+                    sessionStorage.setItem("ship_id", id)
+
+                    if (baseFlag === "TRUE") {
+                        baseFlag = "기본 배송지"
+                    } else {
+                        baseFlag = "그 외"
+                    }
+
+                    let greenFlag2;
+                    let show_greenFlag;
+                    if (greenFlag == "TRUE") {
+                        baseFlag += "/ 더그린 배송지"
+                        greenFlag2 = "더그린"
+                        show_greenFlag = 'block';
+                    } else {
+                        show_greenFlag = 'none';
+                        baseFlag = baseFlag
+                    }
+
+                    let show_dawnFlag;
+                    if (dawnFlag == "TRUE") {
+                        dawnFlag = "새벽"
+                        show_dawnFlag = 'block';
+                    } else {
+                        show_dawnFlag = 'none';
+                    }
+
+                    switch (requestType) {
+                        case 1:
+                            requestType = "문앞 / 공동현관 비밀번호"
+                            break;
+                        case 2:
+                            requestType = "문앞 / 비밀번호 없이 출입 가능"
+                            break;
+                        case 3:
+                            requestType = "경비실"
+                            break;
+                        case 4:
+                            requestType = "택배함"
+                            break;
+                        case 5:
+                            requestType = "기타장소"
+                            break;
+                    }
+
+                    let row = $('<div class="shipping_box1">').append(
+                        '<div class="shipping_box1_line1"><div class="shipping_txt"><span class="base_name">' + baseFlag + '</span><span style="display:'+show_greenFlag+'">'+greenFlag2+'</span><span style="display:'+show_dawnFlag+'">'+dawnFlag+'</span></div>' +
+                        '<div class="shipping_edit_box"><a href="#" class="shipping_edit_button"><input type="hidden" value=' + id + '>수정</a>' +
+                        '<div class="just-line"></div><span class="shipping_delete_button"><input type="hidden" value=' + id + '>삭제</span></div></div>' +
+                        '<div class="shipping_box1_line2"> ' + name + ' <span></span>' +
+                        '<span>' + hp + '</span><br>' +
+                        '<span>[ ' + zipcode + ' ] ' + addr1 + ' ( ' + addr2 + ' ) </span></div>' +
+                        '<span>' + requestType + '</span></div></div>'
+                    )
+                    $(".shipping_list").append(row)
+                }
+
+                let baselist = document.querySelectorAll(".shipping_box1");
+                console.log(baselist)
+                for(let i =0; i<baselist.length; i++) {
+                    if(baselist[i].childNodes[0].childNodes[0].childNodes[0].innerHTML === "기본 배송지"){
+                        let base_id = baselist[i].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value
+                        sessionStorage.setItem("base_id", base_id)
+                    }
+                }
+
+
+                $(".shipping_edit_button").click(function (e) {
+                    let ship_id = $(this).children("input").val()
+                    console.log(ship_id)
+
+                    sessionStorage.setItem("ship_id", ship_id)
+                    location.href = "/user/mypage_editShipping"
+                })
+
+                $(".shipping_delete_button").click(function (e) {
+                    let ship_id = $(this).children("input").val()
+                    console.log($(this).parents().siblings(".shipping_txt").children("span").text())
+
+                    if ($(this).parents().siblings(".shipping_txt").children("span").text() === "기본 배송지") {
+                        alert("기본 배송지는 삭제할 수 없습니다")
+                    }else {
+                        axios.delete('/api/membersAddresses/delete/' + ship_id, {}).then((response) => {
+                            alert("배송지 정보가 삭제되었습니다.");
+                            location.href = "/user/mypage_shipping";
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                    }
+                })
+            }).catch(function (err) {
+                console.log(err)
+            });
+        });
+    </script>
+    <!-- axios -->
+</head>
+<body>
+<div id="mypage-box">
+    <div class="container">
+        <div th:replace="/user/fragment/header::header"></div>
+        <input type="hidden" id="memIdx" name="memIdx" th:value="${idx}">
+        <div class="contents">
+            <div th:replace="/user/fragment/section::section"></div>
+        </div>
+        <div class="main">
+            <!-- main_leftaside 시작 -->
+            <div class="main_leftaside1">
+                <div th:replace="/user/fragment/sidebar1::sidebar1"></div>
+                <!-- main_leftaside 끝 -->
+            </div>
+            <div class="main_contents">
+                <div class="contents_box1">
+                    <h2 class="contents_name">배송지 관리</h2>
+                </div>
+
+                <div class="shipping_list">
+
+
+                </div>
+
+                <div class="shipping_button_box" onClick="location.href='/user/mypage_addShipping'">
+                    <a href="/user/mypage_addShipping">배송지 추가</a>
+                </div>
+            </div>
+
+            <!-- main 끝 -->
+        </div>
+        <div th:replace="/user/fragment/footer::footer"></div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{user/js/mypage.js/script.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+</html>
+

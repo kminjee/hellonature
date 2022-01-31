@@ -1,0 +1,89 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로패스 해지</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/mypage.css/mypage.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/user/css/layout.css}">
+    <style>
+        #mypage-box { overflow: hidden; height: 100%;}
+        .container { min-width: 1050px; margin: 0 auto; height: 100%; overflow-y: scroll;}
+        .list li:nth-child(4) { background: #e2e2e2 url("/user/images/mypage.img/hover_right.png") no-repeat 174px 52%; background-size: 6px 11px; font-weight: 700; color: #5dab99;}
+        .list li:nth-child(4) > a { color: #5dab99;}
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    function del(){
+        if(confirm("헬로패스 서비스를 해지하시겠습니까?")){
+            let id = $("#id").val();
+            axios.delete('/api/hellopass/delete' + id, {
+
+            }).then(function (response){
+                location.href='/mypage_orderlist'
+            }).catch(function (response){
+                console.log("오류발생! 서비스가 해지되지 않았습니다.");
+            })
+        }
+    }
+</script>
+<body>
+    <div id="mypage-box">
+        <div class="container">
+            <div th:replace="/user/fragment/header::header"></div>
+            <div class="contents">
+                <div th:replace="/user/fragment/section::section"></div>
+            </div>
+            <div class="main">
+                <!-- main_leftaside 시작 -->
+                <div class="main_leftaside3">
+                    <div th:replace="/user/fragment/sidebar3::sidebar3"></div>
+                <!-- main_leftaside 끝 -->
+                </div>
+                <!-- main_contents 시작 -->
+                <div class="main_contents">                    
+                    <div class="contents_box1">
+                        <div class="back_button">
+                            <a href="javascript:history.back();" alt="뒤로 돌아가기"></a>
+                        </div>
+                        <h2 class="contents_name">헬로패스 해지</h2>                        
+                    </div>
+                    <div class="cancel_hellopass_bigbox">
+                        <div class="cancel_hellopass_box1">
+                            <div class="cancel_hellopass_guide">
+                                <h3>헬로패스를 해지하시면 무제한 무료배송</h3>
+                                <h3>혜택을 더 이상 이용하실 수 없습니다.</h3>
+                            </div>
+                        </div>
+                        <div class="cancel_hellopass_box2">
+                            <h2>해지 전 꼭 확인해주세요!</h2>
+                            <p>ㆍ본 상품은 첫 결제일로부터 7일 이내, 헬로패스 혜택을 한 번도 이용하지 않은 경우에만 환불이 가능합니다.</p>
+                            <p>ㆍ첫 결제일로부터 7일이 지난 뒤에는 환불이 불가능하며, 해지 신청 후에도 남은 이용 기간 동안 헬로패스 혜택을 이용할 수</p>
+                            <p>있습니다.</p>
+                            <p>ㆍ헬로패스 해지는 마이페이지 > 헬로패스 메뉴에서 신청할 수 있으며, 고객센터 전화문의 1544-4339 또는 카카오톡 플러스</p>
+                            <p>친구 (ID 헬로네이처)를 통해서도 진행할 수 있습니다.</p>
+                        </div>
+                    </div>
+                    <button type="submit" id="cancel_hellopass" class="button_submit_no_margin" onclick="del()">해지신청</button>
+                <!-- main_contents 끝 -->        
+                </div>
+            <!-- main 끝 -->
+            </div>
+            <div th:replace="/user/fragment/footer::footer"></div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+    <script type="text/javascript" th:src="@{user/js/mypage.js/script2.js}"></script>
+</body>
+</html>
+

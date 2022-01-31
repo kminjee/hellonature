@@ -1,0 +1,232 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>라이프존 관리 | 상세목록 관리</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="/admin/js/Admin.cate.js"></script>
+</head>
+<body>
+<!--content_title 시작-->
+<div class="content_title"><p>라이프존 관리<span>상세목록 관리</span></p></div>
+<!--content_title 끝-->
+<!--LZone 시작-->
+<div class="LZone">
+    <!--LZ_c1 시작-->
+    <div class="LZ">
+        <div class="LZ_c1">
+            <div class="LZ_c1_box">
+                <div class="LZ_c1_title">카테고리</div>
+                <form class="LZ_c1_cateBox_1">
+                    <ul class="LZ_c1_cateul_1">
+                        <li class="cate" value="3">비건</li>
+                        <li class="cate" value="3">감탄</li>
+                        <li class="cate" value="3">캠핑</li>
+                        <li class="cate" value="3">베이비</li>
+                        <li class="cate" value="3">키즈</li>
+                    </ul>
+                </form>
+                <form class="LZ_c1_cateBox_1">
+                    <ul class="LZ_c1_cateul_2">
+                        <li class="cate" value="3">예시</li>
+                        <li class="cate" value="3">예시</li>
+                        <li class="cate" value="3">예시</li>
+                        <li class="cate" value="3">예시</li>
+                        <li class="cate" value="3">예시</li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+        <div class="LZ_button">
+            <input type="button" name="button" value="조회하기">
+        </div>
+    </div>
+    <!--LZ_c1 끝-->
+    <!--LZ_c2 시작-->
+    <div class="LZ_c2_title">상세 목록 관리</div>
+    <div class="LZ_search">
+        <form name="life_search">
+            <p class="product_title" id="No_c1_title"><label>상세목록 조회</label><span style="margin-left: 20px;"></span></p>
+            <!--table 시작-->
+            <table>
+                <tr>
+                    <th>상품명</th>
+                    <td>
+                        <input type="text" name="text" id="name" placeholder="상품명 입력">
+                    </td>
+                </tr>
+            </table>
+            <!--table 끝-->
+            <!--No_c1_btnBox 시작-->
+            <div class="bottom_btn" id="No_c1_btnBox">
+                <span><input type="reset" name="reset" value="초기화"></span>
+                <span><input type="button" name="submit" value="검색" id="schbtn"></span>
+            </div>
+            <!--No_c1_btnBox 끝-->
+        </form>
+        <form name="life_list">
+                <span>
+                    <input type="button" name="button" value="선택삭제" id="delbtn">
+                </span>
+            <!--table 시작-->
+            <table width="100%" class="list_table">
+                <tr class="thead">
+                    <th width="5%"><input type="checkbox" class="LifeCheck" id="LZ_check2" name="selectall" onclick="LZ_selectAll(this)"><label for="LZ_check2"></th>
+                    <th width="10%">번호</th>
+                    <th width="25%">제목</th>
+                    <th width="25%">내용</th>
+                    <th>분류</th>
+                </tr>
+            </table>
+            <!--table 끝-->
+            <!-- pageBox 시작-->
+            <div class="pageBox">
+                <ul>
+                    <li id="Maxprev"><a href="#"><<</a></li>
+                    <li><a href="#"><</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">></a></li>
+                    <li id="Maxnext"><a href="#">>></a></li>
+                </ul>
+            </div>
+            <!-- pageBox 끝-->
+        </form>
+    </div>
+    <div class="LZ_c2">
+        <div class='LZ_c2_addTitle'>
+            <p>상품추가<span> + 원하는 상품을 추가해주세요</span></p>
+        </div>
+        <form class='LZ_c2_addlist'>
+            <table border="1px" class='LZ_c2_scbox'>
+                <tr height="70">
+                    <th width="150">상품분류</th>
+                    <td>
+                        <select onchange="categoryChange(this)">
+                            <option value="대분류">대분류</option>
+                            <option value="과일">과일</option>
+                            <option value="채소">채소</option>
+                            <option value="쌀·잡곡·견과">쌀·잡곡·견과</option>
+                            <option value="정육·계란">정육·계란 </option>
+                            <option value="수산·건어물">수산·건어물</option>
+                            <option value="국·반찬·요리">국·반찬·요리</option>
+                            <option value="간편식·샐러드">간편식·샐러드</option>
+                            <option value="양념·오일·면">양념·오일·면</option>
+                            <option value="베이커리·유제품">베이커리·유제품</option>
+                            <option value="커피·음료·간식">커피·음료·간식</option>
+                            <option value="생활·선물세트">생활·선물세트</option>
+                        </select>
+                        <select id="LZ_sel">
+                            <option value="중분류">중분류</option>
+                        </select>
+                        <script>
+                            function categoryChange(e) {
+                                var LZ_sel_1 = ["시즌한정과일", "국산과일", "수입과일", "간편과일", "냉동·건과일"];
+                                var LZ_sel_2 = ["필수채소", "반찬채소", "뿌리채소", "쌈·샐러드", "간편채소", "버섯류"];
+                                var LZ_sel_3 = ["쌀", "잡곡", "견과"];
+                                var LZ_sel_4 = ["소고기", "돼지고기", "닭·오리고기", "양고기", "계란류", "양념육·가공육", "햄·소시지·베이컨", "본앤브래드"];
+                                var LZ_sel_5 = ["시즌한정수산·회", "생선류", "오징어·낙지·문어", "새우·게·랍스터", "전복·조개류", "김·미역·해조류", "멸치·건어물", "간편수산물"];
+                                var LZ_sel_6 = ["반찬", "국·찌개·탕", "김치·장아찌·젓갈", "두부·어묵·냉장식품", "만두·튀김·냉동식품"];
+                                var LZ_sel_7 = ["밀키트", "샐러드·도시락", "밥·면·즉석식품", "떡볶이·핫도그·냉동간식", "떡", "시리얼·바·선식", "죽·수프·퓨레"];
+                                var LZ_sel_8 = ["소스·드레싱·육수", "장·식초·액젓", "소금·향신료·설탕·꿀", "오잉·참기름·식용유", "파스타·면", "밀가루·가루·믹스", "통조림·병조림"];
+                                var LZ_sel_9 = ["식빵·빵류", "케이크·파이·디저트류", "치즈·버터·잼", "우유·두유·요거트"];
+                                var LZ_sel_10 = ["커피", "차", "주스", "음료·즙", "생수·탄산수", "아이스크림", "과자류", "캔디·젤리·초콜릿"];
+                                var LZ_sel_11 = ["주방용품", "생활·위생용품", "가전제품", "건강식품", "선물세트"];
+                                var target = document.getElementById("LZ_sel");
+
+                                if(e.value == "과일") var d1 = LZ_sel_1;
+                                else if(e.value == "채소") var d1 = LZ_sel_2;
+                                else if(e.value == "쌀·잡곡·견과") var d1 = LZ_sell_3;
+                                else if(e.value == "정육·계란") var d1 = LZ_sel_4;
+                                else if(e.value == "수산·건어물") var d1 = LZ_sel_5;
+                                else if(e.value == "국·반찬·요리") var d1 = LZ_sel_6;
+                                else if(e.value == "간편식·샐러드") var d1 = LZ_sel_7;
+                                else if(e.value == "양념·오일·면") var d1 = LZ_sel_8;
+                                else if(e.value == "베이커리·유제품") var d1 = LZ_sel_9;
+                                else if(e.value == "커피·음료·간식") var d1 = LZ_sel_10;
+                                else if(e.value == "생활·선물세트") var d1 = LZ_sel_11;
+
+
+                                target.options.length = 0;
+
+                                for (x in d1) {
+                                    var opt1 = document.createElement("option");
+                                    opt1.value = d1[x];
+                                    opt1.innerHTML = d1[x];
+                                    target.appendChild(opt1);
+                                }
+                            }
+                        </script>
+                    </td>
+                </tr>
+                <tr height="70">
+                    <th>판매상태</th>
+                    <td>
+                        <input type="checkbox" name="d_status2" value="all" id="LZ_check_1"><label for="LZ_check_1">전체</label>
+                        <label><input type="checkbox" name="d_status2" value="ing" id="LZ_check_2"><label for="LZ_check_2">정상판매</label>
+                            <label><input type="checkbox" name="d_status2" value="stop" id="LZ_check_3"><label for="LZ_check_3">판매중지</label>
+                                <label><input type="checkbox" name="d_status2" value="sold" id="LZ_check_4"><label for="LZ_check_4">품절</label>
+                    </td>
+                </tr>
+                <tr height="70">
+                    <th>정렬</th>
+                    <td>
+                        <input type="checkbox" id="LZ_check_5"><label for="LZ_check_5">최근등록순</label>
+                        <input type="checkbox" id="LZ_check_6"><label for="LZ_check_6">등록오랜순</label>
+                        <input type="checkbox" id="LZ_check_7"><label for="LZ_check_7">높은가격순</label>
+                        <input type="checkbox" id="LZ_check_8"><label for="LZ_check_8">낮은가격순</label>
+                    </td>
+                </tr>
+                <tr height="70">
+                    <th>상품명</th>
+                    <td>
+                        <input type="text" placeholder="상품명을 입력해주세요" id="LZ_c2_scName">
+                        <input type="submit" value="검색" id="LZ_c2_scbtn">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form>
+            <input type="hidden" id="LZlist_catevalue_1" value="null">
+            <input type="hidden" id="LZlist_catevalue_2" value="null">
+            <table width="90%" style="text-align: center;" class="p_list">
+                <tr>
+                    <th width="7%" height="40px"><input type="checkbox" id="LZ_check"><label for="LZ_check"></th>
+                    <th width="40%">상품 이미지</th>
+                    <th width="28%">상품명</th>
+                    <th width="25%">카테고리</th>
+                </tr>
+                <tr>
+                    <td height="80px"><input type="checkbox" id="LZ_check_10"><label for="LZ_check_10"></td>
+                    <td><img src="">예시</td>
+                    <td>예시</td>
+                    <td>예시</td>
+                </tr>
+            </table>
+            <!-- pageBox 시작-->
+            <div class="pageBox">
+                <ul>
+                    <li id="Maxprev"><a href="#"><<</a></li>
+                    <li><a href="#"><</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">></a></li>
+                    <li id="Maxnext"><a href="#">>></a></li>
+                </ul>
+            </div>
+            <!-- pageBox 끝-->
+            <div id="MC_c3_btnBox" class="bottom_btn">
+                <input type="submit" name="submit" value="등록하기">
+            </div>
+        </form>
+    </div>
+    <!--LZ_c2 끝-->
+</div>
+</body>
+</html>

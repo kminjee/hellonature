@@ -1,0 +1,773 @@
+<html xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헬로네이처 - 오늘이 맛있는 탐험</title>
+    <link rel="stylesheet" href="/user/css/index_style.css">
+    <link rel="stylesheet" th:href="@{/user/css/layout.css}">
+</head>
+
+<body>
+    <div id="container">
+
+        <!--header thymeleaf-->
+        <div th:replace="/user/fragment/header::header"></div>
+
+        <!-- main 시작 -->
+        <main>
+
+            <!-- 아이템 리스트 (헬로윈) -->
+            <section id="item_list_2">
+                <!-- 신상품 타이틀 -->
+                <div class="list_title_bg">
+                    <div class="list_title_mold">
+                        <div class="list_title"><span>헬로윈 홈파티</span></div>
+                    </div>
+                </div>
+                
+                <!-- 신상품 홍보, 아이템 2단 배열 리스트 -->
+                <div class="list_bg">
+                    <ul class="list_mold">
+                        <li class="new_item_wrap">
+                            <a class="new_img halloween_img_1"></a>
+                            <a class="new_banner">
+                                <p>시원하다 못해 으스스 오싹오싹 샹그리아</p>
+                                <p>샹그리아나 레드와인을 담은 유리볼 가장자리에 빨간잼을 발라주고,<br>젤리를 넣어 손바닥 얼음까지 띄워주면 오싹오싹 할로윈 샹그리아 완성!</p>
+                            </a>
+                        </li>
+                        <li class="item_wrap">
+                            <a href="/user/product?prodIdx=397" target="" class="item_img halloween_img_1_1"></a>
+                            <a href="/user/product?prodIdx=397" target="" class="item_name">[츄퍼마켓] 피치 샹그리아</a>
+                            <div class="item_price"><span class="price_comma">22,800</span>원</div>
+                            <div class="item_storage"><span>냉장</span></div>
+                            <div class="like_area">
+<!--                                <span class="item_star">4.2점</span>-->
+<!--                                <div class="rating" data-rate="4.2">-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                </div>-->
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                        </li>
+                        <li class="item_end_wrap">
+                            <a href="/user/product?prodIdx=404" target="" class="item_img halloween_img_1_2"></a>
+                            <a href="/user/product?prodIdx=404" target="" class="item_name">레몬즙(캡슐) 48ml</a>
+                            <div class="item_price"><span class="price_comma">1,900</span>원</div>
+                            <div class="item_storage"><span>냉장</span></div>
+                            <div class="like_area">
+<!--                                <span class="item_star">4.2점</span>-->
+<!--                                <div class="rating" data-rate="4.2">-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                </div>-->
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 특가/혜택 리스트 -->
+            <section id="event_list_1">
+                <!-- 이벤트 3단 배열 타이틀 -->
+                <div class="list_title_bg">
+                    <div class="list_title_mold">
+                        <div class="list_title"><span>특가/혜택</span></div>
+                    </div>
+                </div>
+                
+                <!-- 이벤트 3단 배열 아이템 -->
+                <div class="list_event_bg">
+                    <div class="list_event_mold">
+                        <div class="event1_wrap">
+                            <a href="/user/goods_list?rootIdx=4&cateIdx=62&page=0" target="" class="event1_img"></a>
+                            <p>BORN & BRED<br>BETTER BEEF</p>
+                            <p>최고의 맛을 이끄는 최적의 숙성 시간<br>자타공인 최상급 한우를 즐길 수 있는 곳</p>
+                            <a href="/user/recommend/event" target="" class="event_link">기획전</a>
+                        </div>
+                        <div class="event2_wrap">
+                            <a href="/user/recommend/store" target="" class="event2_img"></a>
+                            <p>갑분 안면도<br>별미 여행</p>
+                            <p>신선한 밥상! 맛있는 한끼!<br>풍년호 털보선장</p>
+                            <a href="/user/recommend/store" target="" class="event_link">팝업스토어</a>
+                        </div>
+                        <div class="event3_wrap">
+                            <a href="/user/goods_list?rootIdx=5&cateIdx=64&page=0" target="" class="event3_img"></a>
+                            <p>해동 없이 싱싱할 때<br>바로 조리하세요</p>
+                            <p>'냉장' 삼치, 갈치, 고등어, 오징어<br>깔끔하게 손질까지 미쳤어요</p>
+                            <a href="/user/recommend/event" target="" class="event_link">기획전</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 아이템 리스트 1 (MD추천) -->
+            <section id="item_list_1">
+                <!-- 아이템 4단 배열 타이틀 -->
+                <div class="list_title_bg">
+                    <div class="list_title_mold">
+                        <div class="list_title"><span>MD 추천</span></div>
+                    </div>
+                </div>
+                
+                <!-- 아이템 4단 배열 리스트 -->
+                <div class="list_bg slide_list">
+                    <div class="list_slide_wrapper">
+                        <ul class="list_mold">
+                            <li class="item_wrap">
+                            <a href="/user/product?prodIdx=288" target="" class="item_img item_img_md2_1"></a>
+                            <a href="/user/product?prodIdx=288" target="" class="item_name">뽀모도로 스파게티</a>
+                            <div class="item_price"><span class="price_comma">3,500</span>원</div>
+                            <div class="item_storage"><span>냉동</span></div>
+                            <div class="like_area">
+<!--                                <span class="item_star">4.2점</span>-->
+<!--                                <div class="rating" data-rate="4.2">-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                </div>-->
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=298" target="" class="item_img item_img_md2_2"></a>
+                                <a href="/user/product?prodIdx=298" target="" class="item_name">[고메] 그릴 피자 3종</a>
+                                <div class="item_price"><span class="price_comma">6,900</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=297" target="" class="item_img item_img_md2_3"></a>
+                                <a href="/user/product?prodIdx=297" target="" class="item_name">[고메] 베이커리생지 5종</a>
+                                <div class="item_price"><span class="price_comma">5,900</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=335" target="" class="item_img item_img_md2_4"></a>
+                                <a href="/user/product?prodIdx=335" target="" class="item_name">마라 새우감바스 380g</a>
+                                <div class="item_price"><span class="price_comma">13,900</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=337" target="" class="item_img item_img_md2_5"></a>
+                                <a href="/user/product?prodIdx=337" target="" class="item_name">[편스토랑] 알로하 쿵팟퐁커리</a>
+                                <div class="item_price"><span class="price_comma">12,720</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=334" target="" class="item_img item_img_md2_6"></a>
+                                <a href="/user/product?prodIdx=334" target="" class="item_name">마라탕면 860g</a>
+                                <div class="item_price"><span class="price_comma">8,900</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=155" target="" class="item_img item_img_md2_7"></a>
+                                <a href="/user/product?prodIdx=155" target="" class="item_name">부어스첸 오리지널 255g</a>
+                                <div class="item_price"><span class="price_comma">3,500</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=265" target="" class="item_img item_img_md2_8"></a>
+                                <a href="/user/product?prodIdx=265" target="" class="item_name">포테이토 치즈 핫도그 400g</a>
+                                <div class="item_price"><span class="price_comma">8,480</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 좌우 슬라이드 버튼 -->
+                    <div class="item_slide_btn_bg">
+                        <div class="item_slide_btn">
+                            <a class="btn_prev">prev</a>
+                            <a class="btn_next">next</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 아이템 리스트 5 (스테이크의모든것) -->
+            <section id="item_list_5">
+                <!-- 아이템 4단 배열 타이틀 -->
+                <div class="list_title_bg">
+                    <div class="list_title_mold">
+                        <div class="list_title"><span>스테이크의 모든 것</span></div>
+                    </div>
+                </div>
+                
+                <!-- 아이템 4단 배열 리스트 -->
+                <div class="list_bg slide_list">
+                    <div class="list_slide_wrapper">
+                        <ul class="list_mold">
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=150" target="" class="item_img item_img_stake2_1"></a>
+                                <a href="/user/product?prodIdx=150" target="" class="item_name">1++등급 한우 갈비살 200g</a>
+                                <div class="item_price"><span class="price_comma">37,000</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=149" target="" class="item_img item_img_stake2_2"></a>
+                                <a href="/user/product?prodIdx=149" target="" class="item_name">1++등급 한우 업진살 200g</a>
+                                <div class="item_price"><span class="price_comma">27,000</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=148" target="" class="item_img item_img_stake2_3"></a>
+                                <a href="/user/product?prodIdx=148" target="" class="item_name">1++등급 한우 삼각살 200g</a>
+                                <div class="item_price"><span class="price_comma">19,000</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=147" target="" class="item_img item_img_stake2_4"></a>
+                                <a href="/user/product?prodIdx=147" target="" class="item_name">1++등급 한우 등심 로스 200g</a>
+                                <div class="item_price"><span class="price_comma">45,000</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=146" target="" class="item_img item_img_stake2_5"></a>
+                                <a href="/user/product?prodIdx=146" target="" class="item_name">1++등급 한우 우둔 큐브 200g</a>
+                                <div class="item_price"><span class="price_comma">15,000</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=145" target="" class="item_img item_img_stake2_6"></a>
+                                <a href="/user/product?prodIdx=145" target="" class="item_name">1++등급 한우 홍두깨 육전용 300g</a>
+                                <div class="item_price"><span class="price_comma">26,500</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=144" target="" class="item_img item_img_stake2_7"></a>
+                                <a href="/user/product?prodIdx=144" target="" class="item_name">1++등급 한우 등심 슬라이스</a>
+                                <div class="item_price"><span class="price_comma">31,500</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=141" target="" class="item_img item_img_stake2_8"></a>
+                                <a href="/user/product?prodIdx=141" target="" class="item_name">1++등급 한우 보섭살 200g</a>
+                                <div class="item_price"><span class="price_comma">19,000</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점☆</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 좌우 슬라이드 버튼 -->
+                    <div class="item_slide_btn_bg">
+                        <div class="item_slide_btn">
+                            <a class="btn_prev">prev</a>
+                            <a class="btn_next">next</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 아이템 리스트 5 (헬로윈 홈파티-2) -->
+            <section id="item_list_7">
+                <!-- 신상품 타이틀 -->
+                <div class="list_title_bg">
+                    <div class="list_title_mold">
+                        <div class="list_title"><span>헬로윈 홈파티</span></div>
+                    </div>
+                </div>
+                
+                <!-- 신상품 홍보, 아이템 2단 배열 리스트 -->
+                <div class="list_bg">
+                    <ul class="list_mold">
+                        <li class="new_item_wrap">
+                            <a class="new_img halloween_img_2"></a>
+                            <a class="new_banner">
+                                <p>오싹 살벌 무시무시한 눈알 파스타</p>
+                                <p>새빨간 토마토 파스타에 눈알이 데-굴 데-굴!<br>크림치즈 체리 페퍼 위에 까만 올리브를 올려 충혈된 눈을 만들어줘요.</p>
+                            </a>
+                        </li>
+                        <li class="item_wrap">
+                            <a href="/user/product?prodIdx=396" target="" class="item_img halloween_img_2_1"></a>
+                            <a href="/user/product?prodIdx=396" target="" class="item_name">통밀 파스타 4종</a>
+                            <div class="item_price"><span class="price_comma">4,500</span>원</div>
+                            <div class="item_storage"><span>상온</span></div>
+                            <div class="like_area">
+<!--                                <span class="item_star">4.2점</span>-->
+<!--                                <div class="rating" data-rate="4.2">-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                </div>-->
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                        </li>
+                        <li class="item_end_wrap">
+                            <a href="/user/product?prodIdx=407" target="" class="item_img halloween_img_2_2"></a>
+                            <a href="/user/product?prodIdx=407" target="" class="item_name">[폰타나] 파스타 소스</a>
+                            <div class="item_price"><span class="price_comma">3,500</span>원</div>
+                            <div class="item_storage"><span>냉장</span></div>
+                            <div class="like_area">
+<!--                                <span class="item_star">4.2점</span>-->
+<!--                                <div class="rating" data-rate="4.2">-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                </div>-->
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 아이템 리스트 2 (헬로윈 홈파티-3) -->
+            <section id="item_list_8">
+                <!-- 신상품 타이틀 -->
+                <div class="list_title_bg">
+                    <div class="list_title_mold">
+                        <div class="list_title"><span>헬로윈 홈파티</span></div>
+                    </div>
+                </div>
+                
+                <!-- 신상품 홍보, 아이템 2단 배열 리스트 -->
+                <div class="list_bg">
+                    <ul class="list_mold">
+                        <li class="new_item_wrap">
+                            <a class="new_img halloween_img_3"></a>
+                            <a class="new_banner">
+                                <p>빙그르르 붕대를 감은 미라 핫도그</p>
+                                <p>할로윈엔 밀가루 붕대를 감은 이색 핫도그 어때요?<br>생지를 가늘고 길게 잘라 소시지에 돌돌 말아주고 치즈를 빨대로 찍어<br>모양을 낸 후 검은 깨를 붙여 눈을 만들어 주면 완성!</p>
+                            </a>
+                        </li>
+                        <li class="item_wrap">
+                            <div class="item_info">
+                                <span class="item_sale">20%</span>
+                            </div>
+                            <a href="/user/product?prodIdx=408" target="" class="item_img halloween_img_3_1"></a>
+                            <a href="/user/product?prodIdx=408" target="" class="item_name">[브리도] 미니 크로와상 생지</a>
+                            <div class="item_price"><span class="price_comma">7,600</span>원</div>
+                            <del><span class="price_comma">9,500</span>원</del>
+                            <div class="item_storage"><span>냉동</span></div>
+                            <div class="like_area">
+<!--                                <span class="item_star">4.2점</span>-->
+<!--                                <div class="rating" data-rate="4.2">-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                </div>-->
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                        </li>
+                        <li class="item_end_wrap">
+                            <a href="/user/product?prodIdx=409" target="" class="item_img halloween_img_3_1"></a>
+                            <a href="/user/product?prodIdx=409" target="" class="item_name">[존쿡델리미트] 비프핫도그</a>
+                            <div class="item_price"><span class="price_comma">6,780</span>원</div>
+                            <div class="item_storage"><span>냉장</span></div>
+                            <div class="like_area">
+<!--                                <span class="item_star">4.2점</span>-->
+<!--                                <div class="rating" data-rate="4.2">-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                </div>-->
+                                <a href="#">
+                                    <button class="price_cart">카트에 담기</button></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 아이템 리스트 1 --> 
+            <section id="item_list_6">
+                <!-- 아이템 4단 배열 타이틀 -->
+                <div class="list_title_bg">
+                    <div class="list_title_mold">
+                        <div class="list_title"><span>집콕 간식거리 해결</span></div>
+                    </div>
+                </div>
+                
+                <!-- 아이템 4단 배열 리스트 -->
+                <div class="list_bg slide_list">
+                    <div class="list_slide_wrapper">
+                        <ul class="list_mold">
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=353" target="" class="item_img item_img_snack_1"></a>
+                                <a href="/user/product?prodIdx=353" target="" class="item_name">
+                                    [허쉬] 오리지널 핫초코 원컵</a>
+                                <div class="item_price"><span class="price_comma">1,200</span>원</div>
+                                <div class="item_storage"><span>상온</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button>
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=338" target="" class="item_img item_img_snack_2"></a>
+                                <a href="/user/product?prodIdx=338" target="" class="item_name">[그림의빵] 플레인 모닝빵</a>
+                                <div class="item_price"><span class="price_comma">3,600</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=343" target="" class="item_img item_img_snack_3"></a>
+                                <a href="/user/product?prodIdx=343" target="" class="item_name">[그림의빵] 초코 크림빵</a>
+                                <div class="item_price"><span class="price_comma">4,800</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=300" target="" class="item_img item_img_snack_4"></a>
+                                <a href="/user/product?prodIdx=300" target="" class="item_name">[우주인피자] 허니 고르곤졸라 피자</a>
+                                <div class="item_price"><span class="price_comma">11,900</span>원</div>
+                                <div class="item_storage"><span>냉동</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=299" target="" class="item_img item_img_snack_5"></a>
+                                <a href="/user/product?prodIdx=299" target="" class="item_name">[풀무원] 국물떡볶이 2인 423.5g</a>
+                                <div class="item_price"><span class="price_comma">4,700</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=289" target="" class="item_img item_img_snack_6"></a>
+                                <a href="/user/product?prodIdx=289" target="" class="item_name">[HEYROO] 제주 마늘라면</a>
+                                <div class="item_price"><span class="price_comma">1,500</span>원</div>
+                                <div class="item_storage"><span>상온</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=362" target="" class="item_img item_img_snack_7"></a>
+                                <a href="/user/product?prodIdx=362" target="" class="item_name">[풀무원] 아임리얼 스트로베리</a>
+                                <div class="item_price"><span class="price_comma">2,900</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                            <li class="item_wrap">
+                                <a href="/user/product?prodIdx=358" target="" class="item_img item_img_snack_8"></a>
+                                <a href="/user/product?prodIdx=358" target="" class="item_name">[풀무원] 아임리얼 토마토</a>
+                                <div class="item_price"><span class="price_comma">2,900</span>원</div>
+                                <div class="item_storage"><span>냉장</span></div>
+                                <div class="like_area">
+<!--                                    <span class="item_star">4.2점</span>-->
+<!--                                    <div class="rating" data-rate="4.2">-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                        <div class="star-wrap"><div class="star"><i class="fas fa-star"></i></div></div>-->
+<!--                                    </div>-->
+                                    <a href="#">
+                                        <button class="price_cart">카트에 담기</button></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 좌우 슬라이드 버튼 -->
+                    <div class="item_slide_btn_bg">
+                        <div class="item_slide_btn">
+                            <a class="btn_prev">prev</a>
+                            <a class="btn_next">next</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- 마지막배너 시작 -->
+            <div class="main_mid_bnr_wrap">
+                <label>
+                    <a href="#" target="" class="main_second_bnr"><img src="/user/images/banner/main_hellodeli.jpg" alt="메인 중간배너3"></a>
+                </label>
+            </div>
+            <!-- 마지막배너 시작 -->
+
+
+        </main>
+        <!-- main 끝 -->
+
+    </div>
+
+    <!--footer thymeleaf-->
+    <!--    <div th:replace="/user/fragment/footer::footer"></div>-->
+    <div th:replace="/user/fragment/footer::footer"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+
+    <script type="text/javascript" th:src="@{/user/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/user/js/index_q.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,455 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 | FAQ 관리</title>
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <script src="/admin/js/checkbox.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    $(function () {
+        let page = $('.page').val();
+
+        axios.get("/api/faq/list?startPage=" + page, {}).then(function (response) {
+            let tb = $('<tbody class="tbody">')
+            console.log(response.data.data);
+            for (let i in response.data.data) {
+                let $id = response.data.data[i].idx;
+                let $title = response.data.data[i].title;
+                let $type = response.data.data[i].type;
+                let $regdate = response.data.data[i].regdate;
+                let $content = response.data.data[i].content;
+                $regdate = $regdate.toString().substring(0, 10);
+                $content.toString().substring(0, 15);
+                $content = $content + "..."
+                console.log($id)
+                console.log($regdate)
+                console.log($title)
+                console.log($type)
+                console.log($content)
+                let k = parseInt(i) + 1;
+
+                switch ($type) {
+                    case 1:
+                        $type = "자주하는 질문"
+                        break;
+                    case 2:
+                        $type = "회원서비스/이용"
+                        break;
+                    case 3:
+                        $type = "쿠폰/적립금"
+                        break;
+                    case 4:
+                        $type = "취소/반품/환불"
+                        break;
+                    case 5:
+                        $type = "주문/결제"
+                        break;
+                    case 6:
+                        $type = "배송"
+                        break;
+                    case 7:
+                        $type = "더그린배송"
+                        break;
+                    case 8:
+                        $type = "T건강습관앱"
+                        break;
+                }
+                console.log($type);
+
+                let row = $('<tr>').append(
+                    '<td><input type="checkbox" id="FAQ_check_' + k + '"name="faq" onclick="FAQ_checkSelectAll()" value="' + $id + '"><label for="FAQ_check_' + k + '"></label></td>' +
+                    '<td><p>' + $title + '</p><p></p><p>' + $content + '</p></td>' +
+                    '<td><p>' + $regdate + '</p></td>' +
+                    '<td>' + $type + '</td>' +
+                    '<td><p><input type="button" value="수정" class="edit"><input type="hidden" value="' + $id + '"></p></td></tr>'
+                )
+                console.log($('input:checkbox[name="faq"]:checked').val())
+                tb.append(row)
+            }
+            $('.thead').after(tb)
+
+            $(".edit").click(function (e) {
+                $("#ajax_hidden").val($(this).next().val());
+                let id = $("#ajax_hidden").val();
+
+                sessionStorage.setItem("faqIdx", id);
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/FAQ_edit?faqIdx=' + id,
+                    datatype: 'html/text',
+                    success: function (result) {
+                        console.log(result)
+                        $("#content").html(result).trigger("create");
+                    }
+                })
+            })
+            // $("#Maxprev").siblings(".page_num").remove();
+            for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                let pages = $('<li class="page_num" value="' + (i - 1) + '">').append(
+                    i + '</li>'
+                )
+                $('#prev').after(pages);
+            }
+            $('.page_num').click(function (e) {
+                $('.tbody').empty();
+
+                $('.page').val($(this).val())
+                let page = $('.page').val()
+
+                axios.get("/api/faq/list?startPage=" + page, {}).then(function (response) {
+                    let tb = $('<tbody class="tbody">')
+                    for (let i in response.data.data) {
+                        let $id = response.data.data[i].idx;
+                        let $title = response.data.data[i].title;
+                        let $type = response.data.data[i].type;
+                        let $regdate = response.data.data[i].regdate;
+                        let $content = response.data.data[i].content;
+                        $regdate = $regdate.toString().substring(0, 10);
+                        $content.toString().substring(0, 15);
+                        $content = $content + "..."
+                        console.log($regdate)
+                        let k = parseInt(i) + 1;
+
+                        switch ($type) {
+                            case 1:
+                                $type = "자주하는 질문"
+                                break;
+                            case 2:
+                                $type = "회원서비스/이용"
+                                break;
+                            case 3:
+                                $type = "쿠폰/적립금"
+                                break;
+                            case 4:
+                                $type = "취소/반품/환불"
+                                break;
+                            case 5:
+                                $type = "주문/결제"
+                                break;
+                            case 6:
+                                $type = "배송"
+                                break;
+                            case 7:
+                                $type = "더그린배송"
+                                break;
+                            case 8:
+                                $type = "T건강습관앱"
+                                break;
+                        }
+
+                        let row = $('<tr>').append(
+                            '<td><input type="checkbox" id="FAQ_check_' + k + '"name="faq" onclick="FAQ_checkSelectAll()" value="' + $id + '"><label for="FAQ_check_' + k + '"></label></td>' +
+                            '<td><p>' + $title + '</p><p></p><p>' + $content + '</p></td>' +
+                            '<td><p>' + $regdate + '</p></td>' +
+                            '<td>' + $type + '</td>' +
+                            '<td><p><input type="button" value="수정" class="edit"><input type="hidden" value="' + $id + '"></p></td></tr>'
+                        )
+                        tb.append(row)
+
+                        $('.thead').after(tb)
+
+                        $(".edit").click(function (e) {
+                            $("#ajax_hidden").val($(this).next().val());
+                            let id = $("#ajax_hidden").val();
+
+                            sessionStorage.setItem("faqIdx", id);
+                            $.ajax({
+                                type: 'GET',
+                                url: '/admin/FAQ_edit?faqIdx=' + id,
+                                datatype: 'html/text',
+                                success: function (result) {
+                                    console.log(result)
+                                    $("#content").html(result).trigger("create");
+                                }
+                            })
+                        })
+                    }
+
+                })
+            }).catch(function (err) {
+                console.log(err)
+            })
+        })
+    })
+
+    function search(){
+        $('.tbody').empty();
+        let page = $('.page').val();
+        let type = $('#FAQ_c1_sel').val();
+        let title = $('#FAQ_c1_scName').val();
+        let url = '/api/faq/list?startPage=' + page + '&type=' + type;
+
+        if(type == ""){
+            url = '/api/faq/list?startPage=' + page;
+        }else if(type != ""){
+            url = url;
+        }
+        if(title == ""){
+            url = url;
+        }else if(title != ""){
+            url = url + '&title=' + title;
+        }
+
+        axios.get(url, {
+
+        }).then(function(response){
+            let tb = $('<tbody class="tbody">')
+            console.log(response.data.data);
+            for (let i in response.data.data) {
+                let $id = response.data.data[i].idx;
+                let $title = response.data.data[i].title;
+                let $type = response.data.data[i].type;
+                let $regdate = response.data.data[i].regdate;
+                let $content = response.data.data[i].content;
+                $regdate = $regdate.toString().substring(0, 10);
+                $content.toString().substring(0, 15);
+                $content = $content + "..."
+                console.log($id)
+                console.log($regdate)
+                console.log($title)
+                console.log($type)
+                console.log($content)
+                let k = parseInt(i) + 1;
+
+                switch ($type) {
+                    case 1:
+                        $type = "자주하는 질문"
+                        break;
+                    case 2:
+                        $type = "회원서비스/이용"
+                        break;
+                    case 3:
+                        $type = "쿠폰/적립금"
+                        break;
+                    case 4:
+                        $type = "취소/반품/환불"
+                        break;
+                    case 5:
+                        $type = "주문/결제"
+                        break;
+                    case 6:
+                        $type = "배송"
+                        break;
+                    case 7:
+                        $type = "더그린배송"
+                        break;
+                    case 8:
+                        $type = "T건강습관앱"
+                        break;
+                }
+                console.log($type);
+
+                let row = $('<tr>').append(
+                    '<td><input type="checkbox" id="FAQ_check_' + k + '"name="faq" onclick="FAQ_checkSelectAll()" value="' + $id + '"><label for="FAQ_check_' + k + '"></label></td>' +
+                    '<td><p>' + $title + '</p><p></p><p>' + $content + '</p></td>' +
+                    '<td><p>' + $regdate + '</p></td>' +
+                    '<td>' + $type + '</td>' +
+                    '<td><p><input type="button" value="수정" class="edit"><input type="hidden" value="' + $id + '"></p></td></tr>'
+                )
+                tb.append(row)
+            }
+            $('.thead').after(tb)
+
+            $(".edit").click(function (e) {
+                $("#ajax_hidden").val($(this).next().val());
+                let id = $("#ajax_hidden").val();
+
+                sessionStorage.setItem("faqIdx", id);
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/FAQ_edit?faqIdx=' + id,
+                    datatype: 'html/text',
+                    success: function (result) {
+                        console.log(result)
+                        $("#content").html(result).trigger("create");
+                    }
+                })
+            })
+            $("#Maxprev").siblings(".page_num").remove();
+            for (let i = response.data.pagination.totalPages; i > 0; i--) {
+                let pages = $('<li class="page_num" value="' + (i - 1) + '">').append(
+                    i + '</li>'
+                )
+                $('#prev').after(pages);
+            }
+            $('.page_num').click(function (e) {
+                $('.tbody').empty();
+
+                $('.page').val($(this).val())
+                let page = $('.page').val()
+
+                axios.get("/api/faq/list?startPage=" + page, {}).then(function (response) {
+                    let tb = $('<tbody class="tbody">')
+                    for (let i in response.data.data) {
+                        let $id = response.data.data[i].idx;
+                        let $title = response.data.data[i].title;
+                        let $type = response.data.data[i].type;
+                        let $regdate = response.data.data[i].regdate;
+                        let $content = response.data.data[i].content;
+                        $content.toString().substring(0, 15);
+                        $content = $content + "..."
+                        $regdate = $regdate.toString().substring(0, 10);
+                        console.log($regdate)
+                        let k = parseInt(i) + 1;
+
+                        switch ($type) {
+                            case 1:
+                                $type = "자주하는 질문"
+                                break;
+                            case 2:
+                                $type = "회원서비스/이용"
+                                break;
+                            case 3:
+                                $type = "쿠폰/적립금"
+                                break;
+                            case 4:
+                                $type = "취소/반품/환불"
+                                break;
+                            case 5:
+                                $type = "주문/결제"
+                                break;
+                            case 6:
+                                $type = "배송"
+                                break;
+                            case 7:
+                                $type = "더그린배송"
+                                break;
+                            case 8:
+                                $type = "T건강습관앱"
+                                break;
+                        }
+
+                        let row = $('<tr>').append(
+                            '<td><input type="checkbox" id="FAQ_check_' + k + '"name="faq" onclick="FAQ_checkSelectAll()" value="' + $id + '"><label for="FAQ_check_' + k + '"></label></td>' +
+                            '<td><p>' + $title + '</p><p></p><p>' + $content + '</p></td>' +
+                            '<td><p>' + $regdate + '</p></td>' +
+                            '<td>' + $type + '</td>' +
+                            '<td><p><input type="button" value="수정" class="edit"><input type="hidden" value="' + $id + '"></p></td></tr>'
+                        )
+                        tb.append(row)
+
+                        $('.thead').after(tb)
+
+                        $(".edit").click(function (e) {
+                            $("#ajax_hidden").val($(this).next().val());
+                            let id = $("#ajax_hidden").val();
+
+                            sessionStorage.setItem("faqIdx", id);
+                            $.ajax({
+                                type: 'GET',
+                                url: '/admin/FAQ_edit?faqIdx=' + id,
+                                datatype: 'html/text',
+                                success: function (result) {
+                                    console.log(result)
+                                    $("#content").html(result).trigger("create");
+                                }
+                            })
+                        })
+                    }
+
+                })
+            }).catch(function(err){
+                console.log(err);
+                alert('불러오기 실패')
+            })
+
+        })
+    }
+
+    $(function () {
+        //선택삭제
+        $('#delbtn').click(function (){
+            confirm("정말 삭제하시겠습니까?")
+            let id = [];
+            ($("input:checkbox[name='faq']:checked").each(function (e){
+                id.push($(this).val())
+            }));
+            id = String(id)
+            console.log(id)
+            if(confirm){
+                axios.delete("/api/faq/deleteList/" + id,  {
+                }).then(function (){
+                    alert("faq가 삭제되었습니다")
+                    location.reload();
+                })
+            }
+        }).catch(function (err){
+            console.log(err)
+        })
+    })
+
+</script>
+<body>
+    <!--cotent_title 시작-->
+    <div class="content_title"><p>고객센터<span>FAQ 관리</span></p></div>
+    <!--cotent_title 끝-->
+    <!--FAQ 시작-->
+    <div class="FAQ">
+        <!--FAQ_c1 시작-->
+        <div class="FAQ_c1">
+            <p id="PQlist_c1_title" class="product_title_s"><label>FAQ 조회</label><span style="margin-left: 20px;"><input type="button" name="button" value="FAQ 등록하기" onclick="FAQ_location_1()"></span></p>
+            <form class="FAQ_c1_searchBox">
+                <select id="FAQ_c1_sel">
+                    <option value="">선택</option>
+                    <option value="1">자주하는 질문</option>
+                    <option value="2">회원서비스/이용</option>
+                    <option value="3">쿠폰/적립금</option>
+                    <option value="4">취소/반품/환불</option>
+                    <option value="5">주문/결제</option>
+                    <option value="6">배송</option>
+                    <option value="7">더그린배송</option>
+                    <option value="8">T건강습관앱</option>
+                </select>
+                <input type="text" placeholder=" 제목을 입력하세요" id="FAQ_c1_scName">
+                <input type="button" value="검색" id="FAQ_c1_scBtn" onclick="search()">
+            </form>
+        </div>
+        <!--FAQ_c1 끝-->
+        <!--FAQ_c2 시작-->
+        <div class="FAQ_c2">
+            <div id="FAQ_c2_title" class="green_title_s">
+                <p>FAQ 목록</p>
+            </div>
+            <!--FAQ_c2_fqlist 시작-->
+                <form name="FAQ_list">
+                    <input type="button" value="선택삭제" class="FAQ_c2_delBtn" name="delete" id="delbtn">
+                    <table class="FAQ_c2_fqlist" border="1px" width="100%">
+                        <thead class="thead">
+                            <tr>
+                                <th height="40px" width="5%"><input type="checkbox" value="cou_list" id="FAQ_check" name="selectall" onclick="FAQ_selectAll(this)"><label for="FAQ_check"></label></th>
+                                <th width="33%">FAQ정보</th>
+                                <th width="20%">등록일자</th>
+                                <th width="17%">문의유형</th>
+                                <th width="15%">수정</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <!--FAQ_c2_fqlist 끝-->
+                <!--pageBox 시작-->                
+                <div class="pageBox">
+                    <ul>
+                        <li id="Maxprev"><a href="#"><<</a></li>
+                        <li id="prev"><</li>
+                        <li><a href="#">></a></li>
+                        <li id="Maxnext"><a href="#">>></a></li>
+                    </ul>
+                    <input type="hidden" value="0" class="page">
+                    <input type="hidden" id="ajax_hidden">
+                </div>
+                <!--pageBox 끝-->  
+            </form>
+        </div>
+        <!--FAQ_c2 끝-->
+    </div> 
+    <!--FAQ 끝-->
+</body>
+</html>

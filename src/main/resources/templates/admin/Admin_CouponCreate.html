@@ -1,0 +1,103 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 | 쿠폰관리</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+    <script src="/static/admin/js/popup.js"></script>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+</head>
+<script>
+    $(function () {
+        $("#coupon_create_btn").click(function () {
+            let title = $("#title").val()
+            let count = $("#count").val();
+            let discount = $("#discount").val()
+            let minPrice = $("#minPrice").val();
+            let dateStart = $("#date_start").val();
+            let dateEnd = $("#date_end").val();
+
+
+            axios.post("/api/memberCouponType/create", {
+                data: {
+                    title: title,
+                    count: count,
+                    discount: discount,
+                    minPrice: minPrice,
+                    dateStart: dateStart,
+                    dateEnd: dateEnd,
+                }
+            }).then(function () {
+                alert("쿠폰 등록에 성공하셨습니다.")
+                $.ajax({
+                    type:"GET",
+                    url : "/admin/CouponList",
+                    datatype : "html/text",
+                    success: function(result){
+                        $("#content").html(result).trigger("create");
+                    }
+                });
+            }).catch(function (err) {
+                console.log(err)
+            })
+        })
+    })
+</script>
+<body>
+<!--content_title 시작-->
+<div class="content_title">
+    <p>고객센터 <span>쿠폰관리</span></p>
+</div>
+<!--content_title 끝-->
+<!--Cou_create 시작-->
+<div class="Cou_create">
+    <!--form 시작-->
+    <form name="coupon_create">
+        <p id="CC_c1_title" class="product_title"><label>쿠폰 등록</label></p>
+        <table>
+            <tr>
+                <th>쿠폰명</th>
+                <td><input type="text" name="create_text" placeholder="쿠폰명을 입력하세요" id="title"></td>
+            </tr>
+            <tr>
+                <th>발급건수</th>
+                <td><input type="text" name="create_text" placeholder="쿠폰명을 입력하세요" id="count"></td>
+            </tr>
+            <tr>
+                <th>할인 설정</th>
+                <td>
+                    <input type="text" name="price" placeholder="할인율 입력 (100초과 시 할인금액)" id="discount">
+                </td>
+            </tr>
+            <tr>
+                <th>최소구매가</th>
+                <td>
+                    <input type="text" name="price" placeholder="최소 구매가격" id="minPrice">
+                </td>
+            </tr>
+            <tr>
+                <th>유효기간</th>
+                <td>
+                    <input type="date" name="date" value="기간필터" id="date_start"> - <input type="date" name="date"
+                                                                                          value="기간필터" id="date_end">
+                </td>
+            </tr>
+        </table>
+        <!--CC_c1_btnBox 시작-->
+        <div id="CC_c1_btnBox" class="bottom_btn">
+            <span><input type="reset" name="reset" value="초기화"></span>
+            <span><input type="button" name="submit" value="등록" id="coupon_create_btn"></span>
+        </div>
+        <!--CC_c1_btnBox 끝-->
+    </form>
+    <!--form 끝-->
+</div>
+<!--Cou_create 끝-->
+</body>
+</html>

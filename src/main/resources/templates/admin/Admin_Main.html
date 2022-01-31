@@ -1,0 +1,95 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="/admin/js/Admin_main.js"></script>
+</head>
+<body>
+    <!--content_title 시작-->
+    <div class="content_title"><p>공지사항</p></div>            
+    <!--content_title 끝-->
+    <!--AMain 시작-->
+    <div class="AMain">
+        <!--Am_c1 시작-->
+        <div class="Am_c1">
+            <div class="Am_c1_box">
+                <p>상품</p>
+                <ul>
+                    <li>판매중<span>예시</span></li>
+                    <li>품절<span>예시</span></li>
+                    <li>판매중지<span>예시</span></li>
+                </ul>
+            </div>
+            <div class="Am_c1_box">
+                <p>주문/배송</p>
+                <ul>
+                    <li>신규 주문<span>예시</span></li>
+                    <li>상품 준비중<span>예시</span></li>
+                    <li>교환 요청<span>예시</span></li>
+                </ul>
+            </div>
+            <div class="Am_c1_box">
+                <p>클레임</p>
+                <ul>
+                    <li>취소 요청<span>예시</span></li>
+                    <li>반품 요청<span>예시</span></li>
+                    <li>교환 요청<span>예시</span></li>
+                </ul>
+            </div>
+            <div class="Am_c1_box">
+                <p>처리지연</p>
+                <ul>
+                    <li>주문확인지연<span>예시</span></li>
+                    <li>발송지연<span>예시</span></li>
+                    <li>취소지연<span>예시</span></li>
+                    <li>교환지연<span>예시</span></li>
+                    <li>반품지연<span>예시</span></li>
+                </ul>
+            </div>
+            <div class="Am_c1_box">
+                <p>상품문의/후기</p>
+                <ul>
+                    <li>미답변 문의<span>예시</span></li>
+                    <li>미답변 후기<span>예시</span></li>
+                </ul>
+            </div>
+            <div class="Am_c1_box">
+                <p>1:1문의</p>
+                <ul>
+                    <li>미답변 문의<span>예시</span></li>
+                </ul>
+            </div>
+            <div class="Am_c1_box" style="width: 47.5%;">
+            </div>
+        </div>
+        <!--Am_c1 끝-->
+        <!--Am_c2 시작-->
+        <div class="Am_c2">
+            <div class="Am_c2_title">이용 고객 현황<span>오전 8시 업데이트</span></div>
+            <hr width="95%">
+            <ul>
+                <li><a href= "#" id="Am_c2_chart_1">유입수(어제 시간별)<span>예시</span></a></li>
+                <li><a href= "#" id="Am_c2_chart_2">스토어찜(어제 누적)<span>예시</span></a></li>
+                <li><a href= "#" id="Am_c2_chart_3">소식알림(어제 누적)<span>예시</span></a></li>
+            </ul>
+            <div class="Am_c2_chart">
+                <div class="Am_c2_canvasBox">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <!--Am_c2 끝-->
+    </div>
+    <!--AMain 끝-->
+</body>
+</html>

@@ -1,0 +1,141 @@
+<html
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 상품 관리 | 상품 후기</title>
+    <link rel="stylesheet" href="/admin/css/style2.css">
+    <script type="text/javascript" src="/admin/ckeditor/ckeditor.js"></script>
+</head>
+<script>
+    $(function(){
+        let id = sessionStorage.getItem("idx1");
+        console.log(id)
+
+        axios.get('/api/productReview/read/'+ id, {
+
+        }).then(function(response){
+            let name = response.data.data.memName;
+            let proName = response.data.data.proName;
+            let regdate = response.data.data.regdate;
+            let proIdx = response.data.data.proIdx;
+            let content = response.data.data.content;
+            let ansContent = response.data.data.ansContent;
+            let like = response.data.data.like;
+            let files = response.data.data.files;
+
+
+            console.log(name)
+            console.log(regdate)
+            console.log(proIdx)
+            console.log(like)
+
+            $('#name').text(name);
+            $('#regdate').text(regdate);
+            $('#pro_name').text(proName)
+            $('#proIdx').text(proIdx);
+            $('#review_content').text(content);
+            $('#PA_editor').text(ansContent);
+            $('#like').text(like);
+            $("#img").attr("src", files);
+
+        }).catch(function(err){
+            console.log(err)
+        })
+    })
+
+    function sendit(){
+        let id = sessionStorage.getItem("idx1");
+        let ansContent = CKEDITOR.instances.PA_editor.getData();
+        console.log(id)
+        axios.put('/api/productReview/ansContent/update', {
+            data: {
+                idx: id,
+                ansContent: ansContent
+            }
+        }).then(function (){
+            alert('답변이 완료되었습니다');
+            $.ajax({
+                type:"GET",
+                url : "/admin/ProductReview/",
+                datatype : "html/text",
+                success: function(result){
+                    $("#content").html(result).trigger("create");
+                }
+            });
+        })
+    }
+
+
+</script>
+<body>
+    <!--content_title 시작-->
+    <div class="content_title">
+        <p>전체 상품 관리 <span>상품 후기</span></p>
+    </div>
+    <!--content_title 끝-->
+    <!--Pro_review 시작-->
+    <div class="Pro_review">
+        <!--PA_c1 시작-->
+        <div class="PA_c1">
+            <!--form 시작-->
+            <form name="pro_review">
+                <p id="PA_title1" class="product_title"><label>후기 상세</label></p>
+                <!--table 시작-->
+                <table id="pro_review">
+                    <tr>
+                        <th width="140">작성자</th>
+                        <td width="300" id="name"></td>
+                        <th width="140">작성일시</th>
+                        <td width="300" id="regdate"></td>
+                    </tr>
+                    <tr>
+                        <th>구매상품</th>
+                        <td id="pro_name"></td>
+                        <th>상품코드</th>
+                        <td id="proIdx"></td>
+                    </tr>
+                    <tr>
+                        <th>만족도</th>
+                        <td id="like"></td>
+                        <th>첨부파일</th>
+                        <td id="files"><img src="" id="img"></td>
+                    </tr>
+                    <tr>
+                        <th>구매후기</th>
+                        <td colspan="3" id="review_content">맛있어용</td>
+                    </tr>
+                </table>
+                <!--table 끝-->
+                <p id="PA_title2" class="product_title"><label>후기 답변하기</label></p>
+                <!--table 시작-->
+                <table id="review_answer">
+                    <tr>
+                        <th width="120">답변 내용</th>
+                        <td width="1000px">
+                            <textarea name="productText" id="PA_editor" cols="30" rows="10"></textarea>
+                            <!-- CKEditor 시작-->
+                            <script type="text/javascript">
+                                CKEDITOR.replace('PA_editor'
+                                            , {height: 200                                                 
+                                        });
+                            </script>
+                            <!-- CKEditor 끝-->
+                        </td>
+                    </tr>
+                </table>
+                <!--table 끝-->
+                <!--PA_c1_btnBox 시작-->
+                <div id="PA_c1_btnBox" class="bottom_btn">
+                    <input type="button" name="submit" value="수정" onclick="sendit()">
+                </div>
+            <!--PA_c1_btnBox 끝-->
+            </form>
+            <!--form 끝-->
+        </div>
+        <!--PA_c1 끝-->
+    </div>
+    <!--Pro_review 끝-->
+</body>
+</html>
