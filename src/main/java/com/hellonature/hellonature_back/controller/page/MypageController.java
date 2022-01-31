@@ -170,104 +170,104 @@ public class MypageController {
     // 주문내역(홈)
     @GetMapping("/mypage_orderlist")
     public String mypageOrderlist(){
-        return "user/mypage/!!!mypage_orderlist.html";
+        return "user/mypage/mypage_orderlist.html";
     }
     // 배송지 관리
     @GetMapping("/mypage_shipping")
     public String mypageShipping(){
-        return "user/mypage/!!!mypage_shipping.html";
+        return "user/mypage/mypage_shipping.html";
     }
     // 배송지 수정
     @GetMapping("/mypage_editShipping")
     public String mypageEditShipping(){
-        return "user/mypage/!!!mypage_edit_shipping.html";
+        return "user/mypage/mypage_edit_shipping.html";
     }
     // 배송지 추가
     @GetMapping("/mypage_addShipping")
     public String mypageAddShipping(){
-        return "user/mypage/!!!mypage_add_shipping.html";
+        return "user/mypage/mypage_add_shipping.html";
     }
     // 구매후기
     @GetMapping("/mypage_review")
     public String mypageReview(){
-        return "user/mypage/!!!mypage_review.html";
+        return "user/mypage/mypage_review.html";
     }
     // 구매후기 작성
     @GetMapping("/mypage_enrollReview")
     public String mypageEnrollReview(){
-        return "user/mypage/!!!mypage_enroll_review.html";
+        return "user/mypage/mypage_enroll_review.html";
     }
     // 구매후기 상세
     @GetMapping("/mypage_detaillReview")
     public String mypageDetailReview(){
-        return "user/mypage/!!!mypage_detail_review.html";
+        return "user/mypage/mypage_detail_review.html";
     }
     // 더그린배송
     @GetMapping("/mypage_thegreen")
     public String mypageThegreen(){
-        return "user/mypage/!!!mypage_thegreen.html";
+        return "user/mypage/mypage_thegreen.html";
     }
     // 더그린배송 선택
     @GetMapping("/mypage_chooseThegreen")
     public String mypageChooseThegreen(){
-        return "user/mypage/!!!mypage_choose_thegreen.html";
+        return "user/mypage/mypage_choose_thegreen.html";
     }
     // 더그린배송 결제
     @GetMapping("/mypage_paythegreen")
     public String mypagePayThegreen(){
-        return "user/mypage/!!!mypage_pay_thegreen.html";
+        return "user/mypage/mypage_pay_thegreen.html";
     }
     // 상품문의
     @GetMapping("/mypage_productinq")
     public String mypageProductinq(){
-        return "user/mypage/!!!mypage_productinq.html";
+        return "user/mypage/mypage_productinq.html";
     }
     // 상품문의 등록
     @GetMapping("/mypage_enrollProductinq")
     public String mypageEnrollProductinq(){
-        return "user/mypage/!!!mypage_enroll_productinq.html";
+        return "user/mypage/mypage_enroll_productinq.html";
     }
     // 1:1문의
     @GetMapping("/mypage_mantoman")
     public String mypageMantoman(){
-        return "user/mypage/!!!mypage_mantoman.html";
+        return "user/mypage/mypage_mantoman.html";
     }
     // 1:1문의 등록
     @GetMapping("/mypage_enrollMantoman")
     public String mypageEnrollMantoman(){
-        return "user/mypage/!!!mypage_enroll_mantoman.html";
+        return "user/mypage/mypage_enroll_mantoman.html";
     }
     // 개인정보수정
     @GetMapping("/mypage_edit")
     public String mypageEdit(){
-        return "user/mypage/!!!mypage_edit.html";
+        return "user/mypage/mypage_edit.html";
     }
     // 개인정보수정 - 내정보관리
     @GetMapping("/mypage_editMyinfo")
     public String mypageEditMyinfo(){
-        return "user/mypage/!!!mypage_edit_myinfo.html";
+        return "user/mypage/mypage_edit_myinfo.html";
     }
 
     // ----------------------------------------- sidebar2 -----------------------------------------
     // 고객센터
     @GetMapping("/mypage_center")
     public String mypageCenter(){
-        return "user/mypage/!!!mypage_center.html";
+        return "user/mypage/mypage_center.html";
     }
     // FAQ
     @GetMapping("/mypage_faq")
     public String mypageFaq(){
-        return "user/mypage/!!!mypage_faq.html";
+        return "user/mypage/mypage_faq.html";
     }
     // NEWS(공지사항)
     @GetMapping("/mypage_news")
     public String mypageNews(){
-        return "user/mypage/!!!mypage_news.html";
+        return "user/mypage/mypage_news.html";
     }
     // NEWS(공지사항 디테일)
     @GetMapping("/mypage_newsDetail")
     public String mypageNewsDetail(){
-        return "user/mypage/!!!mypage_newsdetail.html";
+        return "user/mypage/mypage_newsdetail.html";
     }
 
 
@@ -275,37 +275,37 @@ public class MypageController {
     // 헬로캐쉬
     @GetMapping("/mypage_hellocash")
     public String mypageHellocash(){
-        return "user/mypage/!!!mypage_hellocash.html";
+        return "user/mypage/mypage_hellocash.html";
     }
     // 쿠폰
     @GetMapping("/mypage_coupon")
     public String mypageCoupon(){
-        return "user/mypage/!!!mypage_coupon.html";
+        return "user/mypage/mypage_coupon.html";
     }
     // 헬로페이
     @GetMapping("/mypage_hellopay")
     public String mypageHellopay(){
-        return "user/mypage/!!!mypage_hellopay.html";
+        return "user/mypage/mypage_hellopay.html";
     }
     // 헬로페이 등록(카드등록)
     @GetMapping("/mypage_enrollHellopay")
     public String mypageEnrollHellopay(){
-        return "user/mypage/!!!mypage_enroll_hellopay.html";
+        return "user/mypage/mypage_enroll_hellopay.html";
     }
     // 헬로패스
     @GetMapping("/mypage_hellopass")
     public String mypageHellopass(){
-        return "user/mypage/!!!mypage_hellopass.html";
+        return "user/mypage/mypage_hellopass.html";
     }
     // 헬로패스 해지
     @GetMapping("/mypage_cancelHellopass")
     public String mypageCancelHellopass(){
-        return "user/mypage/!!!mypage_cancel_hellopass.html";
+        return "user/mypage/mypage_cancel_hellopass.html";
     }
     // 헬로패스 결제
     @GetMapping("/mypage_payhellopass")
     public String mypagePayHellopass(){
-        return "user/mypage/!!!mypage_pay_hellopass.html";
+        return "user/mypage/mypage_pay_hellopass.html";
     }
 
     // 회원 장바구니
