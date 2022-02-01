@@ -39,7 +39,7 @@
 
                             let li = $(`<li id="rootIdx" onclick="location.href='/user/goods_list?rootIdx=${rootIdx}&page=0'">`).append(
                                 '<input id="firstCate_value" type="hidden" value="' + rootIdx + '">' +
-                                '<a href="#" class="cate-parent fruit"><img src="/user/images/icon/icon_cate_' + num + '.png" alt="과일 아이콘"><div>' + name + '</div></a></li>'
+                                '<a href="#" class="cate-parent fruit"><img src="/user/images/icon/icon_cate_' + num + '.png"><div>' + name + '</div></a></li>'
                             );
                             $(".cate_1dep").append(li);
                         }
