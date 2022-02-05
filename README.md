@@ -1,4 +1,4 @@
-# 헬로네이처 (Hello Nature)
+# 헬로네이처 (hellonature)
 <br/>
 <div align="center">
 
