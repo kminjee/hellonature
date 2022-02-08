@@ -53,4 +53,7 @@
 
 ## 사이트 기능
 ## 데이터 관계도
+<img src="https://user-images.githubusercontent.com/86812090/152960465-a60991ab-ad57-4281-8dc8-3ea4c267a90d.jpg" />
+<br/>
+
 ## 코드 소개
